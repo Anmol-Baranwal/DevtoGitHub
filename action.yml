@@ -1,0 +1,45 @@
+name: 'DevSync'
+description: 'Save your Dev.to articles with all the necessary information on GitHub'
+author: 'Anmol Baranwal <anmolbaranwal119@gmail.com>'
+inputs:
+  devApiKey:
+    description: 'Dev API key (required)'
+    required: true
+  gh-token:
+    description: 'The GitHub token for authentication.'
+    default: ${{ github.token }}
+    required: false
+  outputDir:
+    description: 'The output directory for creating markdown files'
+    default: '/'
+    required: false
+  readingList:
+    description: 'To create a reading list from DEV.'
+    default: 'false'
+    required: false
+  excludeTags:
+    description: 'To filter the reading list to avoid from this tag.'
+    default: ''
+    required: false
+  mustIncludeTags:
+    description: 'To create a reading list from DEV to include this tag at all costs.'
+    default: ''
+    required: false
+  saveArticles:
+    description: 'To save all the articles with all the necessary information.'
+    default: 'true'
+    required: true
+  branch:
+    description: 'The git branch to use'
+    required: false
+    default: 'main'
+  conventional_commits:
+    description: 'Use conventional commits messages'
+    required: false
+    default: 'false'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
+branding:
+  icon: 'save'
+  color: 'gray-dark'

@@ -1,0 +1,34 @@
+name: "DevSync"
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Run daily, adjust as needed
+
+  workflow_dispatch:
+  push: { branches: ["main", "testing", "core_functionalities"] }
+
+jobs:
+  save_articles:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Run DevSync Action
+        uses: ./ # Path to the directory containing the action.yml
+        with:
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          devApiKey: ${{ secrets.DEV_TOKEN }}
+          outputDir: "/articles"
