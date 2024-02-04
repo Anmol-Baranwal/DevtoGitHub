@@ -44,10 +44,11 @@ async function DevSync() {
             core.setFailed("GitHub token is missing. Make sure to set the GITHUB_TOKEN secret.");
             return;
         }
+        const apiKey = core.getInput("devApiKey");
         const outputDir = core.getInput("outputDir") || "/"; // Default is the root directory
         const branch = core.getInput("branch");
         const conventionalCommits = core.getInput("conventional_commits") === "true";
-        const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)();
+        const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
         (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch, conventionalCommits);
         core.notice("Articles fetched and saved successfully.");
     }
@@ -145,10 +146,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.fetchDevToArticles = void 0;
 const node_fetch_1 = __importDefault(__nccwpck_require__(1793));
-async function fetchDevToArticles() {
+async function fetchDevToArticles(apiKey) {
     const apiUrl = `https://dev.to/api/articles/me`;
     const headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "api-key": apiKey
     };
     const response = await (0, node_fetch_1.default)(apiUrl, { headers });
     if (!response.ok) {

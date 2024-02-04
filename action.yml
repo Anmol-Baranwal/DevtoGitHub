@@ -5,6 +5,7 @@ inputs:
   devApiKey:
     description: 'Dev API key (required)'
     required: true
+    default: "${{ secrets.DEV_TOKEN }}"
   gh-token:
     description: 'The GitHub token for authentication.'
     default: ${{ github.token }}

@@ -16,11 +16,12 @@ async function DevSync() {
       return
     }
 
+    const apiKey = core.getInput("devApiKey")
     const outputDir = core.getInput("outputDir") || "/" // Default is the root directory
     const branch = core.getInput("branch")
     const conventionalCommits = core.getInput("conventional_commits") === "true"
 
-    const articles = await fetchDevToArticles()
+    const articles = await fetchDevToArticles(apiKey)
     createMarkdownFile(articles, outputDir, branch, conventionalCommits)
     core.notice("Articles fetched and saved successfully.")
   } catch (error) {
