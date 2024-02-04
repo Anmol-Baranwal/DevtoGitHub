@@ -18,7 +18,7 @@ export async function createMarkdownFile(
   if (!fs.existsSync(outputDir)) {
     try {
       // Create the directory with necessary permissions
-      fs.mkdirSync(outputDir, { recursive: true })
+      fs.mkdirSync(outputDir)
     } catch (error) {
       core.setFailed(
         `Failed to create directory ${outputDir}: ${(error as Error).message}`
