@@ -18,7 +18,5 @@ jobs:
       - name: Run DevSync Action
         uses: ./ # Path to the directory containing the action.yml
         with:
-          # gh-token: ${{ secrets.GITHUB_TOKEN }}
-          # devApiKey: ${{ secrets.DEV_TOKEN }}
           outputDir: "/articles"
           branch: "core_functionalities"
