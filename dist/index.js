@@ -97,7 +97,14 @@ const git_1 = __nccwpck_require__(9556);
 async function createMarkdownFile(articles, outputDir, branch, conventionalCommits) {
     // output directory must exist
     if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir);
+        try {
+            // Create the directory with necessary permissions
+            fs.mkdirSync(outputDir, { recursive: true });
+        }
+        catch (error) {
+            core.setFailed(`Failed to create directory ${outputDir}: ${error.message}`);
+            return;
+        }
     }
     for (const article of articles) {
         const fileName = (0, git_1.getFileNameFromTitle)(article.title);

@@ -16,7 +16,15 @@ export async function createMarkdownFile(
 ): Promise<void> {
   // output directory must exist
   if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir)
+    try {
+      // Create the directory with necessary permissions
+      fs.mkdirSync(outputDir, { recursive: true })
+    } catch (error) {
+      core.setFailed(
+        `Failed to create directory ${outputDir}: ${(error as Error).message}`
+      )
+      return
+    }
   }
 
   for (const article of articles) {
