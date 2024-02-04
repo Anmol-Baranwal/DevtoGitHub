@@ -1,5 +1,6 @@
+import { fetchDevToArticles } from "./utils/fetchDevToArticles"
+import { createMarkdownFile } from "./utils/createMarkdownFile"
 import * as core from "@actions/core"
-import * as github from "@actions/github"
 
 async function DevSync() {
   try {
@@ -15,13 +16,13 @@ async function DevSync() {
       return
     }
 
-    const octokit = github.getOctokit(token)
-    const context = github.context
+    const outputDir = core.getInput("outputDir") || "/" // Default is the root directory
 
-    core.notice("step 1.")
-  } catch (error: any) {
-    core.notice("No Issue found!")
-    core.notice("Workflow failed: " + error.message)
+    const articles = await fetchDevToArticles()
+    createMarkdownFile(articles, outputDir)
+    core.notice("Articles fetched and saved successfully.")
+  } catch (error) {
+    console.error("Error:", (error as Error).message)
   }
 }
 
