@@ -17,11 +17,7 @@ export async function gitCommit(
   message: string,
   config: string[]
 ): Promise<void> {
-  // Set user name and email configuration
-  await exec.exec("git", [...config])
-
-  // Commit with the specified message
-  await exec.exec("git", ["commit", "-m", message])
+  await exec.exec("git", [...config, "commit", "-m", message])
 }
 
 export async function gitPush(branch: string, config: string[]): Promise<void> {
