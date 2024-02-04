@@ -2,10 +2,10 @@ import * as fs from "fs"
 import * as core from "@actions/core"
 import {
   gitAdd,
-  gitCommit,
   gitPush,
   getFileNameFromTitle,
-  gitConfig
+  gitConfig,
+  gitCommit
 } from "./git"
 
 export async function createMarkdownFile(
@@ -33,11 +33,8 @@ export async function createMarkdownFile(
 
     // Check if the markdown file already exists
     if (!fs.existsSync(filePath)) {
-      let commitMessage = `Update ${fileName} markdown file`
-
-      if (conventionalCommits) {
-        commitMessage = `chore: ${commitMessage.toLowerCase()}`
-      }
+      // Use predefined commit message
+      const commitMessage = `Update ${fileName} markdown file`
 
       const markdownContent = `---
 title: "${article.title}"

@@ -4,8 +4,8 @@ import * as exec from "@actions/exec"
 export function getFileNameFromTitle(title: string): string {
   // Replace spaces and special characters with underscores
   return title
-    .replace(/[^\w\s]/gi, "_")
-    .replace(/\s+/g, "_")
+    .replace(/[^\w\s]/gi, " ")
+    .replace(/\s+/g, " ")
     .toLowerCase()
 }
 

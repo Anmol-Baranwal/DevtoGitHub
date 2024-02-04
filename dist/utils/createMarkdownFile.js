@@ -44,10 +44,8 @@ async function createMarkdownFile(articles, outputDir, branch, conventionalCommi
         const filePath = `${outputDir}/${fileName}.md`;
         // Check if the markdown file already exists
         if (!fs.existsSync(filePath)) {
-            let commitMessage = `Update ${fileName} markdown file`;
-            if (conventionalCommits) {
-                commitMessage = `chore: ${commitMessage.toLowerCase()}`;
-            }
+            // Use predefined commit message
+            const commitMessage = `Update ${fileName} markdown file`;
             const markdownContent = `---
 title: "${article.title}"
 description: "${article.description}"

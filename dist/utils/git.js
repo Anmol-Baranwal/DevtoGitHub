@@ -29,8 +29,8 @@ const exec = __importStar(require("@actions/exec"));
 function getFileNameFromTitle(title) {
     // Replace spaces and special characters with underscores
     return title
-        .replace(/[^\w\s]/gi, "_")
-        .replace(/\s+/g, "_")
+        .replace(/[^\w\s]/gi, " ")
+        .replace(/\s+/g, " ")
         .toLowerCase();
 }
 exports.getFileNameFromTitle = getFileNameFromTitle;

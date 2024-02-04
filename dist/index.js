@@ -111,10 +111,8 @@ async function createMarkdownFile(articles, outputDir, branch, conventionalCommi
         const filePath = `${outputDir}/${fileName}.md`;
         // Check if the markdown file already exists
         if (!fs.existsSync(filePath)) {
-            let commitMessage = `Update ${fileName} markdown file`;
-            if (conventionalCommits) {
-                commitMessage = `chore: ${commitMessage.toLowerCase()}`;
-            }
+            // Use predefined commit message
+            const commitMessage = `Update ${fileName} markdown file`;
             const markdownContent = `---
 title: "${article.title}"
 description: "${article.description}"
@@ -206,8 +204,8 @@ const exec = __importStar(__nccwpck_require__(1514));
 function getFileNameFromTitle(title) {
     // Replace spaces and special characters with underscores
     return title
-        .replace(/[^\w\s]/gi, "_")
-        .replace(/\s+/g, "_")
+        .replace(/[^\w\s]/gi, " ")
+        .replace(/\s+/g, " ")
         .toLowerCase();
 }
 exports.getFileNameFromTitle = getFileNameFromTitle;
