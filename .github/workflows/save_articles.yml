@@ -18,5 +18,6 @@ jobs:
       - name: Run DevSync Action
         uses: ./ # Path to the directory containing the action.yml
         with:
+          devApiKey: ${{ secrets.DEV_TOKEN }}
           outputDir: "/articles"
           branch: "core_functionalities"
