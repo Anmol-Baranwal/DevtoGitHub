@@ -34,7 +34,7 @@ export async function createMarkdownFile(
     // Check if the markdown file already exists
     if (!fs.existsSync(filePath)) {
       // Use predefined commit message
-      const commitMessage = `Update ${fileName} markdown file`
+      const commitMessage = `chore: add ${fileName}`
 
       const markdownContent = `---
 title: "${article.title}"
