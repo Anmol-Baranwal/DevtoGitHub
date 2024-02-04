@@ -36,7 +36,7 @@ inputs:
   conventional_commits:
     description: 'Use conventional commits messages'
     required: false
-    default: 'false'
+    default: 'true'
 runs:
   using: 'node16'
   main: 'dist/index.js'

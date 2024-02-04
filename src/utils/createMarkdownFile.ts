@@ -1,17 +1,36 @@
 import * as fs from "fs"
+import * as core from "@actions/core"
+import {
+  gitAdd,
+  gitCommit,
+  gitPush,
+  getFileNameFromTitle,
+  gitConfig
+} from "./git"
 
-export function createMarkdownFile(articles: any[], outputDir: string): void {
-  // output directory must exists
+export async function createMarkdownFile(
+  articles: any[],
+  outputDir: string,
+  branch: string,
+  conventionalCommits: boolean
+): Promise<void> {
+  // output directory must exist
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir)
   }
 
-  articles.forEach((article) => {
+  for (const article of articles) {
     const fileName = getFileNameFromTitle(article.title)
     const filePath = `${outputDir}/${fileName}.md`
 
     // Check if the markdown file already exists
     if (!fs.existsSync(filePath)) {
+      let commitMessage = `Update ${fileName} markdown file`
+
+      if (conventionalCommits) {
+        commitMessage = `chore: ${commitMessage.toLowerCase()}`
+      }
+
       const markdownContent = `---
 title: "${article.title}"
 description: "${article.description}"
@@ -20,23 +39,21 @@ tags: [${article.tag_list.map((tag: string) => `"${tag}"`).join(", ")}]
 url: "${article.url}"
 created_at: "${article.published_timestamp}"
 ---
+
 `
 
       fs.writeFileSync(filePath, markdownContent)
-      console.log(`Markdown file created: ${filePath}`)
+
+      // Commit and push the new markdown file to the specified branch
+      await gitAdd(filePath)
+      await gitCommit(commitMessage, gitConfig)
+      await gitPush(branch, gitConfig)
+
+      core.notice(`Markdown file created and committed: ${filePath}`)
     } else {
-      console.log(
+      core.notice(
         `Markdown file already exists for "${article.title}". Skipping.`
       )
     }
-  })
-}
-
-// generate a valid file name from the article title
-function getFileNameFromTitle(title: string): string {
-  // Replace spaces and special characters with underscores
-  return title
-    .replace(/[^\w\s]/gi, "_")
-    .replace(/\s+/g, "_")
-    .toLowerCase()
+  }
 }
