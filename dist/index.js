@@ -216,7 +216,10 @@ async function gitAdd(filePath) {
 }
 exports.gitAdd = gitAdd;
 async function gitCommit(message, config) {
-    await exec.exec("git", ["commit", "-m", message, ...config]);
+    // Set user name and email configuration
+    await exec.exec("git", [...config]);
+    // Commit with the specified message
+    await exec.exec("git", ["commit", "-m", message]);
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch, config) {
