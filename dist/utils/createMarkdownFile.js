@@ -25,16 +25,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMarkdownFile = void 0;
 const fs = __importStar(require("fs"));
-function createMarkdownFile(articles, outputDir) {
-    // output directory must exists
+const core = __importStar(require("@actions/core"));
+const git_1 = require("./git");
+async function createMarkdownFile(articles, outputDir, branch, conventionalCommits) {
+    // output directory must exist
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir);
     }
-    articles.forEach((article) => {
-        const fileName = getFileNameFromTitle(article.title);
+    for (const article of articles) {
+        const fileName = (0, git_1.getFileNameFromTitle)(article.title);
         const filePath = `${outputDir}/${fileName}.md`;
         // Check if the markdown file already exists
         if (!fs.existsSync(filePath)) {
+            let commitMessage = `Update ${fileName} markdown file`;
+            if (conventionalCommits) {
+                commitMessage = `chore: ${commitMessage.toLowerCase()}`;
+            }
             const markdownContent = `---
 title: "${article.title}"
 description: "${article.description}"
@@ -43,21 +49,18 @@ tags: [${article.tag_list.map((tag) => `"${tag}"`).join(", ")}]
 url: "${article.url}"
 created_at: "${article.published_timestamp}"
 ---
+
 `;
             fs.writeFileSync(filePath, markdownContent);
-            console.log(`Markdown file created: ${filePath}`);
+            // Commit and push the new markdown file to the specified branch
+            await (0, git_1.gitAdd)(filePath);
+            await (0, git_1.gitCommit)(commitMessage, git_1.gitConfig);
+            await (0, git_1.gitPush)(branch, git_1.gitConfig);
+            core.notice(`Markdown file created and committed: ${filePath}`);
         }
         else {
-            console.log(`Markdown file already exists for "${article.title}". Skipping.`);
+            core.notice(`Markdown file already exists for "${article.title}". Skipping.`);
         }
-    });
+    }
 }
 exports.createMarkdownFile = createMarkdownFile;
-// generate a valid file name from the article title
-function getFileNameFromTitle(title) {
-    // Replace spaces and special characters with underscores
-    return title
-        .replace(/[^\w\s]/gi, "_")
-        .replace(/\s+/g, "_")
-        .toLowerCase();
-}

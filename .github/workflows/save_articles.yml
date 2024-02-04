@@ -21,3 +21,4 @@ jobs:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           devApiKey: ${{ secrets.DEV_TOKEN }}
           outputDir: "/articles"
+          branch: "core_functionalities"
