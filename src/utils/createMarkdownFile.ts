@@ -50,9 +50,14 @@ created_at: "${article.published_timestamp}"
       fs.writeFileSync(filePath, markdownContent)
 
       // Commit and push the new markdown file to the specified branch
-      // await gitAdd(filePath)
-      // await gitCommit(commitMessage, gitConfig)
-      // await gitPush(branch, gitConfig)
+      await gitAdd(filePath)
+
+      console.log("Attempting to add files to git...")
+
+      await gitCommit(commitMessage, gitConfig)
+
+      console.log("Files added to git.")
+      await gitPush(branch, gitConfig)
 
       core.notice(`Markdown file created and committed: ${filePath}`)
     } else {
