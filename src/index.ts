@@ -1,32 +1,39 @@
-import { fetchDevToArticles } from "./utils/fetchDevToArticles"
-import { createMarkdownFile } from "./utils/createMarkdownFile"
+import * as fs from "fs"
 import * as core from "@actions/core"
 
-async function DevSync() {
+async function createAnmolMarkdownFile(outputDir: string): Promise<void> {
   try {
-    // const token = core.getInput("gh-token")
+    // Output directory must exist
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir) // Create the directory if it doesn't exist
+    }
 
-    // if (!token) core.debug(token + "")
-    // else core.debug(token)
+    // Define file path
+    const filePath = `${outputDir}/anmol.md`
 
-    // if (!token) {
-    //   core.setFailed(
-    //     "GitHub token is missing. Make sure to set the GITHUB_TOKEN secret."
-    //   )
-    //   return
-    // }
+    // Check if the Markdown file already exists
+    if (!fs.existsSync(filePath)) {
+      // Markdown content
+      const markdownContent = `---
+title: "Anmol"
+description: "Anmol Baranwal"
+---
 
-    const apiKey = core.getInput("devApiKey")
-    const outputDir = core.getInput("outputDir") || "/" // Default is the root directory
-    const branch = core.getInput("branch") || "main"
-    const conventionalCommits = core.getInput("conventional_commits") === "true"
+Anmol Baranwal`
 
-    const articles = await fetchDevToArticles(apiKey)
-    createMarkdownFile(articles, outputDir, branch)
-    // core.notice("Articles fetched and saved successfully.")
+      // Write markdown content to file
+      fs.writeFileSync(filePath, markdownContent)
+
+      core.notice(`Markdown file created: ${filePath}`)
+    } else {
+      core.notice(`Markdown file already exists: ${filePath}`)
+    }
   } catch (error) {
-    console.error("Error:", (error as Error).message)
+    core.setFailed(
+      `Failed to create Markdown file: ${(error as Error).message}`
+    )
   }
 }
 
-DevSync()
+// Example usage
+createAnmolMarkdownFile("./articles")
