@@ -1,18 +1,11 @@
-import * as fs from "fs"
 import * as core from "@actions/core"
-import {
-  gitAdd,
-  gitPush,
-  getFileNameFromTitle,
-  gitConfig,
-  gitCommit
-} from "./git"
+import * as fs from "fs"
+import { getFileNameFromTitle } from "./git"
 
 export async function createMarkdownFile(
   articles: any[],
   outputDir: string,
-  branch: string,
-  conventionalCommits: boolean
+  branch: string
 ): Promise<void> {
   // output directory must exist
   if (!fs.existsSync(outputDir)) {
@@ -27,14 +20,15 @@ export async function createMarkdownFile(
     }
   }
 
+  const commits = []
+
   for (const article of articles) {
     const fileName = getFileNameFromTitle(article.title)
     const filePath = `${outputDir}/${fileName}.md`
 
     // Check if the markdown file already exists
     if (!fs.existsSync(filePath)) {
-      // Use predefined commit message
-      const commitMessage = `chore: add ${fileName}`
+      const commitMessage = `Add ${fileName}`
 
       const markdownContent = `---
 title: "${article.title}"
@@ -47,24 +41,60 @@ created_at: "${article.published_timestamp}"
 
 `
 
-      core.notice("start of file path")
+      core.notice(`markdown content`)
+      // Write markdown content to file
       fs.writeFileSync(filePath, markdownContent)
 
-      // Commit and push the new markdown file to the specified branch
-      await gitAdd(filePath)
+      core.notice(`push start`)
+      commits.push({ message: commitMessage, filePath })
 
-      core.notice("Attempting to add files to git...")
-
-      await gitCommit(commitMessage, gitConfig)
-
-      core.notice("Files added to git.")
-      await gitPush(branch, gitConfig)
-
-      core.notice(`Markdown file created and committed: ${filePath}`)
+      core.notice(`Markdown file created: ${filePath}`)
     } else {
       core.notice(
         `Markdown file already exists for "${article.title}". Skipping.`
       )
     }
+  }
+
+  if (commits.length > 0) {
+    await createCommitAndPush(branch, commits)
+  }
+}
+
+async function createCommitAndPush(branch: string, commits: any[]) {
+  try {
+    // Authenticate with GitHub using your personal access token
+    const token = process.env.GITHUB_TOKEN
+    if (!token) {
+      throw new Error(
+        "GitHub token is missing. Make sure to set the GITHUB_TOKEN secret."
+      )
+    }
+
+    const commitData = {
+      branch,
+      commits: commits.map(({ message, filePath }) => {
+        const content = fs.readFileSync(filePath, "utf8")
+        return {
+          message,
+          content: Buffer.from(content).toString("base64")
+        }
+      })
+    }
+
+    // Create a new commit using the GitHub REST API
+    await fetch(
+      `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/git/commits`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `token ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(commitData)
+      }
+    )
+  } catch (error) {
+    throw new Error(`Failed to create commit: ${(error as Error).message}`)
   }
 }
