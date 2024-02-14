@@ -1,5 +1,6 @@
 import { DevToArticle } from "../types"
 import fetch from "node-fetch"
+import * as core from "@actions/core"
 
 export async function fetchDevToArticles(
   apiKey: string
@@ -16,6 +17,8 @@ export async function fetchDevToArticles(
   if (!response.ok) {
     throw new Error(`Failed to fetch articles. Status: ${response.status}`)
   }
+
+  core.notice("Articles fetched and saved successfully.")
 
   const articles = await response.json()
   return articles as DevToArticle[]

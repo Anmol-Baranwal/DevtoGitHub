@@ -30,7 +30,7 @@
     "typescript": "^5.3.3"
   },
   "engines": {
-    "node": "16.x"
+    "node": "20.x"
   },
   "dependencies": {
     "@actions/exec": "^1.1.1",
