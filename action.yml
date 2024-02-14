@@ -8,7 +8,7 @@ inputs:
   gh-token:
     description: 'The GitHub token for authentication.'
     default: ${{ github.token }}
-    required: false
+    required: true
   outputDir:
     description: 'The output directory for creating markdown files'
     default: '/'
