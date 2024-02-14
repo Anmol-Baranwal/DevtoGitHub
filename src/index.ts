@@ -23,7 +23,7 @@ async function DevSync() {
 
     const articles = await fetchDevToArticles(apiKey)
     createMarkdownFile(articles, outputDir, branch)
-    core.notice("Articles fetched and saved successfully.")
+    // core.notice("Articles fetched and saved successfully.")
   } catch (error) {
     console.error("Error:", (error as Error).message)
   }

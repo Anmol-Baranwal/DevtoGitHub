@@ -50,7 +50,7 @@ async function DevSync() {
         const conventionalCommits = core.getInput("conventional_commits") === "true";
         const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
         (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch);
-        core.notice("Articles fetched and saved successfully.");
+        // core.notice("Articles fetched and saved successfully.")
     }
     catch (error) {
         console.error("Error:", error.message);
@@ -135,6 +135,7 @@ created_at: "${article.published_timestamp}"
         }
     }
     if (commits.length > 0) {
+        core.notice(`pushing commit`);
         await createCommitAndPush(branch, commits);
     }
 }
@@ -169,6 +170,7 @@ async function createCommitAndPush(branch, commits) {
             },
             body: JSON.stringify(commitData)
         });
+        core.notice(`commit data: ${commitData}`);
     }
     catch (error) {
         throw new Error(`Failed to create commit: ${error.message}`);

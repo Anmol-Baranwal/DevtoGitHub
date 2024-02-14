@@ -57,6 +57,7 @@ created_at: "${article.published_timestamp}"
   }
 
   if (commits.length > 0) {
+    core.notice(`pushing commit`)
     await createCommitAndPush(branch, commits)
   }
 }
@@ -98,6 +99,8 @@ async function createCommitAndPush(branch: string, commits: any[]) {
         body: JSON.stringify(commitData)
       }
     )
+
+    core.notice(`commit data: ${commitData}`)
   } catch (error) {
     throw new Error(`Failed to create commit: ${(error as Error).message}`)
   }

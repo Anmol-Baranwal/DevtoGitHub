@@ -68,6 +68,7 @@ created_at: "${article.published_timestamp}"
         }
     }
     if (commits.length > 0) {
+        core.notice(`pushing commit`);
         await createCommitAndPush(branch, commits);
     }
 }
@@ -102,6 +103,7 @@ async function createCommitAndPush(branch, commits) {
             },
             body: JSON.stringify(commitData)
         });
+        core.notice(`commit data: ${commitData}`);
     }
     catch (error) {
         throw new Error(`Failed to create commit: ${error.message}`);
