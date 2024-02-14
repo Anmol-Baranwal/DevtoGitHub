@@ -56,11 +56,14 @@ created_at: "${article.published_timestamp}"
 ---
 
 `;
+            core.notice("start of file path");
             fs.writeFileSync(filePath, markdownContent);
             // Commit and push the new markdown file to the specified branch
-            // await gitAdd(filePath)
-            // await gitCommit(commitMessage, gitConfig)
-            // await gitPush(branch, gitConfig)
+            await (0, git_1.gitAdd)(filePath);
+            core.notice("Attempting to add files to git...");
+            await (0, git_1.gitCommit)(commitMessage, git_1.gitConfig);
+            core.notice("Files added to git.");
+            await (0, git_1.gitPush)(branch, git_1.gitConfig);
             core.notice(`Markdown file created and committed: ${filePath}`);
         }
         else {

@@ -46,7 +46,7 @@ async function DevSync() {
         }
         const apiKey = core.getInput("devApiKey");
         const outputDir = core.getInput("outputDir") || "/"; // Default is the root directory
-        const branch = core.getInput("branch");
+        const branch = core.getInput("branch") || "main";
         const conventionalCommits = core.getInput("conventional_commits") === "true";
         const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
         (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch, conventionalCommits);
@@ -123,11 +123,14 @@ created_at: "${article.published_timestamp}"
 ---
 
 `;
+            core.notice("start of file path");
             fs.writeFileSync(filePath, markdownContent);
             // Commit and push the new markdown file to the specified branch
-            // await gitAdd(filePath)
-            // await gitCommit(commitMessage, gitConfig)
-            // await gitPush(branch, gitConfig)
+            await (0, git_1.gitAdd)(filePath);
+            core.notice("Attempting to add files to git...");
+            await (0, git_1.gitCommit)(commitMessage, git_1.gitConfig);
+            core.notice("Files added to git.");
+            await (0, git_1.gitPush)(branch, git_1.gitConfig);
             core.notice(`Markdown file created and committed: ${filePath}`);
         }
         else {

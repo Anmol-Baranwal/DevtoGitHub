@@ -19,5 +19,5 @@ jobs:
         uses: ./ # Path to the directory containing the action.yml
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
-          outputDir: "./articles"
+          # outputDir: "./"
           branch: "core_functionalities"

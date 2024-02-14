@@ -18,7 +18,7 @@ async function DevSync() {
 
     const apiKey = core.getInput("devApiKey")
     const outputDir = core.getInput("outputDir") || "/" // Default is the root directory
-    const branch = core.getInput("branch")
+    const branch = core.getInput("branch") || "main"
     const conventionalCommits = core.getInput("conventional_commits") === "true"
 
     const articles = await fetchDevToArticles(apiKey)
