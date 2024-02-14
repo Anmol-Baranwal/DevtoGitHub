@@ -1,4 +1,5 @@
 import * as fs from "fs"
+import * as path from "path"
 import * as core from "@actions/core"
 
 async function createAnmolMarkdownFile(outputDir: string): Promise<void> {
@@ -9,7 +10,7 @@ async function createAnmolMarkdownFile(outputDir: string): Promise<void> {
     }
 
     // Define file path
-    const filePath = `${outputDir}/anmol.md`
+    const filePath = path.join(outputDir, "anmol.md")
 
     // Check if the Markdown file already exists
     if (!fs.existsSync(filePath)) {
@@ -36,4 +37,4 @@ Anmol Baranwal`
 }
 
 // Example usage
-createAnmolMarkdownFile("./articles")
+createAnmolMarkdownFile("./")

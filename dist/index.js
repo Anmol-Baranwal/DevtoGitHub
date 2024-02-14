@@ -31,6 +31,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const fs = __importStar(__nccwpck_require__(7147));
+const path = __importStar(__nccwpck_require__(1017));
 const core = __importStar(__nccwpck_require__(2186));
 async function createAnmolMarkdownFile(outputDir) {
     try {
@@ -39,7 +40,7 @@ async function createAnmolMarkdownFile(outputDir) {
             fs.mkdirSync(outputDir); // Create the directory if it doesn't exist
         }
         // Define file path
-        const filePath = `${outputDir}/anmol.md`;
+        const filePath = path.join(outputDir, "anmol.md");
         // Check if the Markdown file already exists
         if (!fs.existsSync(filePath)) {
             // Markdown content
@@ -62,7 +63,7 @@ Anmol Baranwal`;
     }
 }
 // Example usage
-createAnmolMarkdownFile("./articles");
+createAnmolMarkdownFile("./");
 
 
 /***/ }),
