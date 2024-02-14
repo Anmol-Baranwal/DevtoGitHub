@@ -63,12 +63,16 @@ created_at: "${article.published_timestamp}"
 
 async function createCommitAndPush(branch: string, commits: any[]) {
   try {
-    // Authenticate with GitHub using your personal access token
-    const token = process.env.GITHUB_TOKEN
+    const token = core.getInput("gh-token")
+
+    if (!token) core.debug(token + "")
+    else core.debug(token)
+
     if (!token) {
-      throw new Error(
+      core.setFailed(
         "GitHub token is missing. Make sure to set the GITHUB_TOKEN secret."
       )
+      return
     }
 
     const commitData = {

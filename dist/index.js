@@ -35,15 +35,15 @@ const createMarkdownFile_1 = __nccwpck_require__(6034);
 const core = __importStar(__nccwpck_require__(2186));
 async function DevSync() {
     try {
-        const token = core.getInput("gh-token");
-        if (!token)
-            core.debug(token + "");
-        else
-            core.debug(token);
-        if (!token) {
-            core.setFailed("GitHub token is missing. Make sure to set the GITHUB_TOKEN secret.");
-            return;
-        }
+        // const token = core.getInput("gh-token")
+        // if (!token) core.debug(token + "")
+        // else core.debug(token)
+        // if (!token) {
+        //   core.setFailed(
+        //     "GitHub token is missing. Make sure to set the GITHUB_TOKEN secret."
+        //   )
+        //   return
+        // }
         const apiKey = core.getInput("devApiKey");
         const outputDir = core.getInput("outputDir") || "/"; // Default is the root directory
         const branch = core.getInput("branch") || "main";
@@ -141,10 +141,14 @@ created_at: "${article.published_timestamp}"
 exports.createMarkdownFile = createMarkdownFile;
 async function createCommitAndPush(branch, commits) {
     try {
-        // Authenticate with GitHub using your personal access token
-        const token = process.env.GITHUB_TOKEN;
+        const token = core.getInput("gh-token");
+        if (!token)
+            core.debug(token + "");
+        else
+            core.debug(token);
         if (!token) {
-            throw new Error("GitHub token is missing. Make sure to set the GITHUB_TOKEN secret.");
+            core.setFailed("GitHub token is missing. Make sure to set the GITHUB_TOKEN secret.");
+            return;
         }
         const commitData = {
             branch,

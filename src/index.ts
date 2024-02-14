@@ -4,17 +4,17 @@ import * as core from "@actions/core"
 
 async function DevSync() {
   try {
-    const token = core.getInput("gh-token")
+    // const token = core.getInput("gh-token")
 
-    if (!token) core.debug(token + "")
-    else core.debug(token)
+    // if (!token) core.debug(token + "")
+    // else core.debug(token)
 
-    if (!token) {
-      core.setFailed(
-        "GitHub token is missing. Make sure to set the GITHUB_TOKEN secret."
-      )
-      return
-    }
+    // if (!token) {
+    //   core.setFailed(
+    //     "GitHub token is missing. Make sure to set the GITHUB_TOKEN secret."
+    //   )
+    //   return
+    // }
 
     const apiKey = core.getInput("devApiKey")
     const outputDir = core.getInput("outputDir") || "/" // Default is the root directory

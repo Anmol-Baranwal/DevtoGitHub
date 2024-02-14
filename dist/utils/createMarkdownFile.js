@@ -74,10 +74,14 @@ created_at: "${article.published_timestamp}"
 exports.createMarkdownFile = createMarkdownFile;
 async function createCommitAndPush(branch, commits) {
     try {
-        // Authenticate with GitHub using your personal access token
-        const token = process.env.GITHUB_TOKEN;
+        const token = core.getInput("gh-token");
+        if (!token)
+            core.debug(token + "");
+        else
+            core.debug(token);
         if (!token) {
-            throw new Error("GitHub token is missing. Make sure to set the GITHUB_TOKEN secret.");
+            core.setFailed("GitHub token is missing. Make sure to set the GITHUB_TOKEN secret.");
+            return;
         }
         const commitData = {
             branch,
