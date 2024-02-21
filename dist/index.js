@@ -35,21 +35,12 @@ const createMarkdownFile_1 = __nccwpck_require__(6034);
 const core = __importStar(__nccwpck_require__(2186));
 async function DevSync() {
     try {
-        // const token = core.getInput("gh-token")
-        // if (!token) core.debug(token + "")
-        // else core.debug(token)
-        // if (!token) {
-        //   core.setFailed(
-        //     "GitHub token is missing. Make sure to set the GITHUB_TOKEN secret."
-        //   )
-        //   return
-        // }
         const apiKey = core.getInput("devApiKey");
-        const outputDir = core.getInput("outputDir") || "/"; // Default is the root directory
-        const branch = core.getInput("branch") || "main";
-        const conventionalCommits = core.getInput("conventional_commits") === "true";
+        const outputDir = core.getInput("outputDir") || "./articles"; // Default is the articles directory
+        // const branch = core.getInput("branch") || "main"
+        // const conventionalCommits = core.getInput("conventional_commits") === "true"
         const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
-        (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch);
+        (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir);
         // core.notice("Articles fetched and saved successfully.")
     }
     catch (error) {
@@ -94,6 +85,7 @@ exports.createMarkdownFile = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
 const git_1 = __nccwpck_require__(9556);
+const parseMarkdownContent_1 = __nccwpck_require__(4305);
 async function createMarkdownFile(articles, outputDir, branch) {
     // output directory must exist
     if (!fs.existsSync(outputDir)) {
@@ -106,76 +98,22 @@ async function createMarkdownFile(articles, outputDir, branch) {
             return;
         }
     }
-    const commits = [];
     for (const article of articles) {
-        const fileName = (0, git_1.getFileNameFromTitle)(article.title);
+        const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
         const filePath = `${outputDir}/${fileName}.md`;
         // Check if the markdown file already exists
         if (!fs.existsSync(filePath)) {
-            const commitMessage = `Add ${fileName}`;
-            const markdownContent = `---
-title: "${article.title}"
-description: "${article.description}"
-cover_image: "${article.cover_image || ""}"
-tags: [${article.tag_list.map((tag) => `"${tag}"`).join(", ")}]
-url: "${article.url}"
-created_at: "${article.published_timestamp}"
----
-
-`;
-            core.notice(`markdown content`);
+            const markdownContent = (0, parseMarkdownContent_1.parseMarkdownContent)(article);
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
-            core.notice(`push start`);
-            commits.push({ message: commitMessage, filePath });
             core.notice(`Markdown file created: ${filePath}`);
         }
         else {
             core.notice(`Markdown file already exists for "${article.title}". Skipping.`);
         }
     }
-    if (commits.length > 0) {
-        core.notice(`pushing commit`);
-        await createCommitAndPush(branch, commits);
-    }
 }
 exports.createMarkdownFile = createMarkdownFile;
-async function createCommitAndPush(branch, commits) {
-    try {
-        const token = core.getInput("gh-token");
-        if (!token)
-            core.debug(token + "");
-        else
-            core.debug(token);
-        if (!token) {
-            core.setFailed("GitHub token is missing. Make sure to set the GITHUB_TOKEN secret.");
-            return;
-        }
-        const commitData = {
-            branch,
-            commits: commits.map(({ message, filePath }) => {
-                const content = fs.readFileSync(filePath, "utf8");
-                return {
-                    message,
-                    content: Buffer.from(content).toString("base64")
-                };
-            })
-        };
-        // Create a new commit using the GitHub REST API
-        await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/git/commits`, {
-            method: "POST",
-            headers: {
-                Authorization: `token ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(commitData)
-        });
-        core.notice(`commit data: ${commitData}`);
-    }
-    catch (error) {
-        throw new Error(`Failed to create commit: ${error.message}`);
-    }
-}
 
 
 /***/ }),
@@ -267,9 +205,9 @@ exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = expor
 const exec = __importStar(__nccwpck_require__(1514));
 // generate a valid file name using the title
 function getFileNameFromTitle(title) {
-    // Replace spaces and special characters with underscores
+    // Replace special characters other than apostrophes and hyphens with spaces
     return title
-        .replace(/[^\w\s]/gi, " ")
+        .replace(/[^\w\s'-]/gi, " ")
         .replace(/\s+/g, " ")
         .toLowerCase();
 }
@@ -292,6 +230,44 @@ exports.gitConfig = [
     "-c",
     `user.email="${process.env.GITHUB_ACTOR}@users.noreply.github.com"`
 ];
+
+
+/***/ }),
+
+/***/ 4305:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseMarkdownContent = void 0;
+function parseMarkdownContent(article) {
+    const coverImageBanner = article.cover_image
+        ? `<img src="${article.cover_image}" alt="Cover Image" />`
+        : "";
+    const formattedTimestamp = formatTimestamp(article.published_timestamp);
+    const formattedTags = article.tag_list.map((tag) => `\`${tag}\``).join(", ");
+    return `\
+  ${coverImageBanner}
+  <hr />
+  
+  # ${article.title}
+  
+  **Tags:** ${formattedTags}
+
+  **Published At:** ${formattedTimestamp}
+
+  **URL:** [${article.url}](${article.url})
+
+  <hr />
+  ${article.body_markdown}    
+  `;
+}
+exports.parseMarkdownContent = parseMarkdownContent;
+const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString();
+};
 
 
 /***/ }),
