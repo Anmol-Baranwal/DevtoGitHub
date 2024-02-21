@@ -15,11 +15,19 @@ export interface DevToArticle {
   body_markdown?: string
 }
 
-export interface DevtoError {
-  error: string
-  status: number
+export interface ReadingListArticle {
+  id: number
+  title: string
+  readable_publish_date: string
+  url: string
+  cover_image: string
+  canonical_url: string
+  reading_time_minutes: number
+  tags: string
 }
 
-export interface LocalArticle {
-  body_markdown: string
+export interface ReadingList {
+  id?: number
+  created_at: string
+  article: ReadingListArticle
 }
