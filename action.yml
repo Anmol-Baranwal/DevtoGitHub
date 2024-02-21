@@ -11,7 +11,7 @@ inputs:
     required: true
   outputDir:
     description: 'The output directory for creating markdown files'
-    default: '/'
+    default: './articles'
     required: false
   readingList:
     description: 'To create a reading list from DEV.'

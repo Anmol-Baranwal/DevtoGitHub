@@ -2,9 +2,9 @@ import * as exec from "@actions/exec"
 
 // generate a valid file name using the title
 export function getFileNameFromTitle(title: string): string {
-  // Replace spaces and special characters with underscores
+  // Replace special characters other than apostrophes and hyphens with spaces
   return title
-    .replace(/[^\w\s]/gi, " ")
+    .replace(/[^\w\s'-]/gi, " ")
     .replace(/\s+/g, " ")
     .toLowerCase()
 }

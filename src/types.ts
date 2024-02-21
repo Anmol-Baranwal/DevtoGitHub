@@ -5,7 +5,7 @@ export interface DevToArticle {
   description: string
   cover_image?: string
   social_image?: string
-  tag_list?: string[]
+  tag_list: string[]
   url: string
   positive_reactions_count: number
   public_reactions_count: number

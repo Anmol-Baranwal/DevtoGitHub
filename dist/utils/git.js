@@ -27,9 +27,9 @@ exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = expor
 const exec = __importStar(require("@actions/exec"));
 // generate a valid file name using the title
 function getFileNameFromTitle(title) {
-    // Replace spaces and special characters with underscores
+    // Replace special characters other than apostrophes and hyphens with spaces
     return title
-        .replace(/[^\w\s]/gi, " ")
+        .replace(/[^\w\s'-]/gi, " ")
         .replace(/\s+/g, " ")
         .toLowerCase();
 }
