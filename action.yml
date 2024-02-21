@@ -17,6 +17,10 @@ inputs:
     description: 'To create a reading list from DEV.'
     default: 'false'
     required: false
+  readTime:
+    description: 'Reading time for articles in reading list'
+    default: 'false'
+    required: false
   excludeTags:
     description: 'To filter the reading list to avoid from this tag.'
     default: ''

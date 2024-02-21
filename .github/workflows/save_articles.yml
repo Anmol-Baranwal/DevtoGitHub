@@ -35,5 +35,6 @@ jobs:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           gh-token: ${{ secrets.SECRET_TOKEN }}
           readingList: "true"
+          readTime: "true"
           # outputDir: "./articles"
           # branch: "core_functionalities"

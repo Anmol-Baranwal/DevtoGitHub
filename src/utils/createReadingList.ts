@@ -8,6 +8,8 @@ export async function createReadingList(
 ): Promise<void> {
   const outputDir = "./"
 
+  const readTime = core.getInput("readTime") || "false"
+
   // Read existing content of README
   let existingContent = ""
   const readmePath = `${outputDir}/README.md`
@@ -19,10 +21,15 @@ export async function createReadingList(
   if (!existingContent.includes("## Reading List")) {
     existingContent += "\n <hr/> \n\n## Reading List\n\n"
   }
+  console.log({ readTime })
 
   // Add bullet points for each article
   for (const articleItem of articles) {
-    existingContent += `- [${articleItem.article.title}](${articleItem.article.url})\n`
+    if (readTime) {
+      existingContent += `- [${articleItem.article.title}](${articleItem.article.url}) - ${articleItem.article.reading_time_minutes} minutes\n`
+    } else {
+      existingContent += `- [${articleItem.article.title}](${articleItem.article.url})\n`
+    }
   }
 
   fs.writeFileSync(readmePath, existingContent)

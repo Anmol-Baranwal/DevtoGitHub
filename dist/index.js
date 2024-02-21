@@ -91,6 +91,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
 async function createReadingList(articles, branch) {
     const outputDir = "./";
+    const readTime = core.getInput("readTime") || "false";
     // Read existing content of README
     let existingContent = "";
     const readmePath = `${outputDir}/README.md`;
@@ -101,9 +102,15 @@ async function createReadingList(articles, branch) {
     if (!existingContent.includes("## Reading List")) {
         existingContent += "\n <hr/> \n\n## Reading List\n\n";
     }
+    console.log({ readTime });
     // Add bullet points for each article
     for (const articleItem of articles) {
-        existingContent += `- [${articleItem.article.title}](${articleItem.article.url})\n`;
+        if (readTime) {
+            existingContent += `- [${articleItem.article.title}](${articleItem.article.url}) - ${articleItem.article.reading_time_minutes} minutes\n`;
+        }
+        else {
+            existingContent += `- [${articleItem.article.title}](${articleItem.article.url})\n`;
+        }
     }
     fs.writeFileSync(readmePath, existingContent);
     core.notice(`Reading list updated in README.md`);
@@ -154,7 +161,7 @@ async function fetchDevToReadingList(apiKey, per_page) {
     const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
-        "api-key": apiKey
+        "api-key": "Kk9yXar68C98KfsZokUDc5Ag"
     };
     console.log({ apiUrl });
     const response = await (0, node_fetch_1.default)(apiUrl, { headers });
