@@ -1,30 +1,41 @@
-import { fetchDevToArticles } from "./utils/fetchDevToArticles"
-import { createMarkdownFile } from "./utils/createMarkdownFile"
+import * as fs from "fs"
+import * as path from "path"
 import * as core from "@actions/core"
-import { createReadingList } from "./utils/createReadingList"
-import { fetchDevToReadingList } from "./utils/fetchDevToReadingList"
 
-async function DevSync() {
+async function createAnmolMarkdownFile(outputDir: string): Promise<void> {
   try {
-    const apiKey = core.getInput("devApiKey")
-    const outputDir = core.getInput("outputDir") || "./articles" // Default is the articles directory
-    const outputDirReading = core.getInput("outputDirReading") || "./" // Default is the root directory
-    // const branch = core.getInput("branch") || "main"
-    // const conventionalCommits = core.getInput("conventional_commits") === "true"
-    const readingList = core.getInput("readingList") === "true" || false
+    outputDir = "./"
+    // Output directory must exist
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir) // Create the directory if it doesn't exist
+    }
 
-    const articles = await fetchDevToArticles(apiKey)
-    createMarkdownFile(articles, outputDir)
-    core.notice("Articles fetched and saved successfully.")
+    // Define file path
+    const filePath = path.join(outputDir, "anmol.md")
 
-    if (readingList) {
-      const readingListArticles = await fetchDevToReadingList(apiKey, 5)
+    // Check if the Markdown file already exists
+    if (!fs.existsSync(filePath)) {
+      // Markdown content
+      const markdownContent = `---
+title: "Anmol"
+description: "Anmol Baranwal"
+---
 
-      createReadingList(readingListArticles, outputDirReading)
+Anmol Baranwal`
+
+      // Write markdown content to file
+      fs.writeFileSync(filePath, markdownContent)
+
+      core.notice(`Markdown file created: ${filePath}`)
+    } else {
+      core.notice(`Markdown file already exists: ${filePath}`)
     }
   } catch (error) {
-    console.error("Error:", (error as Error).message)
+    core.setFailed(
+      `Failed to create Markdown file: ${(error as Error).message}`
+    )
   }
 }
 
-DevSync()
+// Example usage
+createAnmolMarkdownFile("./")
