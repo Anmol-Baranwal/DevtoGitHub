@@ -25,6 +25,14 @@ export async function createReadingList(
 
   // Add bullet points for each article
   for (const articleItem of articles) {
+    const articleUrl = articleItem.article.url
+    if (existingContent.includes(articleUrl)) {
+      console.log(
+        `Skipping article "${articleItem.article.title}" because it already exists in the reading list.`
+      )
+      continue
+    }
+
     if (readTime) {
       existingContent += `- [${articleItem.article.title}](${articleItem.article.url}) - ${articleItem.article.reading_time_minutes} minutes\n`
     } else {
