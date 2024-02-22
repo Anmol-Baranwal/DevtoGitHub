@@ -48,6 +48,9 @@ export async function fetchDevToReadingList(
     .split(",")
     .map((tag) => tag.trim())
 
+  core.notice(`excludeTags: ${excludeTags}`)
+  core.notice(`mustIncludeTags: ${mustIncludeTags}`)
+
   // we can also do this.
   // core.getInput("mustIncludeTags").flatMap(tagList => tagList.split(", "));
 
@@ -70,6 +73,8 @@ export async function fetchDevToReadingList(
     excludeTags,
     mustIncludeTags
   )
+
+  core.notice(`filteredArticles: ${filteredArticles}`)
 
   return filteredReadingList
 }

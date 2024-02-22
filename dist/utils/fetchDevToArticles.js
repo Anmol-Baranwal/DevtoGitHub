@@ -43,6 +43,7 @@ async function fetchDevToArticles(apiKey, per_page) {
     }
     core.notice("Articles fetched and saved successfully.");
     const articles = await response.json();
+    core.notice(`articles: ${articles}`);
     return articles;
 }
 exports.fetchDevToArticles = fetchDevToArticles;

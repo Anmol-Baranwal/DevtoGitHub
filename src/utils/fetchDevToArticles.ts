@@ -23,5 +23,8 @@ export async function fetchDevToArticles(
   core.notice("Articles fetched and saved successfully.")
 
   const articles = await response.json()
+
+  core.notice(`articles: ${articles}`)
+
   return articles as DevToArticle[]
 }
