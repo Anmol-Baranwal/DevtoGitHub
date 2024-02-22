@@ -35,25 +35,25 @@ export async function fetchDevToReadingList(
 
   const headers: { [key: string]: string } = {
     "Content-Type": "application/json",
-    "api-key": "Kk9yXar68C98KfsZokUDc5Ag"
+    "api-key": apiKey
   }
 
-  // const excludeTags = core
-  //   .getInput("excludeTags")
-  //   .split(",")
-  //   .map((tag) => tag.trim())
+  const excludeTags = core
+    .getInput("excludeTags")
+    .split(",")
+    .map((tag) => tag.trim())
 
-  // const mustIncludeTags = core
-  //   .getInput("mustIncludeTags")
-  //   .split(",")
-  //   .map((tag) => tag.trim())
+  const mustIncludeTags = core
+    .getInput("mustIncludeTags")
+    .split(",")
+    .map((tag) => tag.trim())
 
-  const excludeTags = ["webdev", "react", "discuss"]
-  const mustIncludeTags = ["startup", "programming", "beginners"]
+  // we can also do this.
+  // core.getInput("mustIncludeTags").flatMap(tagList => tagList.split(", "));
 
-  // const excludeTags = ["webdev, react, discuss"].flatMap(tagList => tagList.split(", "));
-
-  console.log({ apiUrl })
+  // sample values
+  // const excludeTags = ["webdev", "react", "discuss"]
+  // const mustIncludeTags = ["startup", "programming", "beginners"]
 
   const response = await fetch(apiUrl, { headers })
 

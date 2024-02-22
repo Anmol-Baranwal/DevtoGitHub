@@ -49,20 +49,21 @@ async function fetchDevToReadingList(apiKey, per_page) {
     const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
-        "api-key": "Kk9yXar68C98KfsZokUDc5Ag"
+        "api-key": apiKey
     };
-    // const excludeTags = core
-    //   .getInput("excludeTags")
-    //   .split(",")
-    //   .map((tag) => tag.trim())
-    // const mustIncludeTags = core
-    //   .getInput("mustIncludeTags")
-    //   .split(",")
-    //   .map((tag) => tag.trim())
-    const excludeTags = ["webdev", "react", "discuss"];
-    const mustIncludeTags = ["startup", "programming", "beginners"];
-    // const excludeTags = ["webdev, react, discuss"].flatMap(tagList => tagList.split(", "));
-    console.log({ apiUrl });
+    const excludeTags = core
+        .getInput("excludeTags")
+        .split(",")
+        .map((tag) => tag.trim());
+    const mustIncludeTags = core
+        .getInput("mustIncludeTags")
+        .split(",")
+        .map((tag) => tag.trim());
+    // we can also do this.
+    // core.getInput("mustIncludeTags").flatMap(tagList => tagList.split(", "));
+    // sample values
+    // const excludeTags = ["webdev", "react", "discuss"]
+    // const mustIncludeTags = ["startup", "programming", "beginners"]
     const response = await (0, node_fetch_1.default)(apiUrl, { headers });
     if (!response.ok) {
         throw new Error(`Failed to fetch reading list. Status: ${response.status}`);

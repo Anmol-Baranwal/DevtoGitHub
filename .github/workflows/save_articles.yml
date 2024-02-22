@@ -36,7 +36,7 @@ jobs:
           gh-token: ${{ secrets.SECRET_TOKEN }}
           readingList: true
           readTime: true
-          # excludeTags: "discuss"
-          # mustIncludeTags: "programming, softwaredevelopment"
+          excludeTags: "discuss"
+          mustIncludeTags: "programming, softwaredevelopment, beginners, webdev"
           # outputDir: "./articles"
           # branch: "core_functionalities"

@@ -4,11 +4,10 @@ import { ReadingList } from "../types"
 
 export async function createReadingList(
   articles: ReadingList[],
+  outputDir: string,
   branch?: string
 ): Promise<void> {
-  const outputDir = "./"
-
-  const readTime = core.getInput("readTime") || "false"
+  const readTime = core.getInput("readTime") === "true" || false
 
   // Read existing content of README
   let existingContent = ""
@@ -21,11 +20,11 @@ export async function createReadingList(
   if (!existingContent.includes("## Reading List")) {
     existingContent += "\n <hr/> \n\n## Reading List\n\n"
   }
-  console.log({ readTime })
 
   // Add bullet points for each article
   for (const articleItem of articles) {
     const articleUrl = articleItem.article.url
+    // url is used to avoid adding duplicate articles
     if (existingContent.includes(articleUrl)) {
       console.log(
         `Skipping article "${articleItem.article.title}" because it already exists in the reading list.`

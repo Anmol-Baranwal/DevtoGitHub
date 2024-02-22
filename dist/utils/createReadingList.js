@@ -26,9 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createReadingList = void 0;
 const core = __importStar(require("@actions/core"));
 const fs = __importStar(require("fs"));
-async function createReadingList(articles, branch) {
-    const outputDir = "./";
-    const readTime = core.getInput("readTime") || "false";
+async function createReadingList(articles, outputDir, branch) {
+    const readTime = core.getInput("readTime") === "true" || false;
     // Read existing content of README
     let existingContent = "";
     const readmePath = `${outputDir}/README.md`;
@@ -39,10 +38,10 @@ async function createReadingList(articles, branch) {
     if (!existingContent.includes("## Reading List")) {
         existingContent += "\n <hr/> \n\n## Reading List\n\n";
     }
-    console.log({ readTime });
     // Add bullet points for each article
     for (const articleItem of articles) {
         const articleUrl = articleItem.article.url;
+        // url is used to avoid adding duplicate articles
         if (existingContent.includes(articleUrl)) {
             console.log(`Skipping article "${articleItem.article.title}" because it already exists in the reading list.`);
             continue;
