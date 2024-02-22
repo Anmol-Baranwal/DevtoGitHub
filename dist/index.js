@@ -155,22 +155,48 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.fetchDevToReadingList = void 0;
 const node_fetch_1 = __importDefault(__nccwpck_require__(1793));
 const core = __importStar(__nccwpck_require__(2186));
+const filteredArticles = (articles, excludeTags, mustIncludeTags) => {
+    if (excludeTags.length === 0) {
+        // No filtering if excludeTags is empty
+        return articles;
+    }
+    return articles.filter((articleItem) => {
+        const articleTags = articleItem.article.tags;
+        const hasExcludedTag = excludeTags.some((tag) => articleTags.includes(tag));
+        const hasMustIncludeTag = mustIncludeTags.length !== 0 &&
+            mustIncludeTags.some((tag) => articleTags.includes(tag));
+        const shouldInclude = hasMustIncludeTag || !hasExcludedTag;
+        return shouldInclude;
+    });
+};
 async function fetchDevToReadingList(apiKey, per_page) {
     if (per_page === undefined)
-        per_page = 200; // default is 30
+        per_page = 999; // default is 30
     const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
         "api-key": "Kk9yXar68C98KfsZokUDc5Ag"
     };
+    // const excludeTags = core
+    //   .getInput("excludeTags")
+    //   .split(",")
+    //   .map((tag) => tag.trim())
+    // const mustIncludeTags = core
+    //   .getInput("mustIncludeTags")
+    //   .split(",")
+    //   .map((tag) => tag.trim())
+    const excludeTags = ["webdev", "react", "discuss"];
+    const mustIncludeTags = ["startup", "programming", "beginners"];
+    // const excludeTags = ["webdev, react, discuss"].flatMap(tagList => tagList.split(", "));
     console.log({ apiUrl });
     const response = await (0, node_fetch_1.default)(apiUrl, { headers });
     if (!response.ok) {
         throw new Error(`Failed to fetch reading list. Status: ${response.status}`);
     }
     core.notice("Reading list fetched successfully.");
-    const articles = await response.json();
-    return articles;
+    const articles = (await response.json());
+    const filteredReadingList = filteredArticles(articles, excludeTags, mustIncludeTags);
+    return filteredReadingList;
 }
 exports.fetchDevToReadingList = fetchDevToReadingList;
 

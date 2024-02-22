@@ -34,7 +34,9 @@ jobs:
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           gh-token: ${{ secrets.SECRET_TOKEN }}
-          readingList: "true"
-          readTime: "true"
+          readingList: true
+          readTime: true
+          # excludeTags: "discuss"
+          # mustIncludeTags: "programming, softwaredevelopment"
           # outputDir: "./articles"
           # branch: "core_functionalities"

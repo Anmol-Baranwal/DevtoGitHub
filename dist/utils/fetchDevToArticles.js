@@ -29,8 +29,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchDevToArticles = void 0;
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const core = __importStar(require("@actions/core"));
-async function fetchDevToArticles(apiKey) {
-    const apiUrl = `https://dev.to/api/articles/me`;
+async function fetchDevToArticles(apiKey, per_page) {
+    if (per_page === undefined)
+        per_page = 999; // default is 30
+    const apiUrl = `https://dev.to/api/articles/me?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
         "api-key": apiKey

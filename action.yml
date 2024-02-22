@@ -32,7 +32,7 @@ inputs:
   saveArticles:
     description: 'To save all the articles with all the necessary information.'
     default: 'true'
-    required: true
+    required: false
   branch:
     description: 'The git branch to use'
     required: false
