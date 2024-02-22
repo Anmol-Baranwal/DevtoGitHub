@@ -71,7 +71,6 @@ async function fetchDevToReadingList(apiKey, per_page) {
     core.notice("Reading list fetched successfully.");
     const articles = (await response.json());
     const filteredReadingList = filteredArticles(articles, excludeTags, mustIncludeTags);
-    core.notice(`filteredArticles: ${filteredReadingList}`);
     return filteredReadingList;
 }
 exports.fetchDevToReadingList = fetchDevToReadingList;

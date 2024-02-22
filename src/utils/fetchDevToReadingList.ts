@@ -71,7 +71,5 @@ export async function fetchDevToReadingList(
     mustIncludeTags
   )
 
-  core.notice(`filteredArticles: ${filteredReadingList}`)
-
   return filteredReadingList
 }
