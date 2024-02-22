@@ -43,10 +43,6 @@ async function DevSync() {
         // const branch = core.getInput("branch") || "main"
         // const conventionalCommits = core.getInput("conventional_commits") === "true"
         const readingList = core.getInput("readingList") === "true" || false;
-        core.notice(`apiKey: ${apiKey}`);
-        core.notice(`outputDir: ${outputDir}`);
-        core.notice(`outputDirReading: ${outputDirReading}`);
-        core.notice(`readingList: ${readingList}`);
         const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
         (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir);
         core.notice("Articles fetched and saved successfully.");
@@ -118,7 +114,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
             const markdownContent = (0, parseMarkdownContent_1.parseMarkdownContent)(article);
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
-            core.notice(`markdownContent: ${markdownContent}`);
+            // core.notice(`markdownContent: ${markdownContent}`)
             core.notice(`Markdown file created: ${filePath}`);
         }
         else {
@@ -168,12 +164,12 @@ async function createReadingList(articles, outputDir, branch) {
     core.notice(`readTime: ${readTime}`);
     // Read existing content of README
     let existingContent = "";
-    const readmePath = `${outputDir}/README.md`;
+    const readmePath = `${outputDir}README.md`;
     if (fs.existsSync(readmePath)) {
         existingContent = fs.readFileSync(readmePath, "utf8");
     }
     core.notice(`readmePath: ${readmePath}`);
-    core.notice(`existingContent: ${existingContent}`);
+    // core.notice(`existingContent: ${existingContent}`)
     // Check if the reading list heading exists, if not add it
     if (!existingContent.includes("## Reading List")) {
         existingContent += "\n <hr/> \n\n## Reading List\n\n";
@@ -251,7 +247,6 @@ async function fetchDevToArticles(apiKey, per_page) {
     }
     core.notice("Articles fetched and saved successfully.");
     const articles = await response.json();
-    core.notice(`articles: ${articles}`);
     return articles;
 }
 exports.fetchDevToArticles = fetchDevToArticles;
@@ -324,8 +319,6 @@ async function fetchDevToReadingList(apiKey, per_page) {
         .getInput("mustIncludeTags")
         .split(",")
         .map((tag) => tag.trim());
-    core.notice(`excludeTags: ${excludeTags}`);
-    core.notice(`mustIncludeTags: ${mustIncludeTags}`);
     // we can also do this.
     // core.getInput("mustIncludeTags").flatMap(tagList => tagList.split(", "));
     // sample values
@@ -338,7 +331,7 @@ async function fetchDevToReadingList(apiKey, per_page) {
     core.notice("Reading list fetched successfully.");
     const articles = (await response.json());
     const filteredReadingList = filteredArticles(articles, excludeTags, mustIncludeTags);
-    core.notice(`filteredArticles: ${filteredArticles}`);
+    core.notice(`filteredArticles: ${filteredReadingList}`);
     return filteredReadingList;
 }
 exports.fetchDevToReadingList = fetchDevToReadingList;

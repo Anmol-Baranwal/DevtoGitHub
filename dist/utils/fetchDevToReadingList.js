@@ -59,8 +59,6 @@ async function fetchDevToReadingList(apiKey, per_page) {
         .getInput("mustIncludeTags")
         .split(",")
         .map((tag) => tag.trim());
-    core.notice(`excludeTags: ${excludeTags}`);
-    core.notice(`mustIncludeTags: ${mustIncludeTags}`);
     // we can also do this.
     // core.getInput("mustIncludeTags").flatMap(tagList => tagList.split(", "));
     // sample values
@@ -73,7 +71,7 @@ async function fetchDevToReadingList(apiKey, per_page) {
     core.notice("Reading list fetched successfully.");
     const articles = (await response.json());
     const filteredReadingList = filteredArticles(articles, excludeTags, mustIncludeTags);
-    core.notice(`filteredArticles: ${filteredArticles}`);
+    core.notice(`filteredArticles: ${filteredReadingList}`);
     return filteredReadingList;
 }
 exports.fetchDevToReadingList = fetchDevToReadingList;

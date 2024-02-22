@@ -31,7 +31,7 @@ export async function createMarkdownFile(
       // Write markdown content to file
       fs.writeFileSync(filePath, markdownContent)
 
-      core.notice(`markdownContent: ${markdownContent}`)
+      // core.notice(`markdownContent: ${markdownContent}`)
 
       core.notice(`Markdown file created: ${filePath}`)
     } else {

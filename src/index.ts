@@ -13,11 +13,6 @@ async function DevSync() {
     // const conventionalCommits = core.getInput("conventional_commits") === "true"
     const readingList = core.getInput("readingList") === "true" || false
 
-    core.notice(`apiKey: ${apiKey}`)
-    core.notice(`outputDir: ${outputDir}`)
-    core.notice(`outputDirReading: ${outputDirReading}`)
-    core.notice(`readingList: ${readingList}`)
-
     const articles = await fetchDevToArticles(apiKey)
     createMarkdownFile(articles, outputDir)
     core.notice("Articles fetched and saved successfully.")
