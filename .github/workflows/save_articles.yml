@@ -31,6 +31,8 @@ jobs:
 
       - name: Run DevSync
         uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           gh-token: ${{ secrets.SECRET_TOKEN }}
@@ -41,10 +43,3 @@ jobs:
           branch: "core_functionalities"
           # outputDir: "./articles"
           # branch: "core_functionalities"
-
-      - name: commit
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git commit -m "add changes"
-          git push

@@ -29,6 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = exports.getFileNameFromTitle = void 0;
 const exec = __importStar(require("@actions/exec"));
 const node_process_1 = __importDefault(require("node:process"));
+const core = __importStar(require("@actions/core"));
 // generate a valid file name using the title
 function getFileNameFromTitle(title) {
     // Replace special characters other than apostrophes and hyphens with spaces
@@ -39,14 +40,17 @@ function getFileNameFromTitle(title) {
 }
 exports.getFileNameFromTitle = getFileNameFromTitle;
 async function gitAdd(filePath) {
+    core.notice(`inside gitAdd`);
     await exec.exec("git", ["add", filePath]);
 }
 exports.gitAdd = gitAdd;
 async function gitCommit(message, config) {
+    core.notice(`inside gitCommit`);
     await exec.exec("git", [...config, "commit", "-m", message]);
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch, config) {
+    core.notice(`inside gitPush`);
     await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config]);
 }
 exports.gitPush = gitPush;

@@ -1,5 +1,6 @@
 import * as exec from "@actions/exec"
 import process from "node:process"
+import * as core from "@actions/core"
 
 // generate a valid file name using the title
 export function getFileNameFromTitle(title: string): string {
@@ -11,6 +12,7 @@ export function getFileNameFromTitle(title: string): string {
 }
 
 export async function gitAdd(filePath: string): Promise<void> {
+  core.notice(`inside gitAdd`)
   await exec.exec("git", ["add", filePath])
 }
 
@@ -18,10 +20,12 @@ export async function gitCommit(
   message: string,
   config: string[]
 ): Promise<void> {
+  core.notice(`inside gitCommit`)
   await exec.exec("git", [...config, "commit", "-m", message])
 }
 
 export async function gitPush(branch: string, config: string[]): Promise<void> {
+  core.notice(`inside gitPush`)
   await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config])
 }
 
