@@ -50,7 +50,7 @@ export async function createMarkdownFile(
       try {
         // Commit and push the new markdown file to the specified branch
 
-        await exec.exec("git", gitConfig)
+        // await exec.exec("git", gitConfig)
 
         await gitAdd(filePath)
 

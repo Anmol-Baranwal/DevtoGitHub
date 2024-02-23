@@ -91,7 +91,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createMarkdownFile = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
-const exec = __importStar(__nccwpck_require__(1514));
 const git_1 = __nccwpck_require__(9556);
 const parseMarkdownContent_1 = __nccwpck_require__(4305);
 async function createMarkdownFile(articles, outputDir, branch) {
@@ -121,7 +120,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
             fs.writeFileSync(filePath, markdownContent);
             try {
                 // Commit and push the new markdown file to the specified branch
-                await exec.exec("git", git_1.gitConfig);
+                // await exec.exec("git", gitConfig)
                 await (0, git_1.gitAdd)(filePath);
                 core.notice(`commitMessageBefore`);
                 await (0, git_1.gitCommit)(commitMessage, filePath);
