@@ -402,7 +402,8 @@ async function gitAdd(filePath) {
 exports.gitAdd = gitAdd;
 async function gitCommit(message, config) {
     core.notice(`inside gitCommit`);
-    await exec.exec("git", [...config, "commit", "-m", message]);
+    const configOptions = config.map((opt) => `-c "${opt}"`).join(" ");
+    await exec.exec("git", [`commit`, `-m`, `"${message}"`, configOptions]);
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch, config) {
