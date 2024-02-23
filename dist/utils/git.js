@@ -47,8 +47,8 @@ async function gitPush(branch, config) {
 }
 exports.gitPush = gitPush;
 exports.gitConfig = [
-    "-c",
+    "git config --global",
     `user.name="${process.env.GITHUB_ACTOR || "GitHub Actions"}"`,
-    "-c",
+    "git config --global",
     `user.email="${process.env.GITHUB_ACTOR}@users.noreply.github.com"`
 ];
