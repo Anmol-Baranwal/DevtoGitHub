@@ -118,18 +118,19 @@ async function createMarkdownFile(articles, outputDir, branch) {
             const markdownContent = (0, parseMarkdownContent_1.parseMarkdownContent)(article);
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
-            try {
-                // Commit and push the new markdown file to the specified branch
-                await (0, git_1.gitAdd)(filePath);
-                await (0, git_1.gitCommit)(commitMessage, git_1.gitConfig);
-                core.notice(`branchbefore`);
-                await (0, git_1.gitPush)(branch, git_1.gitConfig);
-                core.notice(`branchafter`);
-                core.notice(`Markdown file created and committed: ${filePath}`);
-            }
-            catch (error) {
-                core.setFailed(`Failed to commit and push changes: ${error.message}`);
-            }
+            // try {
+            //   // Commit and push the new markdown file to the specified branch
+            //   await gitAdd(filePath)
+            //   await gitCommit(commitMessage, gitConfig)
+            //   core.notice(`branchbefore`)
+            //   await gitPush(branch, gitConfig)
+            //   core.notice(`branchafter`)
+            //   core.notice(`Markdown file created and committed: ${filePath}`)
+            // } catch (error) {
+            //   core.setFailed(
+            //     `Failed to commit and push changes: ${(error as Error).message}`
+            //   )
+            // }
             core.notice(`Markdown file created: ${filePath}`);
         }
         else {
@@ -384,7 +385,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = exports.getFileNameFromTitle = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const node_process_1 = __importDefault(__nccwpck_require__(7742));
-const core = __importStar(__nccwpck_require__(2186));
 // generate a valid file name using the title
 function getFileNameFromTitle(title) {
     // Replace special characters other than apostrophes and hyphens with spaces
@@ -394,23 +394,16 @@ function getFileNameFromTitle(title) {
         .toLowerCase();
 }
 exports.getFileNameFromTitle = getFileNameFromTitle;
-const githubToken = core.getInput(`gh-token`);
 async function gitAdd(filePath) {
-    await exec.exec("git", ["add", filePath], {
-        env: { ...node_process_1.default.env, GITHUB_TOKEN: githubToken }
-    });
+    await exec.exec("git", ["add", filePath]);
 }
 exports.gitAdd = gitAdd;
 async function gitCommit(message, config) {
-    await exec.exec("git", [...config, "commit", "-m", message], {
-        env: { ...node_process_1.default.env, GITHUB_TOKEN: githubToken }
-    });
+    await exec.exec("git", [...config, "commit", "-m", message]);
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch, config) {
-    await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config], {
-        env: { ...node_process_1.default.env, GITHUB_TOKEN: githubToken }
-    });
+    await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config]);
 }
 exports.gitPush = gitPush;
 exports.gitConfig = [
@@ -423,28 +416,6 @@ exports.gitConfig = [
     "user.email",
     `${node_process_1.default.env.GITHUB_ACTOR}@users.noreply.github.com`
 ];
-// export async function gitAdd(filePath: string): Promise<void> {
-//   await exec.exec("git", ["add", filePath])
-// }
-// export async function gitCommit(
-//   message: string,
-//   config: string[]
-// ): Promise<void> {
-//   await exec.exec("git", [...config, "commit", "-m", message])
-// }
-// export async function gitPush(branch: string, config: string[]): Promise<void> {
-//   await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config])
-// }
-// export const gitConfig = [
-//   "config",
-//   "--global",
-//   "user.name",
-//   process.env.GITHUB_ACTOR || "GitHub Actions",
-//   "config",
-//   "--global",
-//   "user.email",
-//   `${process.env.GITHUB_ACTOR}@users.noreply.github.com`
-// ]
 
 
 /***/ }),

@@ -46,25 +46,25 @@ export async function createMarkdownFile(
       // Write markdown content to file
       fs.writeFileSync(filePath, markdownContent)
 
-      try {
-        // Commit and push the new markdown file to the specified branch
+      // try {
+      //   // Commit and push the new markdown file to the specified branch
 
-        await gitAdd(filePath)
+      //   await gitAdd(filePath)
 
-        await gitCommit(commitMessage, gitConfig)
+      //   await gitCommit(commitMessage, gitConfig)
 
-        core.notice(`branchbefore`)
+      //   core.notice(`branchbefore`)
 
-        await gitPush(branch, gitConfig)
+      //   await gitPush(branch, gitConfig)
 
-        core.notice(`branchafter`)
+      //   core.notice(`branchafter`)
 
-        core.notice(`Markdown file created and committed: ${filePath}`)
-      } catch (error) {
-        core.setFailed(
-          `Failed to commit and push changes: ${(error as Error).message}`
-        )
-      }
+      //   core.notice(`Markdown file created and committed: ${filePath}`)
+      // } catch (error) {
+      //   core.setFailed(
+      //     `Failed to commit and push changes: ${(error as Error).message}`
+      //   )
+      // }
       core.notice(`Markdown file created: ${filePath}`)
     } else {
       core.notice(
