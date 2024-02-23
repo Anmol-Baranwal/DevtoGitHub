@@ -57,7 +57,13 @@ exports.gitAdd = gitAdd;
 // }
 async function gitCommit(message, filePath) {
     core.notice(`inside gitCommit`);
-    await exec.exec("git", ["commit", "-m", message, filePath]);
+    await exec.exec("git", [
+        "commit",
+        "-m",
+        message,
+        filePath,
+        `--author=Anmol Baranwal <anmolbaranwal119@gmail.com>`
+    ]);
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch) {

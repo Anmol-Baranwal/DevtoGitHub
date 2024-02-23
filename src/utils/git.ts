@@ -34,7 +34,13 @@ export async function gitCommit(
   filePath: string
 ): Promise<void> {
   core.notice(`inside gitCommit`)
-  await exec.exec("git", ["commit", "-m", message, filePath])
+  await exec.exec("git", [
+    "commit",
+    "-m",
+    message,
+    filePath,
+    `--author=Anmol Baranwal <anmolbaranwal119@gmail.com>`
+  ])
 }
 
 export async function gitPush(branch: string): Promise<void> {
