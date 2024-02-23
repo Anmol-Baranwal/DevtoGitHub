@@ -157,6 +157,10 @@ async function createArticlesReadme(articles, outputDir, branch) {
     for (const article of articles) {
         const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
         const fileLink = `./${fileName}.md`;
+        if (readmeContent.includes(`[${article.title}]`)) {
+            console.log(`Skipping "${article.title}" because it already exists in the table of contents.`);
+            continue;
+        }
         // Add entry to README content
         readmeContent += `- [${article.title}](${fileLink.replace(/ /g, "%20")})\n`;
     }
