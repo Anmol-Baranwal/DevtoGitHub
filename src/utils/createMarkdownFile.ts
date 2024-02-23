@@ -30,6 +30,9 @@ export async function createMarkdownFile(
     }
   }
 
+  // Create content for README.md
+  let readmeContent = "# Table of Contents\n\n"
+
   for (const article of articles) {
     const fileName = getFileNameFromTitle(article.title).trim()
     const filePath = `${outputDir}/${fileName}.md`
@@ -45,6 +48,8 @@ export async function createMarkdownFile(
       const markdownContent = parseMarkdownContent(article)
       // Write markdown content to file
       fs.writeFileSync(filePath, markdownContent)
+
+      readmeContent += `- [${article.title}](${fileName}.md)\n`
 
       try {
         await gitAdd(filePath)
@@ -63,5 +68,27 @@ export async function createMarkdownFile(
         `Markdown file already exists for "${article.title}". Skipping.`
       )
     }
+  }
+
+  const readmePath = `${outputDir}/README.md`
+  fs.writeFileSync(readmePath, readmeContent)
+
+  // Git operations for README.md
+  let commitMessage = "Update README with table of contents"
+
+  if (conventionalCommits) {
+    commitMessage = `chore: ${commitMessage.toLowerCase()}`
+  }
+
+  try {
+    await gitAdd(readmePath)
+    await gitCommit(commitMessage, readmePath)
+    await gitPush(branch)
+
+    core.notice("README.md file created and committed")
+  } catch (error) {
+    core.setFailed(
+      `Failed to commit and push changes (readme articles): ${error}`
+    )
   }
 }

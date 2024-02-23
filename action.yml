@@ -37,6 +37,10 @@ inputs:
     description: 'To save all the articles with all the necessary information.'
     default: 'true'
     required: false
+  saveArticlesReadme:
+    description: 'To create a list of saved articles linked with their respective file in the readme.'
+    default: 'false'
+    required: false
   branch:
     description: 'The git branch to use'
     required: false
