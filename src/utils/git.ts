@@ -34,13 +34,7 @@ export async function gitCommit(
   filePath: string
 ): Promise<void> {
   core.notice(`inside gitCommit`)
-  await exec.exec("git", [
-    "commit",
-    "-m",
-    message,
-    filePath,
-    `--author=Anmol Baranwal <anmolbaranwal119@gmail.com>`
-  ])
+  await exec.exec("git", ["commit", "-m", message, filePath])
 }
 
 export async function gitPush(branch: string): Promise<void> {
@@ -51,10 +45,8 @@ export async function gitPush(branch: string): Promise<void> {
 export const gitConfig = [
   "config",
   "--global",
-  "user.name",
-  process.env.GITHUB_ACTOR || "GitHub Actions",
+  `user.name=${process.env.GITHUB_ACTOR || "GitHub Actions"}`,
   "config",
   "--global",
-  "user.email",
-  `${process.env.GITHUB_ACTOR}@users.noreply.github.com`
+  `user.email=${process.env.GITHUB_ACTOR}@users.noreply.github.com`
 ]

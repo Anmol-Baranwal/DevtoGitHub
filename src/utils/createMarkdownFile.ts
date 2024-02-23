@@ -1,5 +1,6 @@
 import * as core from "@actions/core"
 import * as fs from "fs"
+import * as exec from "@actions/exec"
 import {
   getFileNameFromTitle,
   gitAdd,
@@ -48,6 +49,8 @@ export async function createMarkdownFile(
 
       try {
         // Commit and push the new markdown file to the specified branch
+
+        await exec.exec("git", gitConfig)
 
         await gitAdd(filePath)
 

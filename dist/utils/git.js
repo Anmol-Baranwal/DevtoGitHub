@@ -57,13 +57,7 @@ exports.gitAdd = gitAdd;
 // }
 async function gitCommit(message, filePath) {
     core.notice(`inside gitCommit`);
-    await exec.exec("git", [
-        "commit",
-        "-m",
-        message,
-        filePath,
-        `--author=Anmol Baranwal <anmolbaranwal119@gmail.com>`
-    ]);
+    await exec.exec("git", ["commit", "-m", message, filePath]);
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch) {
@@ -74,10 +68,8 @@ exports.gitPush = gitPush;
 exports.gitConfig = [
     "config",
     "--global",
-    "user.name",
-    node_process_1.default.env.GITHUB_ACTOR || "GitHub Actions",
+    `user.name=${node_process_1.default.env.GITHUB_ACTOR || "GitHub Actions"}`,
     "config",
     "--global",
-    "user.email",
-    `${node_process_1.default.env.GITHUB_ACTOR}@users.noreply.github.com`
+    `user.email=${node_process_1.default.env.GITHUB_ACTOR}@users.noreply.github.com`
 ];

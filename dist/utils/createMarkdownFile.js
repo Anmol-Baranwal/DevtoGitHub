@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMarkdownFile = void 0;
 const core = __importStar(require("@actions/core"));
 const fs = __importStar(require("fs"));
+const exec = __importStar(require("@actions/exec"));
 const git_1 = require("./git");
 const parseMarkdownContent_1 = require("./parseMarkdownContent");
 async function createMarkdownFile(articles, outputDir, branch) {
@@ -55,6 +56,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
             fs.writeFileSync(filePath, markdownContent);
             try {
                 // Commit and push the new markdown file to the specified branch
+                await exec.exec("git", git_1.gitConfig);
                 await (0, git_1.gitAdd)(filePath);
                 core.notice(`commitMessageBefore`);
                 await (0, git_1.gitCommit)(commitMessage, filePath);

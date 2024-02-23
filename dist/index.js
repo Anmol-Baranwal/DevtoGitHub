@@ -91,6 +91,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createMarkdownFile = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
+const exec = __importStar(__nccwpck_require__(1514));
 const git_1 = __nccwpck_require__(9556);
 const parseMarkdownContent_1 = __nccwpck_require__(4305);
 async function createMarkdownFile(articles, outputDir, branch) {
@@ -120,6 +121,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
             fs.writeFileSync(filePath, markdownContent);
             try {
                 // Commit and push the new markdown file to the specified branch
+                await exec.exec("git", git_1.gitConfig);
                 await (0, git_1.gitAdd)(filePath);
                 core.notice(`commitMessageBefore`);
                 await (0, git_1.gitCommit)(commitMessage, filePath);
@@ -413,13 +415,7 @@ exports.gitAdd = gitAdd;
 // }
 async function gitCommit(message, filePath) {
     core.notice(`inside gitCommit`);
-    await exec.exec("git", [
-        "commit",
-        "-m",
-        message,
-        filePath,
-        `--author=Anmol Baranwal <anmolbaranwal119@gmail.com>`
-    ]);
+    await exec.exec("git", ["commit", "-m", message, filePath]);
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch) {
@@ -430,12 +426,10 @@ exports.gitPush = gitPush;
 exports.gitConfig = [
     "config",
     "--global",
-    "user.name",
-    node_process_1.default.env.GITHUB_ACTOR || "GitHub Actions",
+    `user.name=${node_process_1.default.env.GITHUB_ACTOR || "GitHub Actions"}`,
     "config",
     "--global",
-    "user.email",
-    `${node_process_1.default.env.GITHUB_ACTOR}@users.noreply.github.com`
+    `user.email=${node_process_1.default.env.GITHUB_ACTOR}@users.noreply.github.com`
 ];
 
 
