@@ -53,11 +53,11 @@ export async function createMarkdownFile(
 
         core.notice(`commitMessageBefore`)
 
-        await gitCommit(commitMessage, gitConfig)
+        await gitCommit(commitMessage, filePath)
 
         core.notice(`branchbefore`)
 
-        await gitPush(branch, gitConfig)
+        await gitPush(branch)
 
         core.notice(`branchafter`)
 

@@ -16,18 +16,30 @@ export async function gitAdd(filePath: string): Promise<void> {
   await exec.exec("git", ["add", filePath])
 }
 
+// export async function gitCommit(
+//   message: string,
+//   config: string[]
+// ): Promise<void> {
+//   core.notice(`inside gitCommit`)
+//   await exec.exec("git", [...config, "commit", "-m", message])
+// }
+
+// export async function gitPush(branch: string, config: string[]): Promise<void> {
+//   core.notice(`inside gitPush`)
+//   await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config])
+// }
+
 export async function gitCommit(
   message: string,
-  config: string[]
+  filePath: string
 ): Promise<void> {
   core.notice(`inside gitCommit`)
-  const configOptions = config.map((opt) => `-c "${opt}"`).join(" ")
-  await exec.exec("git", [`commit`, `"${message}"`, configOptions])
+  await exec.exec("git", ["commit", "-m", message, filePath])
 }
 
-export async function gitPush(branch: string, config: string[]): Promise<void> {
+export async function gitPush(branch: string): Promise<void> {
   core.notice(`inside gitPush`)
-  await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config])
+  await exec.exec("git", ["push", "origin", `HEAD:${branch}`])
 }
 
 export const gitConfig = [
