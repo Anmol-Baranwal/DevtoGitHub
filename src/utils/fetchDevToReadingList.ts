@@ -30,7 +30,7 @@ export async function fetchDevToReadingList(
   apiKey: string,
   per_page?: number
 ): Promise<ReadingList[]> {
-  if (per_page === undefined) per_page = 999 // default is 30
+  if (per_page === undefined) per_page = 1 // default is 30
   const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`
 
   const headers: { [key: string]: string } = {
