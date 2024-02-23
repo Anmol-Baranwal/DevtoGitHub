@@ -47,7 +47,7 @@ exports.gitAdd = gitAdd;
 async function gitCommit(message, config) {
     core.notice(`inside gitCommit`);
     const configOptions = config.map((opt) => `-c "${opt}"`).join(" ");
-    await exec.exec("git", [`commit`, `-m`, `"${message}"`, configOptions]);
+    await exec.exec("git", [`commit`, `"${message}"`, configOptions]);
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch, config) {

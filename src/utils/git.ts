@@ -22,7 +22,7 @@ export async function gitCommit(
 ): Promise<void> {
   core.notice(`inside gitCommit`)
   const configOptions = config.map((opt) => `-c "${opt}"`).join(" ")
-  await exec.exec("git", [`commit`, `-m`, `"${message}"`, configOptions])
+  await exec.exec("git", [`commit`, `"${message}"`, configOptions])
 }
 
 export async function gitPush(branch: string, config: string[]): Promise<void> {
