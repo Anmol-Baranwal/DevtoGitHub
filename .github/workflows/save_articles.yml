@@ -5,7 +5,7 @@ on:
     - cron: "0 0 * * *" # Run daily, adjust as needed
   workflow_dispatch:
   push:
-    branches: ["core_functionalities"]
+    branches: ["main"]
 
 jobs:
   save_articles:
@@ -39,12 +39,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
-          gh-token: ${{ secrets.SECRET_TOKEN }}
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
           readingList: true
           readTime: true
           excludeTags: "discuss"
           mustIncludeTags: "programming, softwaredevelopment, beginners, webdev"
-          branch: "core_functionalities"
+          branch: "main"
           saveArticlesReadme: true
-          # outputDir: "./articles"
-          # branch: "core_functionalities"

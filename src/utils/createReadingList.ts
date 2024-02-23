@@ -11,7 +11,7 @@ export async function createReadingList(
   const readTime = core.getInput("readTime") === "true" || false
 
   const conventionalCommits =
-    core.getInput("conventional_commits") === "true" || true
+    core.getInput("conventionalCommits") === "true" || true
 
   // Read existing content of README
   let existingContent = ""

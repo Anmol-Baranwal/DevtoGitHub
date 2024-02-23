@@ -10,7 +10,7 @@ import {
 import { parseMarkdownContent } from "./parseMarkdownContent"
 
 const conventionalCommits =
-  core.getInput("conventional_commits") === "true" || true
+  core.getInput("conventionalCommits") === "true" || true
 
 export async function createMarkdownFile(
   articles: any[],
@@ -47,9 +47,9 @@ export async function createMarkdownFile(
       fs.writeFileSync(filePath, markdownContent)
 
       try {
-        // await gitAdd(filePath)
-        // await gitCommit(commitMessage, filePath)
-        // await gitPush(branch)
+        await gitAdd(filePath)
+        await gitCommit(commitMessage, filePath)
+        await gitPush(branch)
 
         core.notice(`Markdown file created and committed: ${filePath}`)
       } catch (error) {
@@ -115,9 +115,9 @@ async function createArticlesReadme(
   }
 
   try {
-    // await gitAdd(readmePath)
-    // await gitCommit(commitMessage, readmePath)
-    // await gitPush(branch)
+    await gitAdd(readmePath)
+    await gitCommit(commitMessage, readmePath)
+    await gitPush(branch)
 
     core.notice("README.md file created and committed")
   } catch (error) {

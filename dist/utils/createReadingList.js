@@ -29,7 +29,7 @@ const fs = __importStar(require("fs"));
 const git_1 = require("./git");
 async function createReadingList(articles, outputDir, branch) {
     const readTime = core.getInput("readTime") === "true" || false;
-    const conventionalCommits = core.getInput("conventional_commits") === "true" || true;
+    const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
     // Read existing content of README
     let existingContent = "";
     const readmePath = `${outputDir}README.md`;

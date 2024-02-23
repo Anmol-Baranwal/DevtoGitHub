@@ -45,7 +45,7 @@ inputs:
     description: 'The git branch to use'
     required: false
     default: 'main'
-  conventional_commits:
+  conventionalCommits:
     description: 'Use conventional commit message standards'
     required: false
     default: 'true'

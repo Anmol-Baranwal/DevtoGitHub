@@ -28,7 +28,7 @@ const core = __importStar(require("@actions/core"));
 const fs = __importStar(require("fs"));
 const git_1 = require("./git");
 const parseMarkdownContent_1 = require("./parseMarkdownContent");
-const conventionalCommits = core.getInput("conventional_commits") === "true" || true;
+const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
 async function createMarkdownFile(articles, outputDir, branch) {
     // output directory must exist
     if (!fs.existsSync(outputDir)) {
@@ -54,9 +54,9 @@ async function createMarkdownFile(articles, outputDir, branch) {
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
             try {
-                // await gitAdd(filePath)
-                // await gitCommit(commitMessage, filePath)
-                // await gitPush(branch)
+                await (0, git_1.gitAdd)(filePath);
+                await (0, git_1.gitCommit)(commitMessage, filePath);
+                await (0, git_1.gitPush)(branch);
                 core.notice(`Markdown file created and committed: ${filePath}`);
             }
             catch (error) {
@@ -101,9 +101,9 @@ async function createArticlesReadme(articles, outputDir, branch) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`;
     }
     try {
-        // await gitAdd(readmePath)
-        // await gitCommit(commitMessage, readmePath)
-        // await gitPush(branch)
+        await (0, git_1.gitAdd)(readmePath);
+        await (0, git_1.gitCommit)(commitMessage, readmePath);
+        await (0, git_1.gitPush)(branch);
         core.notice("README.md file created and committed");
     }
     catch (error) {

@@ -93,7 +93,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
 const git_1 = __nccwpck_require__(9556);
 const parseMarkdownContent_1 = __nccwpck_require__(4305);
-const conventionalCommits = core.getInput("conventional_commits") === "true" || true;
+const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
 async function createMarkdownFile(articles, outputDir, branch) {
     // output directory must exist
     if (!fs.existsSync(outputDir)) {
@@ -119,9 +119,9 @@ async function createMarkdownFile(articles, outputDir, branch) {
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
             try {
-                // await gitAdd(filePath)
-                // await gitCommit(commitMessage, filePath)
-                // await gitPush(branch)
+                await (0, git_1.gitAdd)(filePath);
+                await (0, git_1.gitCommit)(commitMessage, filePath);
+                await (0, git_1.gitPush)(branch);
                 core.notice(`Markdown file created and committed: ${filePath}`);
             }
             catch (error) {
@@ -166,9 +166,9 @@ async function createArticlesReadme(articles, outputDir, branch) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`;
     }
     try {
-        // await gitAdd(readmePath)
-        // await gitCommit(commitMessage, readmePath)
-        // await gitPush(branch)
+        await (0, git_1.gitAdd)(readmePath);
+        await (0, git_1.gitCommit)(commitMessage, readmePath);
+        await (0, git_1.gitPush)(branch);
         core.notice("README.md file created and committed");
     }
     catch (error) {
@@ -215,7 +215,7 @@ const fs = __importStar(__nccwpck_require__(7147));
 const git_1 = __nccwpck_require__(9556);
 async function createReadingList(articles, outputDir, branch) {
     const readTime = core.getInput("readTime") === "true" || false;
-    const conventionalCommits = core.getInput("conventional_commits") === "true" || true;
+    const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
     // Read existing content of README
     let existingContent = "";
     const readmePath = `${outputDir}README.md`;
@@ -376,7 +376,7 @@ async function fetchDevToReadingList(apiKey, per_page) {
     const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
-        "api-key": "Kk9yXar68C98KfsZokUDc5Ag"
+        "api-key": apiKey
     };
     const excludeTags = core
         .getInput("excludeTags")
