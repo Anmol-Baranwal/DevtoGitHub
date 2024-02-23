@@ -20,16 +20,17 @@ export async function createReadingList(
     existingContent = fs.readFileSync(readmePath, "utf8")
   }
 
-  let commitMessage = `update reading list`
+  const hasReadingListHeading = existingContent.includes("## Reading List")
+  let commitMessage = hasReadingListHeading
+    ? "update reading list"
+    : "create reading list"
 
   if (conventionalCommits) {
     commitMessage = `chore: ${commitMessage.toLowerCase()}`
   }
 
-  core.notice(`existingContent: ${existingContent}`)
-
   // Check if the reading list heading exists, if not add it
-  if (!existingContent.includes("## Reading List")) {
+  if (!hasReadingListHeading) {
     existingContent += "\n <hr/> \n\n## Reading List\n\n"
   }
 

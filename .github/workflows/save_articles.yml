@@ -5,7 +5,7 @@ on:
     - cron: "0 0 * * *" # Run daily, adjust as needed
   workflow_dispatch:
   push:
-    branches: ["main", "testing", "core_functionalities"]
+    branches: ["core_functionalities"]
 
 jobs:
   save_articles:
@@ -45,5 +45,6 @@ jobs:
           excludeTags: "discuss"
           mustIncludeTags: "programming, softwaredevelopment, beginners, webdev"
           branch: "core_functionalities"
+          saveArticlesReadme: true
           # outputDir: "./articles"
           # branch: "core_functionalities"

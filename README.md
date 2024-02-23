@@ -14,3 +14,4 @@ Save your dev.to articles with this github action workflow
 - [Next.js 14 Booking App with Live Data Scraping using Scraping Browser](https://dev.to/kishansheth/nextjs-14-booking-app-with-live-data-scraping-using-scraping-browser-610) - 14 minutes
 - [A11y: Vanilla javascript aria-live announcer](https://dev.to/this-is-learning/a11y-vanilla-javascript-aria-live-announcer-784) - 4 minutes
 - [A GitHub Action that automatically generates & updates markdown content (like your README.md) from external or remote files.](https://dev.to/dineshsonachalam/a-github-action-that-automatically-generates-updates-markdown-content-like-your-readme-md-from-external-or-remote-files-hp7) - 4 minutes
+- [Creating Scroll Progress Bar using CSS and JavaScript in React](https://dev.to/surajondev/creating-scroll-progress-bar-using-css-and-javascript-in-react-85o) - 4 minutes

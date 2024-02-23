@@ -93,8 +93,8 @@ const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
 const git_1 = __nccwpck_require__(9556);
 const parseMarkdownContent_1 = __nccwpck_require__(4305);
+const conventionalCommits = core.getInput("conventional_commits") === "true" || true;
 async function createMarkdownFile(articles, outputDir, branch) {
-    const conventionalCommits = core.getInput("conventional_commits") === "true" || true;
     // output directory must exist
     if (!fs.existsSync(outputDir)) {
         try {
@@ -106,8 +106,6 @@ async function createMarkdownFile(articles, outputDir, branch) {
             return;
         }
     }
-    // Create content for README.md
-    let readmeContent = "# Table of Contents\n\n";
     for (const article of articles) {
         const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
         const filePath = `${outputDir}/${fileName}.md`;
@@ -120,11 +118,10 @@ async function createMarkdownFile(articles, outputDir, branch) {
             const markdownContent = (0, parseMarkdownContent_1.parseMarkdownContent)(article);
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
-            readmeContent += `- [${article.title}](${fileName}.md)\n`;
             try {
-                await (0, git_1.gitAdd)(filePath);
-                await (0, git_1.gitCommit)(commitMessage, filePath);
-                await (0, git_1.gitPush)(branch);
+                // await gitAdd(filePath)
+                // await gitCommit(commitMessage, filePath)
+                // await gitPush(branch)
                 core.notice(`Markdown file created and committed: ${filePath}`);
             }
             catch (error) {
@@ -136,24 +133,49 @@ async function createMarkdownFile(articles, outputDir, branch) {
             core.notice(`Markdown file already exists for "${article.title}". Skipping.`);
         }
     }
+    const tableOfContents = core.getInput("saveArticlesReadme") === "true" || false;
+    if (tableOfContents) {
+        await createArticlesReadme(articles, outputDir, branch);
+    }
+}
+exports.createMarkdownFile = createMarkdownFile;
+async function createArticlesReadme(articles, outputDir, branch) {
+    // Create content for README.md
+    let readmeContent = "";
     const readmePath = `${outputDir}/README.md`;
+    if (fs.existsSync(readmePath)) {
+        readmeContent = fs.readFileSync(readmePath, "utf8");
+    }
+    const hasTableOfContentsHeading = readmeContent.includes("# Table of Contents\n\n");
+    // Set the commit message based on whether the heading exists
+    let commitMessage = hasTableOfContentsHeading
+        ? "update readme with table of contents"
+        : "create readme with table of contents";
+    if (!hasTableOfContentsHeading) {
+        readmeContent = "# Table of Contents\n\n";
+    }
+    for (const article of articles) {
+        const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
+        const fileLink = `./${fileName}.md`;
+        // Add entry to README content
+        readmeContent += `- [${article.title}](${fileLink.replace(/ /g, "%20")})\n`;
+    }
+    // Write README.md
     fs.writeFileSync(readmePath, readmeContent);
-    // Git operations for README.md
-    let commitMessage = "Update README with table of contents";
     if (conventionalCommits) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`;
     }
     try {
-        await (0, git_1.gitAdd)(readmePath);
-        await (0, git_1.gitCommit)(commitMessage, readmePath);
-        await (0, git_1.gitPush)(branch);
+        // await gitAdd(readmePath)
+        // await gitCommit(commitMessage, readmePath)
+        // await gitPush(branch)
         core.notice("README.md file created and committed");
     }
     catch (error) {
-        core.setFailed(`Failed to commit and push changes (readme articles): ${error}`);
+        ;
+        `Failed to commit and push changes (readme articles): ${error}`;
     }
 }
-exports.createMarkdownFile = createMarkdownFile;
 
 
 /***/ }),
@@ -200,13 +222,15 @@ async function createReadingList(articles, outputDir, branch) {
     if (fs.existsSync(readmePath)) {
         existingContent = fs.readFileSync(readmePath, "utf8");
     }
-    let commitMessage = `update reading list`;
+    const hasReadingListHeading = existingContent.includes("## Reading List");
+    let commitMessage = hasReadingListHeading
+        ? "update reading list"
+        : "create reading list";
     if (conventionalCommits) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`;
     }
-    core.notice(`existingContent: ${existingContent}`);
     // Check if the reading list heading exists, if not add it
-    if (!existingContent.includes("## Reading List")) {
+    if (!hasReadingListHeading) {
         existingContent += "\n <hr/> \n\n## Reading List\n\n";
     }
     // Add bullet points for each article
@@ -278,7 +302,7 @@ const node_fetch_1 = __importDefault(__nccwpck_require__(1793));
 const core = __importStar(__nccwpck_require__(2186));
 async function fetchDevToArticles(apiKey, per_page) {
     if (per_page === undefined)
-        per_page = 0; // default is 30
+        per_page = 1; // default is 30
     const apiUrl = `https://dev.to/api/articles/me?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
@@ -348,11 +372,11 @@ const filteredArticles = (articles, excludeTags, mustIncludeTags) => {
 };
 async function fetchDevToReadingList(apiKey, per_page) {
     if (per_page === undefined)
-        per_page = 999; // default is 30
+        per_page = 1; // default is 30
     const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
-        "api-key": apiKey
+        "api-key": "Kk9yXar68C98KfsZokUDc5Ag"
     };
     const excludeTags = core
         .getInput("excludeTags")
