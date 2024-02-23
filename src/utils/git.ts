@@ -45,8 +45,8 @@ export async function gitPush(branch: string): Promise<void> {
 export const gitConfig = [
   "config",
   "--global",
-  `user.name=${process.env.GITHUB_ACTOR || "GitHub Actions"}`,
+  `user.name=Anmol Baranwal`,
   "config",
   "--global",
-  `user.email=${process.env.GITHUB_ACTOR}@users.noreply.github.com`
+  `user.email=actions@github.com`
 ]

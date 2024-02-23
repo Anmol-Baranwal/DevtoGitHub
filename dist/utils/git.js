@@ -22,13 +22,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = exports.getFileNameFromTitle = void 0;
 const exec = __importStar(require("@actions/exec"));
-const node_process_1 = __importDefault(require("node:process"));
 const core = __importStar(require("@actions/core"));
 // generate a valid file name using the title
 function getFileNameFromTitle(title) {
@@ -68,8 +64,8 @@ exports.gitPush = gitPush;
 exports.gitConfig = [
     "config",
     "--global",
-    `user.name=${node_process_1.default.env.GITHUB_ACTOR || "GitHub Actions"}`,
+    `user.name=Anmol Baranwal`,
     "config",
     "--global",
-    `user.email=${node_process_1.default.env.GITHUB_ACTOR}@users.noreply.github.com`
+    `user.email=actions@github.com`
 ];
