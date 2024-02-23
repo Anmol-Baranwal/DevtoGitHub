@@ -8,7 +8,7 @@ inputs:
   gh-token:
     description: 'The GitHub token for authentication.'
     default: ${{ github.token }}
-    required: true
+    required: false
   outputDir:
     description: 'The output directory for creating markdown files'
     default: './articles'
@@ -42,7 +42,7 @@ inputs:
     required: false
     default: 'main'
   conventional_commits:
-    description: 'Use conventional commits messages'
+    description: 'Use conventional commit message standards'
     required: false
     default: 'true'
 runs:

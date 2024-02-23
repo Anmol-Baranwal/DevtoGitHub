@@ -29,6 +29,7 @@ const fs = __importStar(require("fs"));
 const git_1 = require("./git");
 const parseMarkdownContent_1 = require("./parseMarkdownContent");
 async function createMarkdownFile(articles, outputDir, branch) {
+    const conventionalCommits = core.getInput("conventional_commits") === "true" || true;
     // output directory must exist
     if (!fs.existsSync(outputDir)) {
         try {
@@ -45,9 +46,23 @@ async function createMarkdownFile(articles, outputDir, branch) {
         const filePath = `${outputDir}/${fileName}.md`;
         // Check if the markdown file already exists
         if (!fs.existsSync(filePath)) {
+            let commitMessage = `add ${fileName} markdown file`;
+            if (conventionalCommits) {
+                commitMessage = `chore: ${commitMessage.toLowerCase()}`;
+            }
             const markdownContent = (0, parseMarkdownContent_1.parseMarkdownContent)(article);
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
+            try {
+                // Commit and push the new markdown file to the specified branch
+                await (0, git_1.gitAdd)(filePath);
+                await (0, git_1.gitCommit)(commitMessage, git_1.gitConfig);
+                await (0, git_1.gitPush)(branch, git_1.gitConfig);
+                core.notice(`Markdown file created and committed: ${filePath}`);
+            }
+            catch (error) {
+                core.setFailed(`Failed to commit and push changes: ${error.message}`);
+            }
             core.notice(`Markdown file created: ${filePath}`);
         }
         else {

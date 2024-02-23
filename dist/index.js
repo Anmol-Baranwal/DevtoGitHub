@@ -40,15 +40,14 @@ async function DevSync() {
         const apiKey = core.getInput("devApiKey");
         const outputDir = core.getInput("outputDir") || "./articles"; // Default is the articles directory
         const outputDirReading = core.getInput("outputDirReading") || "./"; // Default is the root directory
-        // const branch = core.getInput("branch") || "main"
-        // const conventionalCommits = core.getInput("conventional_commits") === "true"
+        const branch = core.getInput("branch") || "main";
         const readingList = core.getInput("readingList") === "true" || false;
         const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
-        (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir);
+        (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch);
         core.notice("Articles fetched and saved successfully.");
         if (readingList) {
             const readingListArticles = await (0, fetchDevToReadingList_1.fetchDevToReadingList)(apiKey, 5);
-            (0, createReadingList_1.createReadingList)(readingListArticles, outputDirReading);
+            (0, createReadingList_1.createReadingList)(readingListArticles, outputDirReading, branch);
         }
     }
     catch (error) {
@@ -95,6 +94,7 @@ const fs = __importStar(__nccwpck_require__(7147));
 const git_1 = __nccwpck_require__(9556);
 const parseMarkdownContent_1 = __nccwpck_require__(4305);
 async function createMarkdownFile(articles, outputDir, branch) {
+    const conventionalCommits = core.getInput("conventional_commits") === "true" || true;
     // output directory must exist
     if (!fs.existsSync(outputDir)) {
         try {
@@ -111,9 +111,23 @@ async function createMarkdownFile(articles, outputDir, branch) {
         const filePath = `${outputDir}/${fileName}.md`;
         // Check if the markdown file already exists
         if (!fs.existsSync(filePath)) {
+            let commitMessage = `add ${fileName} markdown file`;
+            if (conventionalCommits) {
+                commitMessage = `chore: ${commitMessage.toLowerCase()}`;
+            }
             const markdownContent = (0, parseMarkdownContent_1.parseMarkdownContent)(article);
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
+            try {
+                // Commit and push the new markdown file to the specified branch
+                await (0, git_1.gitAdd)(filePath);
+                await (0, git_1.gitCommit)(commitMessage, git_1.gitConfig);
+                await (0, git_1.gitPush)(branch, git_1.gitConfig);
+                core.notice(`Markdown file created and committed: ${filePath}`);
+            }
+            catch (error) {
+                core.setFailed(`Failed to commit and push changes: ${error.message}`);
+            }
             core.notice(`Markdown file created: ${filePath}`);
         }
         else {

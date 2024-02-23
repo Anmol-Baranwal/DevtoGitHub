@@ -9,18 +9,17 @@ async function DevSync() {
     const apiKey = core.getInput("devApiKey")
     const outputDir = core.getInput("outputDir") || "./articles" // Default is the articles directory
     const outputDirReading = core.getInput("outputDirReading") || "./" // Default is the root directory
-    // const branch = core.getInput("branch") || "main"
-    // const conventionalCommits = core.getInput("conventional_commits") === "true"
+    const branch = core.getInput("branch") || "main"
     const readingList = core.getInput("readingList") === "true" || false
 
     const articles = await fetchDevToArticles(apiKey)
-    createMarkdownFile(articles, outputDir)
+    createMarkdownFile(articles, outputDir, branch)
     core.notice("Articles fetched and saved successfully.")
 
     if (readingList) {
       const readingListArticles = await fetchDevToReadingList(apiKey, 5)
 
-      createReadingList(readingListArticles, outputDirReading)
+      createReadingList(readingListArticles, outputDirReading, branch)
     }
   } catch (error) {
     console.error("Error:", (error as Error).message)

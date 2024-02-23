@@ -5,7 +5,7 @@ import { ReadingList } from "../types"
 export async function createReadingList(
   articles: ReadingList[],
   outputDir: string,
-  branch?: string
+  branch: string
 ): Promise<void> {
   const readTime = core.getInput("readTime") === "true" || false
 

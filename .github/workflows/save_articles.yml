@@ -38,13 +38,6 @@ jobs:
           readTime: true
           excludeTags: "discuss"
           mustIncludeTags: "programming, softwaredevelopment, beginners, webdev"
+          branch: "core_functionalities"
           # outputDir: "./articles"
           # branch: "core_functionalities"
-
-      - name: commit
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git add README.md
-          git commit -m "add changes"
-          git push origin core_functionalities

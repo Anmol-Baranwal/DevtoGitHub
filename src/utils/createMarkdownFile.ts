@@ -1,13 +1,22 @@
 import * as core from "@actions/core"
 import * as fs from "fs"
-import { getFileNameFromTitle } from "./git"
+import {
+  getFileNameFromTitle,
+  gitAdd,
+  gitCommit,
+  gitConfig,
+  gitPush
+} from "./git"
 import { parseMarkdownContent } from "./parseMarkdownContent"
 
 export async function createMarkdownFile(
   articles: any[],
   outputDir: string,
-  branch?: string
+  branch: string
 ): Promise<void> {
+  const conventionalCommits =
+    core.getInput("conventional_commits") === "true" || true
+
   // output directory must exist
   if (!fs.existsSync(outputDir)) {
     try {
@@ -27,10 +36,28 @@ export async function createMarkdownFile(
 
     // Check if the markdown file already exists
     if (!fs.existsSync(filePath)) {
+      let commitMessage = `add ${fileName} markdown file`
+
+      if (conventionalCommits) {
+        commitMessage = `chore: ${commitMessage.toLowerCase()}`
+      }
+
       const markdownContent = parseMarkdownContent(article)
       // Write markdown content to file
       fs.writeFileSync(filePath, markdownContent)
 
+      try {
+        // Commit and push the new markdown file to the specified branch
+        await gitAdd(filePath)
+        await gitCommit(commitMessage, gitConfig)
+        await gitPush(branch, gitConfig)
+
+        core.notice(`Markdown file created and committed: ${filePath}`)
+      } catch (error) {
+        core.setFailed(
+          `Failed to commit and push changes: ${(error as Error).message}`
+        )
+      }
       core.notice(`Markdown file created: ${filePath}`)
     } else {
       core.notice(
