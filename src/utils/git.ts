@@ -28,19 +28,10 @@ export async function gitPush(branch: string, config: string[]): Promise<void> {
 export const gitConfig = [
   "config",
   "--global",
-  `user.name=Anmol Baranwal`,
+  "user.name",
+  process.env.GITHUB_ACTOR || "GitHub Actions",
   "config",
   "--global",
-  `user.email=anmolbaranwal119@gmail.com`
+  "user.email",
+  `${process.env.GITHUB_ACTOR}@users.noreply.github.com`
 ]
-
-// export const gitConfig = [
-//   "config",
-//   "--global",
-//   "user.name",
-//   process.env.GITHUB_ACTOR || "GitHub Actions",
-//   "config",
-//   "--global",
-//   "user.email",
-//   `${process.env.GITHUB_ACTOR}@users.noreply.github.com`
-// ]
