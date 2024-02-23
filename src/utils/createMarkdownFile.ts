@@ -49,11 +49,7 @@ export async function createMarkdownFile(
       try {
         // Commit and push the new markdown file to the specified branch
 
-        core.notice(`filePathBefore`)
-
         await gitAdd(filePath)
-
-        core.notice(`filePathAfter`)
 
         await gitCommit(commitMessage, gitConfig)
 

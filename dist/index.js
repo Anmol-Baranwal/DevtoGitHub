@@ -120,9 +120,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
             fs.writeFileSync(filePath, markdownContent);
             try {
                 // Commit and push the new markdown file to the specified branch
-                core.notice(`filePathBefore`);
                 await (0, git_1.gitAdd)(filePath);
-                core.notice(`filePathAfter`);
                 await (0, git_1.gitCommit)(commitMessage, git_1.gitConfig);
                 core.notice(`branchbefore`);
                 await (0, git_1.gitPush)(branch, git_1.gitConfig);
@@ -404,10 +402,12 @@ async function gitPush(branch, config) {
 }
 exports.gitPush = gitPush;
 exports.gitConfig = [
-    "git config --global",
-    `user.name="${process.env.GITHUB_ACTOR || "GitHub Actions"}"`,
-    "git config --global",
-    `user.email="${process.env.GITHUB_ACTOR}@users.noreply.github.com"`
+    "config",
+    "--global",
+    `user.name=${process.env.GITHUB_ACTOR || "GitHub Actions"}`,
+    "config",
+    "--global",
+    `user.email=${process.env.GITHUB_ACTOR}@users.noreply.github.com`
 ];
 
 
