@@ -119,14 +119,9 @@ async function createMarkdownFile(articles, outputDir, branch) {
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
             try {
-                // Commit and push the new markdown file to the specified branch
-                // await exec.exec("git", gitConfig)
                 await (0, git_1.gitAdd)(filePath);
-                core.notice(`commitMessageBefore`);
                 await (0, git_1.gitCommit)(commitMessage, filePath);
-                core.notice(`branchbefore`);
                 await (0, git_1.gitPush)(branch);
-                core.notice(`branchafter`);
                 core.notice(`Markdown file created and committed: ${filePath}`);
             }
             catch (error) {
@@ -176,14 +171,21 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createReadingList = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
+const git_1 = __nccwpck_require__(9556);
 async function createReadingList(articles, outputDir, branch) {
     const readTime = core.getInput("readTime") === "true" || false;
+    const conventionalCommits = core.getInput("conventional_commits") === "true" || true;
     // Read existing content of README
     let existingContent = "";
     const readmePath = `${outputDir}README.md`;
     if (fs.existsSync(readmePath)) {
         existingContent = fs.readFileSync(readmePath, "utf8");
     }
+    let commitMessage = `update reading list`;
+    if (conventionalCommits) {
+        commitMessage = `chore: ${commitMessage.toLowerCase()}`;
+    }
+    core.notice(`existingContent: ${existingContent}`);
     // Check if the reading list heading exists, if not add it
     if (!existingContent.includes("## Reading List")) {
         existingContent += "\n <hr/> \n\n## Reading List\n\n";
@@ -204,6 +206,15 @@ async function createReadingList(articles, outputDir, branch) {
         }
     }
     fs.writeFileSync(readmePath, existingContent);
+    try {
+        await (0, git_1.gitAdd)(readmePath);
+        await (0, git_1.gitCommit)(commitMessage, readmePath);
+        await (0, git_1.gitPush)(branch);
+        core.notice(`reading list file created and committed`);
+    }
+    catch (error) {
+        core.setFailed(`Failed to commit and push changes: ${error.message}`);
+    }
     core.notice(`Reading list updated in README.md`);
 }
 exports.createReadingList = createReadingList;
@@ -248,7 +259,7 @@ const node_fetch_1 = __importDefault(__nccwpck_require__(1793));
 const core = __importStar(__nccwpck_require__(2186));
 async function fetchDevToArticles(apiKey, per_page) {
     if (per_page === undefined)
-        per_page = 999; // default is 30
+        per_page = 0; // default is 30
     const apiUrl = `https://dev.to/api/articles/me?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",

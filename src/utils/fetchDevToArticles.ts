@@ -6,7 +6,7 @@ export async function fetchDevToArticles(
   apiKey: string,
   per_page?: number
 ): Promise<DevToArticle[]> {
-  if (per_page === undefined) per_page = 999 // default is 30
+  if (per_page === undefined) per_page = 0 // default is 30
   const apiUrl = `https://dev.to/api/articles/me?per_page=${per_page}`
 
   const headers: { [key: string]: string } = {

@@ -54,14 +54,9 @@ async function createMarkdownFile(articles, outputDir, branch) {
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
             try {
-                // Commit and push the new markdown file to the specified branch
-                // await exec.exec("git", gitConfig)
                 await (0, git_1.gitAdd)(filePath);
-                core.notice(`commitMessageBefore`);
                 await (0, git_1.gitCommit)(commitMessage, filePath);
-                core.notice(`branchbefore`);
                 await (0, git_1.gitPush)(branch);
-                core.notice(`branchafter`);
                 core.notice(`Markdown file created and committed: ${filePath}`);
             }
             catch (error) {

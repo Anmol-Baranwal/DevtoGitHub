@@ -1,6 +1,7 @@
 import * as core from "@actions/core"
 import * as fs from "fs"
 import { ReadingList } from "../types"
+import { gitAdd, gitCommit, gitPush } from "./git"
 
 export async function createReadingList(
   articles: ReadingList[],
@@ -9,12 +10,23 @@ export async function createReadingList(
 ): Promise<void> {
   const readTime = core.getInput("readTime") === "true" || false
 
+  const conventionalCommits =
+    core.getInput("conventional_commits") === "true" || true
+
   // Read existing content of README
   let existingContent = ""
   const readmePath = `${outputDir}README.md`
   if (fs.existsSync(readmePath)) {
     existingContent = fs.readFileSync(readmePath, "utf8")
   }
+
+  let commitMessage = `update reading list`
+
+  if (conventionalCommits) {
+    commitMessage = `chore: ${commitMessage.toLowerCase()}`
+  }
+
+  core.notice(`existingContent: ${existingContent}`)
 
   // Check if the reading list heading exists, if not add it
   if (!existingContent.includes("## Reading List")) {
@@ -40,6 +52,18 @@ export async function createReadingList(
   }
 
   fs.writeFileSync(readmePath, existingContent)
+
+  try {
+    await gitAdd(readmePath)
+    await gitCommit(commitMessage, readmePath)
+    await gitPush(branch)
+
+    core.notice(`reading list file created and committed`)
+  } catch (error) {
+    core.setFailed(
+      `Failed to commit and push changes: ${(error as Error).message}`
+    )
+  }
 
   core.notice(`Reading list updated in README.md`)
 }
