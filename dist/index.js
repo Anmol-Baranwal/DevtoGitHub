@@ -404,11 +404,21 @@ exports.gitPush = gitPush;
 exports.gitConfig = [
     "config",
     "--global",
-    `user.name=${process.env.GITHUB_ACTOR || "GitHub Actions"}`,
+    `user.name=Anmol Baranwal`,
     "config",
     "--global",
-    `user.email=${process.env.GITHUB_ACTOR}@users.noreply.github.com`
+    `user.email=anmolbaranwal119@gmail.com`
 ];
+// export const gitConfig = [
+//   "config",
+//   "--global",
+//   "user.name",
+//   process.env.GITHUB_ACTOR || "GitHub Actions",
+//   "config",
+//   "--global",
+//   "user.email",
+//   `${process.env.GITHUB_ACTOR}@users.noreply.github.com`
+// ]
 
 
 /***/ }),
