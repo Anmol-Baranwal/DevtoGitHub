@@ -31,7 +31,7 @@ const node_fetch_1 = __importDefault(require("node-fetch"));
 const core = __importStar(require("@actions/core"));
 async function fetchDevToArticles(apiKey, per_page) {
     if (per_page === undefined)
-        per_page = 0; // default is 30
+        per_page = 1; // default is 30
     const apiUrl = `https://dev.to/api/articles/me?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",

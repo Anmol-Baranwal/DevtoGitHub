@@ -40,7 +40,6 @@ async function createReadingList(articles, outputDir, branch) {
     if (conventionalCommits) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`;
     }
-    core.notice(`existingContent: ${existingContent}`);
     // Check if the reading list heading exists, if not add it
     if (!existingContent.includes("## Reading List")) {
         existingContent += "\n <hr/> \n\n## Reading List\n\n";
