@@ -384,6 +384,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = exports.getFileNameFromTitle = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const node_process_1 = __importDefault(__nccwpck_require__(7742));
+const core = __importStar(__nccwpck_require__(2186));
 // generate a valid file name using the title
 function getFileNameFromTitle(title) {
     // Replace special characters other than apostrophes and hyphens with spaces
@@ -393,16 +394,23 @@ function getFileNameFromTitle(title) {
         .toLowerCase();
 }
 exports.getFileNameFromTitle = getFileNameFromTitle;
+const githubToken = core.getInput(`gh-token`);
 async function gitAdd(filePath) {
-    await exec.exec("git", ["add", filePath]);
+    await exec.exec("git", ["add", filePath], {
+        env: { ...node_process_1.default.env, GITHUB_TOKEN: githubToken }
+    });
 }
 exports.gitAdd = gitAdd;
 async function gitCommit(message, config) {
-    await exec.exec("git", [...config, "commit", "-m", message]);
+    await exec.exec("git", [...config, "commit", "-m", message], {
+        env: { ...node_process_1.default.env, GITHUB_TOKEN: githubToken }
+    });
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch, config) {
-    await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config]);
+    await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config], {
+        env: { ...node_process_1.default.env, GITHUB_TOKEN: githubToken }
+    });
 }
 exports.gitPush = gitPush;
 exports.gitConfig = [
@@ -415,6 +423,28 @@ exports.gitConfig = [
     "user.email",
     `${node_process_1.default.env.GITHUB_ACTOR}@users.noreply.github.com`
 ];
+// export async function gitAdd(filePath: string): Promise<void> {
+//   await exec.exec("git", ["add", filePath])
+// }
+// export async function gitCommit(
+//   message: string,
+//   config: string[]
+// ): Promise<void> {
+//   await exec.exec("git", [...config, "commit", "-m", message])
+// }
+// export async function gitPush(branch: string, config: string[]): Promise<void> {
+//   await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config])
+// }
+// export const gitConfig = [
+//   "config",
+//   "--global",
+//   "user.name",
+//   process.env.GITHUB_ACTOR || "GitHub Actions",
+//   "config",
+//   "--global",
+//   "user.email",
+//   `${process.env.GITHUB_ACTOR}@users.noreply.github.com`
+// ]
 
 
 /***/ }),
