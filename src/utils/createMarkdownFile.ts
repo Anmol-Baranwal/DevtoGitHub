@@ -65,10 +65,15 @@ export async function createMarkdownFile(
       )
     }
   }
-  await createReadme(articles, outputDir, branch)
+  const tableOfContents =
+    core.getInput("saveArticlesReadme") === "true" || false
+
+  if (tableOfContents) {
+    await createArticlesReadme(articles, outputDir, branch)
+  }
 }
 
-async function createReadme(
+async function createArticlesReadme(
   articles: any[],
   outputDir: string,
   branch: string

@@ -68,10 +68,13 @@ async function createMarkdownFile(articles, outputDir, branch) {
             core.notice(`Markdown file already exists for "${article.title}". Skipping.`);
         }
     }
-    await createReadme(articles, outputDir, branch);
+    const tableOfContents = core.getInput("saveArticlesReadme") === "true" || false;
+    if (tableOfContents) {
+        await createArticlesReadme(articles, outputDir, branch);
+    }
 }
 exports.createMarkdownFile = createMarkdownFile;
-async function createReadme(articles, outputDir, branch) {
+async function createArticlesReadme(articles, outputDir, branch) {
     // Create content for README.md
     let readmeContent = "# Table of Contents\n\n";
     for (const article of articles) {

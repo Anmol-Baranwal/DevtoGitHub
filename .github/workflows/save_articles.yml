@@ -45,5 +45,6 @@ jobs:
           excludeTags: "discuss"
           mustIncludeTags: "programming, softwaredevelopment, beginners, webdev"
           branch: "core_functionalities"
+          saveArticlesReadme: true
           # outputDir: "./articles"
           # branch: "core_functionalities"
