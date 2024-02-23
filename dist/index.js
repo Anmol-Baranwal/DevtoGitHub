@@ -119,9 +119,9 @@ async function createMarkdownFile(articles, outputDir, branch) {
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
             try {
-                await (0, git_1.gitAdd)(filePath);
-                await (0, git_1.gitCommit)(commitMessage, filePath);
-                await (0, git_1.gitPush)(branch);
+                // await gitAdd(filePath)
+                // await gitCommit(commitMessage, filePath)
+                // await gitPush(branch)
                 core.notice(`Markdown file created and committed: ${filePath}`);
             }
             catch (error) {
@@ -141,7 +141,19 @@ async function createMarkdownFile(articles, outputDir, branch) {
 exports.createMarkdownFile = createMarkdownFile;
 async function createArticlesReadme(articles, outputDir, branch) {
     // Create content for README.md
-    let readmeContent = "# Table of Contents\n\n";
+    let readmeContent = "";
+    const readmePath = `${outputDir}/README.md`;
+    if (fs.existsSync(readmePath)) {
+        readmeContent = fs.readFileSync(readmePath, "utf8");
+    }
+    const hasTableOfContentsHeading = readmeContent.includes("# Table of Contents\n\n");
+    // Set the commit message based on whether the heading exists
+    let commitMessage = hasTableOfContentsHeading
+        ? "update readme with table of contents"
+        : "create readme with table of contents";
+    if (!hasTableOfContentsHeading) {
+        readmeContent = "# Table of Contents\n\n";
+    }
     for (const article of articles) {
         const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
         const fileLink = `./${fileName}.md`;
@@ -149,17 +161,14 @@ async function createArticlesReadme(articles, outputDir, branch) {
         readmeContent += `- [${article.title}](${fileLink.replace(/ /g, "%20")})\n`;
     }
     // Write README.md
-    const readmePath = `${outputDir}/README.md`;
     fs.writeFileSync(readmePath, readmeContent);
-    // Git operations for README.md
-    let commitMessage = "Update README with table of contents";
     if (conventionalCommits) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`;
     }
     try {
-        await (0, git_1.gitAdd)(readmePath);
-        await (0, git_1.gitCommit)(commitMessage, readmePath);
-        await (0, git_1.gitPush)(branch);
+        // await gitAdd(readmePath)
+        // await gitCommit(commitMessage, readmePath)
+        // await gitPush(branch)
         core.notice("README.md file created and committed");
     }
     catch (error) {
@@ -213,12 +222,15 @@ async function createReadingList(articles, outputDir, branch) {
     if (fs.existsSync(readmePath)) {
         existingContent = fs.readFileSync(readmePath, "utf8");
     }
-    let commitMessage = `update reading list`;
+    const hasReadingListHeading = existingContent.includes("## Reading List");
+    let commitMessage = hasReadingListHeading
+        ? "update reading list"
+        : "create reading list";
     if (conventionalCommits) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`;
     }
     // Check if the reading list heading exists, if not add it
-    if (!existingContent.includes("## Reading List")) {
+    if (!hasReadingListHeading) {
         existingContent += "\n <hr/> \n\n## Reading List\n\n";
     }
     // Add bullet points for each article
@@ -364,7 +376,7 @@ async function fetchDevToReadingList(apiKey, per_page) {
     const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
-        "api-key": apiKey
+        "api-key": "Kk9yXar68C98KfsZokUDc5Ag"
     };
     const excludeTags = core
         .getInput("excludeTags")

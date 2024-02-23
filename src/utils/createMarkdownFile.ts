@@ -47,9 +47,9 @@ export async function createMarkdownFile(
       fs.writeFileSync(filePath, markdownContent)
 
       try {
-        await gitAdd(filePath)
-        await gitCommit(commitMessage, filePath)
-        await gitPush(branch)
+        // await gitAdd(filePath)
+        // await gitCommit(commitMessage, filePath)
+        // await gitPush(branch)
 
         core.notice(`Markdown file created and committed: ${filePath}`)
       } catch (error) {
@@ -79,7 +79,24 @@ async function createArticlesReadme(
   branch: string
 ): Promise<void> {
   // Create content for README.md
-  let readmeContent = "# Table of Contents\n\n"
+  let readmeContent = ""
+  const readmePath = `${outputDir}/README.md`
+  if (fs.existsSync(readmePath)) {
+    readmeContent = fs.readFileSync(readmePath, "utf8")
+  }
+
+  const hasTableOfContentsHeading = readmeContent.includes(
+    "# Table of Contents\n\n"
+  )
+
+  // Set the commit message based on whether the heading exists
+  let commitMessage = hasTableOfContentsHeading
+    ? "update readme with table of contents"
+    : "create readme with table of contents"
+
+  if (!hasTableOfContentsHeading) {
+    readmeContent = "# Table of Contents\n\n"
+  }
 
   for (const article of articles) {
     const fileName = getFileNameFromTitle(article.title).trim()
@@ -91,20 +108,16 @@ async function createArticlesReadme(
   }
 
   // Write README.md
-  const readmePath = `${outputDir}/README.md`
   fs.writeFileSync(readmePath, readmeContent)
-
-  // Git operations for README.md
-  let commitMessage = "Update README with table of contents"
 
   if (conventionalCommits) {
     commitMessage = `chore: ${commitMessage.toLowerCase()}`
   }
 
   try {
-    await gitAdd(readmePath)
-    await gitCommit(commitMessage, readmePath)
-    await gitPush(branch)
+    // await gitAdd(readmePath)
+    // await gitCommit(commitMessage, readmePath)
+    // await gitPush(branch)
 
     core.notice("README.md file created and committed")
   } catch (error) {
