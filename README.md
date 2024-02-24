@@ -22,7 +22,24 @@ Save your dev.to articles and your reading list with a bunch of useful options.
 - Create a file in the repository at the following path: `.github/workflows/dev-sync.yml` and paste the following code into it.
 
 ```yml
+name: DevSync
 
+on:
+  schedule:
+    - cron: "0 0 * * *" # Run daily, adjust as needed
+
+jobs:
+  save-articles:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run DevSync
+        uses: Anmol-Baranwal/DevSync@main
+        with:
+          devApiKey: ${{ secrets.DEV_TOKEN }}
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          saveArticles: true # default
+          outputDir: "./articles" # default
+          saveArticlesReadme: true 
 ```
 
 - For detailed instructions on custom configuration and visual samples, please refer to the [examples](./Examples.md).
@@ -62,9 +79,9 @@ In case you feel confused. Let's understand it with an example.
 
 Suppose we have an article with tags: `['react', 'javascript', 'frontend', 'tutorial']`.
 
-- If `excludeTags` is `['frontend']` and `mustIncludeTags` is `['javascript']`. The article is included because it has the `javascript` tag (even though it also has the `frontend` tag).
-- If `excludeTags` is `['tutorial']` and `mustIncludeTags` is empty (default), the article will be excluded because it has the `tutorial` tag.
-- If `excludeTags` is `['backend']` and `mustIncludeTags` is `['typescript']`. The article is included because it does not have the `backend` tag.
+- If `excludeTags` is 'frontend' and `mustIncludeTags` is 'javascript'. The article is included because it has the `javascript` tag (even though it also has the `frontend` tag).
+- If `excludeTags` is 'tutorial' and `mustIncludeTags` is empty (default), the article will be excluded because it has the `tutorial` tag.
+- If `excludeTags` is 'backend' and `mustIncludeTags` is 'typescript'. The article is included because it does not have the `backend` tag.
 - These cases will work for multiple tags, and `mustIncludeTags` will only work if `excludeTags` is provided.
 
 > As I said earlier even if you remove a article from your reading list on DEV, it's isn't deleted from this repository. I'm going to solve this in the future release.

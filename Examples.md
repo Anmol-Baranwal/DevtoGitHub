@@ -140,7 +140,7 @@ jobs:
 
 > Explanation
 
-This will stop saving your articles since `saveArticles` is set to `false` (default is `true`). It will create your reading list with the articles in a structured way. You can change which directory you want using `outputDirReading`. For instance, the below workflow will save your articles in the root directory by adding your info in a `README`. You can read about excludeTags and mustIncludeTags in [detail with examples](https://github.com/Anmol-Baranwal/DevSync/edit/main/README.md#the-concept-of-excludetags-and-mustincludetags).
+This will stop saving your articles since `saveArticles` is set to `false` (default is `true`). It will create your reading list with the articles in a structured way. You can change which directory you want using `outputDirReading`. For instance, the below workflow will save your articles in the root directory by adding your info in a `README`. You can read about excludeTags and mustIncludeTags in [detail with examples](https://github.com/Anmol-Baranwal/DevSync?tab=readme-ov-file#the-concept-of-excludetags-and-mustincludetags).
 
 > Workflow code
 
