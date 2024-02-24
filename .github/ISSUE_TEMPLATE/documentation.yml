@@ -1,0 +1,32 @@
+name: "Documentation 📋"
+description: "Use this form to suggest on how to improve our docs"
+title: "[DOCS] <write your suggestion here>"
+labels: ["documenation"]
+
+body:
+  - type: textarea
+    id: docs_description
+    attributes:
+      label: "Issue Description"
+      description: "Please provide a brief summary of the documentation issue you are experiencing or would like to address."
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots_examples_docs
+    attributes:
+      label: "Screenshots or Examples (if applicable)"
+      description: "Please include relevant screenshots or examples to help illustrate the problem."
+
+  - type: checkboxes
+    id: terms_checklist_docs
+    attributes:
+      label: "Checklist"
+      description: "By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/Anmol-Baranwal/DevSync/blob/main/CODE_OF_CONDUCT.md)"
+      options:
+        - label: "I have checked the existing [issues](https://github.com/Anmol-Baranwal/DevSync/issues?q=is%3Aissue+)"
+          required: true
+        - label: "I have read the [Contributing Guidelines](https://github.com/Anmol-Baranwal/DevSync/blob/main/Contributing.md)"
+          required: true
+        - label: "I am willing to work on this issue (optional)"
+          required: false

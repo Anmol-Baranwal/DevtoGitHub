@@ -1,0 +1,18 @@
+name: Discussion
+description: Use this to ask questions and for discussion. Please do not create blank issues.
+title: "[Discussion]: <concise title>"
+labels: ["status: discussion"]
+body:
+  - type: textarea
+    id: discussion
+    attributes:
+      label: What would you like to discuss or ask?
+    validations:
+      required: true
+  - type: checkboxes
+    id: no-duplicate-issues
+    attributes:
+      label: "Checklist"
+      options:
+        - label: "I have checked the existing [issues](https://github.com/Anmol-Baranwal/DevSync/issues?q=is%3Aissue+)"
+          required: true
