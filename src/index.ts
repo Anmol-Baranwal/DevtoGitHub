@@ -13,7 +13,7 @@ async function DevSync() {
     const readingList = core.getInput("readingList") === "true" || false
     const saveArticles = core.getInput("saveArticles") === "true" || false
 
-    if (saveArticles) {
+    if (saveArticles === true) {
       const articles = await fetchDevToArticles(apiKey)
       createMarkdownFile(articles, outputDir, branch)
       core.notice("Articles fetched and saved successfully.")
@@ -21,7 +21,7 @@ async function DevSync() {
       core.notice(`skipping saving of articles`)
     }
 
-    if (readingList) {
+    if (readingList === true) {
       const readingListArticles = await fetchDevToReadingList(apiKey, 5)
 
       createReadingList(readingListArticles, outputDirReading, branch)

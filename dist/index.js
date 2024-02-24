@@ -43,7 +43,7 @@ async function DevSync() {
         const branch = core.getInput("branch") || "main";
         const readingList = core.getInput("readingList") === "true" || false;
         const saveArticles = core.getInput("saveArticles") === "true" || false;
-        if (saveArticles) {
+        if (saveArticles === true) {
             const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
             (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch);
             core.notice("Articles fetched and saved successfully.");
@@ -51,7 +51,7 @@ async function DevSync() {
         else {
             core.notice(`skipping saving of articles`);
         }
-        if (readingList) {
+        if (readingList === true) {
             const readingListArticles = await (0, fetchDevToReadingList_1.fetchDevToReadingList)(apiKey, 5);
             (0, createReadingList_1.createReadingList)(readingListArticles, outputDirReading, branch);
         }
