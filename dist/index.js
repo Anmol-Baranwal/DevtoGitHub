@@ -42,12 +42,21 @@ async function DevSync() {
         const outputDirReading = core.getInput("outputDirReading") || "./"; // Default is the root directory
         const branch = core.getInput("branch") || "main";
         const readingList = core.getInput("readingList") === "true" || false;
-        const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
-        (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch);
-        core.notice("Articles fetched and saved successfully.");
+        const saveArticles = core.getInput("saveArticles") === "true" || false;
+        if (saveArticles) {
+            const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
+            (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch);
+            core.notice("Articles fetched and saved successfully.");
+        }
+        else {
+            core.notice(`skipping saving of articles`);
+        }
         if (readingList) {
             const readingListArticles = await (0, fetchDevToReadingList_1.fetchDevToReadingList)(apiKey, 5);
             (0, createReadingList_1.createReadingList)(readingListArticles, outputDirReading, branch);
+        }
+        else {
+            core.notice(`skipping saving reading list`);
         }
     }
     catch (error) {
@@ -176,8 +185,7 @@ async function createArticlesReadme(articles, outputDir, branch) {
         core.notice("README.md file created and committed");
     }
     catch (error) {
-        ;
-        `Failed to commit and push changes (readme articles): ${error}`;
+        core.setFailed(`Failed to commit and push changes (readme articles): ${error}`);
     }
 }
 

@@ -11,15 +11,22 @@ async function DevSync() {
     const outputDirReading = core.getInput("outputDirReading") || "./" // Default is the root directory
     const branch = core.getInput("branch") || "main"
     const readingList = core.getInput("readingList") === "true" || false
+    const saveArticles = core.getInput("saveArticles") === "true" || false
 
-    const articles = await fetchDevToArticles(apiKey)
-    createMarkdownFile(articles, outputDir, branch)
-    core.notice("Articles fetched and saved successfully.")
+    if (saveArticles) {
+      const articles = await fetchDevToArticles(apiKey)
+      createMarkdownFile(articles, outputDir, branch)
+      core.notice("Articles fetched and saved successfully.")
+    } else {
+      core.notice(`skipping saving of articles`)
+    }
 
     if (readingList) {
       const readingListArticles = await fetchDevToReadingList(apiKey, 5)
 
       createReadingList(readingListArticles, outputDirReading, branch)
+    } else {
+      core.notice(`skipping saving reading list`)
     }
   } catch (error) {
     console.error("Error:", (error as Error).message)

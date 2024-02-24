@@ -128,6 +128,8 @@ async function createArticlesReadme(
 
     core.notice("README.md file created and committed")
   } catch (error) {
-    ;`Failed to commit and push changes (readme articles): ${error}`
+    core.setFailed(
+      `Failed to commit and push changes (readme articles): ${error}`
+    )
   }
 }
