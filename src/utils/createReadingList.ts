@@ -13,10 +13,25 @@ export async function createReadingList(
   const conventionalCommits =
     core.getInput("conventionalCommits") === "true" || true
 
-  // Read existing content of README
+  // Ensure the output directory exists
+  if (!fs.existsSync(outputDir)) {
+    try {
+      fs.mkdirSync(outputDir)
+    } catch (error) {
+      core.setFailed(
+        `Failed to create directory ${outputDir}: ${(error as Error).message}`
+      )
+      return
+    }
+  }
+
   let existingContent = ""
-  const readmePath = `${outputDir}README.md`
+  const readmePath = `./${outputDir}/README.md`
+
   if (fs.existsSync(readmePath)) {
+    existingContent = fs.readFileSync(readmePath, "utf8")
+  } else {
+    fs.writeFileSync(readmePath, "")
     existingContent = fs.readFileSync(readmePath, "utf8")
   }
 

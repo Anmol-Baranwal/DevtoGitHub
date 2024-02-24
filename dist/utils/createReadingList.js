@@ -30,10 +30,23 @@ const git_1 = require("./git");
 async function createReadingList(articles, outputDir, branch) {
     const readTime = core.getInput("readTime") === "true" || false;
     const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
-    // Read existing content of README
+    // Ensure the output directory exists
+    if (!fs.existsSync(outputDir)) {
+        try {
+            fs.mkdirSync(outputDir);
+        }
+        catch (error) {
+            core.setFailed(`Failed to create directory ${outputDir}: ${error.message}`);
+            return;
+        }
+    }
     let existingContent = "";
-    const readmePath = `${outputDir}README.md`;
+    const readmePath = `./${outputDir}/README.md`;
     if (fs.existsSync(readmePath)) {
+        existingContent = fs.readFileSync(readmePath, "utf8");
+    }
+    else {
+        fs.writeFileSync(readmePath, "");
         existingContent = fs.readFileSync(readmePath, "utf8");
     }
     const hasReadingListHeading = existingContent.includes("## Reading List");
