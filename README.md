@@ -50,6 +50,8 @@ Various inputs are defined to let you configure the action:
 
 <br>
 
+### The concept of excludeTags and mustIncludeTags
+
 The Combinations that you can use with `readingList`:
 
 As you're aware, there are four tags (max) for each article.
