@@ -1,18 +1,111 @@
 # DevSync
-Save your dev.to articles with this github action workflow
+Save your dev.to articles and your reading list with a bunch of useful options.
 
- <hr/> 
+### Use cases
 
-## Reading List
+> The problem is that there is no way to save the articles for future cases, and this workflow solves that in an efficient way.
 
-- [How I built NotesGPT – a full-stack AI voice note app](https://dev.to/nutlope/how-i-built-notesgpt-a-full-stack-ai-voice-note-app-265o) - 7 minutes
-- [This Is The Best Advanced React Book I’ve Ever Read](https://dev.to/_ndeyefatoudiop/this-is-the-best-advanced-react-book-ive-ever-read-328i) - 2 minutes
-- [🐱Product Hunt has become pay-to-win 💰, but you should still use it to launch your product 🚀](https://dev.to/wasp/product-hunt-has-become-pay-to-win-but-you-should-still-use-it-to-launch-your-product-508d) - 10 minutes
-- [10 "hard truths" junior developers need to hear 🗯🙉](https://dev.to/wasp/10-hard-truths-junior-developers-need-to-hear-3j0e) - 4 minutes
-- [Here is my coolest portfolio](https://dev.to/shreyvijayvargiya/here-is-my-coolest-portfolio-224f) - 4 minutes
-- [Featured Mod of the Month: Pachi](https://dev.to/devteam/featured-mod-of-the-month-pachi-16hh) - 7 minutes
-- [Next.js 14 Booking App with Live Data Scraping using Scraping Browser](https://dev.to/kishansheth/nextjs-14-booking-app-with-live-data-scraping-using-scraping-browser-610) - 14 minutes
-- [A11y: Vanilla javascript aria-live announcer](https://dev.to/this-is-learning/a11y-vanilla-javascript-aria-live-announcer-784) - 4 minutes
-- [A GitHub Action that automatically generates & updates markdown content (like your README.md) from external or remote files.](https://dev.to/dineshsonachalam/a-github-action-that-automatically-generates-updates-markdown-content-like-your-readme-md-from-external-or-remote-files-hp7) - 4 minutes
-- [Creating Scroll Progress Bar using CSS and JavaScript in React](https://dev.to/surajondev/creating-scroll-progress-bar-using-css-and-javascript-in-react-85o) - 4 minutes
-- [Exploring CSS where it doesn't make sense](https://dev.to/samuel-braun/exploring-css-where-it-doesnt-make-sense-417k) - 11 minutes
+- The workflow can save your articles each in a different markdown file.
+- The details like tags, cover image, URL, and published time is shown in a proper format.
+- The best part is that you can create a table of contents in the readme to view and visit each of your articles in the saved repository.
+- You can also save your reading lists with specified structures and URLs for easy access.
+- Optionally display the total read time for each article in the reading list.
+- You can customize the directory in which you want to save the articles and the reading list.
+- I've added a custom logic based on tags to give you more flexibility in saving your reading list.
+
+> The only drawback is that articles/readingList aren't going to update even if you update it on the DEV. I will handle this in the upcoming version.
+
+---
+
+### 🚀 Getting Started
+
+- Create a file in the repository at the following path: `.github/workflows/dev-sync.yml` and paste the following code into it.
+
+```yml
+
+```
+
+- For detailed instructions on custom configuration and visual samples, please refer to the [examples](./Examples.md).
+
+---
+
+### Inputs
+
+Various inputs are defined to let you configure the action:
+
+| Name | Description | Default | Required |
+| ---- | ----------- | ------- | -------- |
+| `gh-token` | The GitHub token for authentication | `'${{ github.token }}'` | `No` |
+| `devApiKey` | The API key from your DEV | `''` | `Yes` |
+| `saveArticles` | This will save your articles in respective markdown file | `'true'` | `No` |
+| `outputDir` | The directory to save your articles | `'./articles'` | `No` |
+| `saveArticlesReadme` | To create a table of contents for your articles in readme (same directory) | `'false'` | `No` |
+| `readingList` | To create a reading list from DEV | `'false'` | `No` |
+| `readTime` | The API key from your DEV | `'false'` | `No` |
+| `outputDirReading` | The output directory for saving the reading list (Readme.md) | `'./'` | `No` |
+| `excludeTags` | To filter the reading list to avoid this tag. Use commas to separate if there are multiple tags. | `''` | `No` |
+| `mustIncludeTags` | To create a reading list to include this tag prioritizing over excludeTags. Use commas to separate if there are multiple tags. | `''` | `No` |
+| `branch` | The git branch to use for these process | `'main'` | `No` |
+| `conventionalCommits` | To use conventional commit message standards | `'true'` | `No` |
+
+<br>
+
+The Combinations that you can use with `readingList`:
+
+As you're aware, there are four tags (max) for each article.
+So, I devised a way to give you some flexibility based on the tags.
+
+Suppose you want to remove some articles with tag `#discuss` but want to include the post if that article with `#discuss` tag also has a `#programming` tag. So, you can include `#discuss` in `exlcudeTags` & `#programming` in `mustIncludeTags`.
+In case you feel confused. Let's understand it with an example.
+
+Suppose we have an article with tags: `['react', 'javascript', 'frontend', 'tutorial']`.
+
+- If `excludeTags` is `['frontend']` and `mustIncludeTags` is `['javascript']`. The article is included because it has the `javascript` tag (even though it also has the `frontend` tag).
+- If `excludeTags` is `['tutorial']` and `mustIncludeTags` is empty (default), the article will be excluded because it has the `tutorial` tag.
+- If `excludeTags` is `['backend']` and `mustIncludeTags` is `['typescript']`. The article is included because it does not have the `backend` tag.
+- These cases will work for multiple tags, and `mustIncludeTags` will only work if `excludeTags` is provided.
+
+> As I said earlier even if you remove a article from your reading list on DEV, it's isn't deleted from this repository. I'm going to solve this in the future release.
+
+---
+
+### 🤝 How to Contribute?
+
+All changes are welcome. Please read our [contributing guidelines](Contributing.md)
+
+Feel free to suggest any features or report bugs using these [issue templates](https://github.com/Anmol-Baranwal/DevSync/issues/new/choose).
+
+---
+
+### 📝 License
+
+<table>
+  <tr>
+     <td>
+       <p align="center"> <img src="https://github.com/rupali-codes/LinksHub/assets/66154908/65ae0c03-9cad-47a6-80b8-23c91cd2ac4e" width="80%"></img>
+    </td>
+    <td> 
+      <img src="https://img.shields.io/badge/License-MIT-yellow.svg"/> <br> 
+The scripts and documentation in this project are released under the <a href="./LICENSE">MIT License</a>. <img width=2300/>
+    </td>
+  </tr>
+</table>
+
+---
+
+### <img src="https://user-images.githubusercontent.com/74038190/221857984-5bf77e81-6f65-4502-a7c8-f29a978efb3f.png" alt="bullseye" width="25" /> Tech & Tools
+
+> In case you want to run the action locally, without having to commit/push every time, you can use the [act](https://github.com/nektos/act) tool.
+
+<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" /> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" />
+<img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white" />
+
+---
+
+### Author 
+
+> Feel free to contact me if you need a custom workflow for your project. I'll be happy to build one.
+
+<table>
+<td align="center" width="200"><pre><a href="https://github.com/Anmol-Baranwal"><img src="https://avatars.githubusercontent.com/u/74038190?v=4" width="200" alt="GitHub Profile of Anmol Baranwal" /><br><sub>Anmol Baranwal</sub></a><br>@Anmol-Baranwal</pre></td>
+</table>
