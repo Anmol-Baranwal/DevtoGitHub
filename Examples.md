@@ -7,7 +7,7 @@
 
 > Explanation
 
-This will save your articles when `saveArticles` is set to `true` (default). You can change which directory you want using `outputDir`. For instance, the below workflow will save your articles in the `articles` directory.
+This will save your articles when `saveArticles` is set to `true` (default). You can change which directory you want using `outputDir`. For instance, the below workflow will save your articles in the `articles` directory. The title of each markdown file would be using the title of the article.
 
 > Workflow code
 
@@ -33,6 +33,18 @@ jobs:
 
 > Output
 ![saving articles](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/a5c18795-c74b-4833-a38b-22c22c8e2c19)
+
+The structure of each article markdown file would be as follows:
+
+- Cover Banner Image
+- Article Title
+- Tags of the Article
+- Published Date
+- URL of the Article
+- Content of the Article
+
+> Output
+![structure of saved article](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/6c1cc3c6-3b35-467b-8892-48dea28ea0d0)
 
 
 ### Table of Contents for Saved Articles

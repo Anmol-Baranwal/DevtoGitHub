@@ -17,9 +17,6 @@ jobs:
 
       - name: Run DevSync
         uses: ./
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: false
