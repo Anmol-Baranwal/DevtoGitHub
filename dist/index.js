@@ -131,6 +131,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
                 await (0, git_1.gitConfig)();
                 await (0, git_1.gitAdd)(filePath);
                 await (0, git_1.gitCommit)(commitMessage, filePath);
+                await (0, git_1.gitPull)(branch);
                 await (0, git_1.gitPush)(branch);
                 core.notice(`Markdown file created and committed: ${filePath}`);
             }
@@ -183,6 +184,7 @@ async function createArticlesReadme(articles, outputDir, branch) {
         await (0, git_1.gitConfig)();
         await (0, git_1.gitAdd)(readmePath);
         await (0, git_1.gitCommit)(commitMessage, readmePath);
+        await (0, git_1.gitPull)(branch);
         await (0, git_1.gitPush)(branch);
         core.notice("README.md file created and committed");
     }
@@ -280,6 +282,7 @@ async function createReadingList(articles, outputDir, branch) {
         await (0, git_1.gitConfig)();
         await (0, git_1.gitAdd)(readmePath);
         await (0, git_1.gitCommit)(commitMessage, readmePath);
+        await (0, git_1.gitPull)(branch);
         await (0, git_1.gitPush)(branch);
         core.notice(`reading list file created and committed`);
     }
@@ -462,7 +465,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = exports.getFileNameFromTitle = void 0;
+exports.gitPull = exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = exports.getFileNameFromTitle = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const core = __importStar(__nccwpck_require__(2186));
 // generate a valid file name using the title
@@ -530,6 +533,15 @@ async function gitConfig() {
     }
 }
 exports.gitConfig = gitConfig;
+async function gitPull(branch) {
+    try {
+        await exec.exec("git", ["pull", "origin", branch]);
+    }
+    catch (error) {
+        core.setFailed(`Failed to pull changes from ${branch}: ${error.message}`);
+    }
+}
+exports.gitPull = gitPull;
 
 
 /***/ }),

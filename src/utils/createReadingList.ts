@@ -1,7 +1,7 @@
 import * as core from "@actions/core"
 import * as fs from "fs"
 import { ReadingList } from "../types"
-import { gitAdd, gitCommit, gitConfig, gitPush } from "./git"
+import { gitAdd, gitCommit, gitConfig, gitPull, gitPush } from "./git"
 
 export async function createReadingList(
   articles: ReadingList[],
@@ -73,6 +73,7 @@ export async function createReadingList(
     await gitConfig()
     await gitAdd(readmePath)
     await gitCommit(commitMessage, readmePath)
+    await gitPull(branch)
     await gitPush(branch)
 
     core.notice(`reading list file created and committed`)

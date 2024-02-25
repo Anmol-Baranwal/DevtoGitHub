@@ -66,3 +66,13 @@ export async function gitConfig(): Promise<void> {
     )
   }
 }
+
+export async function gitPull(branch: string): Promise<void> {
+  try {
+    await exec.exec("git", ["pull", "origin", branch])
+  } catch (error) {
+    core.setFailed(
+      `Failed to pull changes from ${branch}: ${(error as Error).message}`
+    )
+  }
+}

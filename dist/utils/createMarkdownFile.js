@@ -57,6 +57,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
                 await (0, git_1.gitConfig)();
                 await (0, git_1.gitAdd)(filePath);
                 await (0, git_1.gitCommit)(commitMessage, filePath);
+                await (0, git_1.gitPull)(branch);
                 await (0, git_1.gitPush)(branch);
                 core.notice(`Markdown file created and committed: ${filePath}`);
             }
@@ -109,6 +110,7 @@ async function createArticlesReadme(articles, outputDir, branch) {
         await (0, git_1.gitConfig)();
         await (0, git_1.gitAdd)(readmePath);
         await (0, git_1.gitCommit)(commitMessage, readmePath);
+        await (0, git_1.gitPull)(branch);
         await (0, git_1.gitPush)(branch);
         core.notice("README.md file created and committed");
     }

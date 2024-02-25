@@ -80,6 +80,7 @@ async function createReadingList(articles, outputDir, branch) {
         await (0, git_1.gitConfig)();
         await (0, git_1.gitAdd)(readmePath);
         await (0, git_1.gitCommit)(commitMessage, readmePath);
+        await (0, git_1.gitPull)(branch);
         await (0, git_1.gitPush)(branch);
         core.notice(`reading list file created and committed`);
     }

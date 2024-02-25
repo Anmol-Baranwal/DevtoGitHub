@@ -5,6 +5,7 @@ import {
   gitAdd,
   gitCommit,
   gitConfig,
+  gitPull,
   gitPush
 } from "./git"
 import { parseMarkdownContent } from "./parseMarkdownContent"
@@ -50,6 +51,7 @@ export async function createMarkdownFile(
         await gitConfig()
         await gitAdd(filePath)
         await gitCommit(commitMessage, filePath)
+        await gitPull(branch)
         await gitPush(branch)
 
         core.notice(`Markdown file created and committed: ${filePath}`)
@@ -126,6 +128,7 @@ async function createArticlesReadme(
     await gitConfig()
     await gitAdd(readmePath)
     await gitCommit(commitMessage, readmePath)
+    await gitPull(branch)
     await gitPush(branch)
 
     core.notice("README.md file created and committed")

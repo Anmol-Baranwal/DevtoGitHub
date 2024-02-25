@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = exports.getFileNameFromTitle = void 0;
+exports.gitPull = exports.gitConfig = exports.gitPush = exports.gitCommit = exports.gitAdd = exports.getFileNameFromTitle = void 0;
 const exec = __importStar(require("@actions/exec"));
 const core = __importStar(require("@actions/core"));
 // generate a valid file name using the title
@@ -91,3 +91,12 @@ async function gitConfig() {
     }
 }
 exports.gitConfig = gitConfig;
+async function gitPull(branch) {
+    try {
+        await exec.exec("git", ["pull", "origin", branch]);
+    }
+    catch (error) {
+        core.setFailed(`Failed to pull changes from ${branch}: ${error.message}`);
+    }
+}
+exports.gitPull = gitPull;
