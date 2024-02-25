@@ -22,6 +22,9 @@ jobs:
   save-articles:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Run DevSync
         uses: Anmol-Baranwal/DevSync@main
         with:
@@ -66,6 +69,9 @@ jobs:
   save-articles:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Run DevSync
         uses: Anmol-Baranwal/DevSync@main
         with:
@@ -99,6 +105,9 @@ jobs:
   save-articles:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Run DevSync
         uses: Anmol-Baranwal/DevSync@main
         with:
@@ -133,6 +142,9 @@ jobs:
   save-articles:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Run DevSync
         uses: Anmol-Baranwal/DevSync@main
         with:
@@ -167,6 +179,9 @@ jobs:
   save-articles:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Run DevSync
         uses: Anmol-Baranwal/DevSync@main
         with:

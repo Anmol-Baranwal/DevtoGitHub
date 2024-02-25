@@ -1,7 +1,7 @@
 name: Feature Request 💡
 description: Have any new idea or new feature to improve the workflow? Please suggest!
 title: "[Feature] <write a small description here>"
-labels: ["enhancement"]
+labels: ["enhancement", "goal: new-feature"]
 body:
   - type: textarea
     id: description

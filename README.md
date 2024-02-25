@@ -1,9 +1,9 @@
 # DevSync
-Save your dev.to articles and your reading list with a bunch of useful options.
+Save your DEV.to articles and reading list with a bunch of useful options.
 
 ## Use cases
 
-> The problem is that there is no way to save the articles for future cases, and this workflow solves that in an efficient way.
+> The problem is that there is no way to save the articles or reading list from DEV.to as a backup, and this solves that in an efficient way.
 
 - The workflow can save your articles each in a different markdown file.
 - The details like tags, cover image, URL, and published time is shown in a proper format.
@@ -32,6 +32,9 @@ jobs:
   save-articles:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Run DevSync
         uses: Anmol-Baranwal/DevSync@main
         with:
@@ -42,7 +45,7 @@ jobs:
           saveArticlesReadme: true # this will create a table of content for easy navigation
 ```
 
-- For detailed instructions on custom configuration and visual samples, please refer to the [examples](./Examples.md).
+- For detailed instructions on custom configuration and visual samples, please refer to the [examples](./Examples.md). To get started, I've also mentioned some of the [common cron schedule](https://github.com/Anmol-Baranwal/DevSync/blob/main/Examples.md#other-options) for you to use in the workflow.
 
 ---
 

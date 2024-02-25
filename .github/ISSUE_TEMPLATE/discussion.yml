@@ -1,7 +1,7 @@
 name: Discussion
 description: Use this to ask questions and for discussion. Please do not create blank issues.
 title: "[Discussion]: <concise title>"
-labels: ["status: discussion"]
+labels: ["discussion", "goal: new-ideas"]
 body:
   - type: textarea
     id: discussion
