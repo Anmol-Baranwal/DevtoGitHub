@@ -175,9 +175,10 @@ These options are not mandatory for everyone if you're not very familiar with Gi
 
 There are conventions for commit messages that make commits self-explanatory regarding their type. If `conventionalCommits` is set to `true` (default) then those conventions will be used. You can read more about [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
-![Screenshot 2024-02-24 174038](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/4cd62814-6eb0-45c5-869b-20c624981c8c)
+> Output
+![conventional commits](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/4cd62814-6eb0-45c5-869b-20c624981c8c)
 
 
-### Git Branch
+> Git Branch
 
 You can read more about the branch [here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches). Branches will allow you to do those above process in a contained area of your repository. You can change it using `branch` whose default value is `main`.

@@ -54,6 +54,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
             try {
+                await (0, git_1.gitConfig)();
                 await (0, git_1.gitAdd)(filePath);
                 await (0, git_1.gitCommit)(commitMessage, filePath);
                 await (0, git_1.gitPush)(branch);
@@ -105,6 +106,7 @@ async function createArticlesReadme(articles, outputDir, branch) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`;
     }
     try {
+        await (0, git_1.gitConfig)();
         await (0, git_1.gitAdd)(readmePath);
         await (0, git_1.gitCommit)(commitMessage, readmePath);
         await (0, git_1.gitPush)(branch);

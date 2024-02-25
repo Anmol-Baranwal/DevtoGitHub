@@ -1,7 +1,7 @@
 # DevSync
 Save your dev.to articles and your reading list with a bunch of useful options.
 
-### Use cases
+## Use cases
 
 > The problem is that there is no way to save the articles for future cases, and this workflow solves that in an efficient way.
 
@@ -17,7 +17,7 @@ Save your dev.to articles and your reading list with a bunch of useful options.
 
 ---
 
-### 🚀 Getting Started
+## 🚀 Getting Started
 
 - Create a file in the repository at the following path: `.github/workflows/dev-sync.yml` and paste the following code into it.
 
@@ -46,7 +46,7 @@ jobs:
 
 ---
 
-### Inputs
+## Inputs
 
 Various inputs are defined to let you configure the action:
 
@@ -67,7 +67,7 @@ Various inputs are defined to let you configure the action:
 
 <br>
 
-### The concept of excludeTags and mustIncludeTags
+## The concept of excludeTags and mustIncludeTags
 
 The Combinations that you can use with `readingList`:
 
@@ -88,7 +88,7 @@ Suppose we have an article with tags: `['react', 'javascript', 'frontend', 'tuto
 
 ---
 
-### 🤝 How to Contribute?
+## 🤝 How to Contribute?
 
 All changes are welcome. Please read our [contributing guidelines](Contributing.md)
 
@@ -96,7 +96,7 @@ Feel free to suggest any features or report bugs using these [issue templates](h
 
 ---
 
-### 📝 License
+## 📝 License
 
 <table>
   <tr>
@@ -112,7 +112,7 @@ The scripts and documentation in this project are released under the <a href="./
 
 ---
 
-### <img src="https://user-images.githubusercontent.com/74038190/221857984-5bf77e81-6f65-4502-a7c8-f29a978efb3f.png" alt="bullseye" width="25" /> Tech & Tools
+## <img src="https://user-images.githubusercontent.com/74038190/221857984-5bf77e81-6f65-4502-a7c8-f29a978efb3f.png" alt="bullseye" width="25" /> Tech & Tools
 
 > In case you want to run the action locally, without having to commit/push every time, you can use the [act](https://github.com/nektos/act) tool.
 
@@ -121,7 +121,7 @@ The scripts and documentation in this project are released under the <a href="./
 
 ---
 
-### Author 
+## Author 
 
 > Feel free to contact me if you need a custom workflow for your project. I'll be happy to build one.
 

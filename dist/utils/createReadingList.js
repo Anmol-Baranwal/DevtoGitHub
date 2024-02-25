@@ -77,6 +77,7 @@ async function createReadingList(articles, outputDir, branch) {
     }
     fs.writeFileSync(readmePath, existingContent);
     try {
+        await (0, git_1.gitConfig)();
         await (0, git_1.gitAdd)(readmePath);
         await (0, git_1.gitCommit)(commitMessage, readmePath);
         await (0, git_1.gitPush)(branch);

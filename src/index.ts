@@ -22,7 +22,7 @@ async function DevSync() {
     }
 
     if (readingList === true) {
-      const readingListArticles = await fetchDevToReadingList(apiKey, 5)
+      const readingListArticles = await fetchDevToReadingList(apiKey)
 
       createReadingList(readingListArticles, outputDirReading, branch)
     } else {

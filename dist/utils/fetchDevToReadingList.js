@@ -45,7 +45,7 @@ const filteredArticles = (articles, excludeTags, mustIncludeTags) => {
 };
 async function fetchDevToReadingList(apiKey, per_page) {
     if (per_page === undefined)
-        per_page = 1; // default is 30
+        per_page = 999; // default is 30
     const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",

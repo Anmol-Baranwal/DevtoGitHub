@@ -1,7 +1,7 @@
 import * as core from "@actions/core"
 import * as fs from "fs"
 import { ReadingList } from "../types"
-import { gitAdd, gitCommit, gitPush } from "./git"
+import { gitAdd, gitCommit, gitConfig, gitPush } from "./git"
 
 export async function createReadingList(
   articles: ReadingList[],
@@ -70,6 +70,7 @@ export async function createReadingList(
   fs.writeFileSync(readmePath, existingContent)
 
   try {
+    await gitConfig()
     await gitAdd(readmePath)
     await gitCommit(commitMessage, readmePath)
     await gitPush(branch)

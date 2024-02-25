@@ -47,6 +47,7 @@ export async function createMarkdownFile(
       fs.writeFileSync(filePath, markdownContent)
 
       try {
+        await gitConfig()
         await gitAdd(filePath)
         await gitCommit(commitMessage, filePath)
         await gitPush(branch)
@@ -122,6 +123,7 @@ async function createArticlesReadme(
   }
 
   try {
+    await gitConfig()
     await gitAdd(readmePath)
     await gitCommit(commitMessage, readmePath)
     await gitPush(branch)

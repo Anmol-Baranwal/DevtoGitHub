@@ -52,7 +52,7 @@ async function DevSync() {
             core.notice(`skipping saving of articles`);
         }
         if (readingList === true) {
-            const readingListArticles = await (0, fetchDevToReadingList_1.fetchDevToReadingList)(apiKey, 5);
+            const readingListArticles = await (0, fetchDevToReadingList_1.fetchDevToReadingList)(apiKey);
             (0, createReadingList_1.createReadingList)(readingListArticles, outputDirReading, branch);
         }
         else {
@@ -128,6 +128,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
             try {
+                await (0, git_1.gitConfig)();
                 await (0, git_1.gitAdd)(filePath);
                 await (0, git_1.gitCommit)(commitMessage, filePath);
                 await (0, git_1.gitPush)(branch);
@@ -179,6 +180,7 @@ async function createArticlesReadme(articles, outputDir, branch) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`;
     }
     try {
+        await (0, git_1.gitConfig)();
         await (0, git_1.gitAdd)(readmePath);
         await (0, git_1.gitCommit)(commitMessage, readmePath);
         await (0, git_1.gitPush)(branch);
@@ -275,6 +277,7 @@ async function createReadingList(articles, outputDir, branch) {
     }
     fs.writeFileSync(readmePath, existingContent);
     try {
+        await (0, git_1.gitConfig)();
         await (0, git_1.gitAdd)(readmePath);
         await (0, git_1.gitCommit)(commitMessage, readmePath);
         await (0, git_1.gitPush)(branch);
@@ -327,7 +330,7 @@ const node_fetch_1 = __importDefault(__nccwpck_require__(1793));
 const core = __importStar(__nccwpck_require__(2186));
 async function fetchDevToArticles(apiKey, per_page) {
     if (per_page === undefined)
-        per_page = 1; // default is 30
+        per_page = 999; // default is 30
     const apiUrl = `https://dev.to/api/articles/me?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
@@ -397,7 +400,7 @@ const filteredArticles = (articles, excludeTags, mustIncludeTags) => {
 };
 async function fetchDevToReadingList(apiKey, per_page) {
     if (per_page === undefined)
-        per_page = 1; // default is 30
+        per_page = 999; // default is 30
     const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`;
     const headers = {
         "Content-Type": "application/json",
@@ -472,39 +475,61 @@ function getFileNameFromTitle(title) {
 }
 exports.getFileNameFromTitle = getFileNameFromTitle;
 async function gitAdd(filePath) {
-    core.notice(`inside gitAdd`);
-    await exec.exec("git", ["add", filePath]);
+    try {
+        await exec.exec("git", ["add", filePath]);
+    }
+    catch (error) {
+        core.setFailed(`Failed to complete git add: ${error.message}`);
+    }
 }
 exports.gitAdd = gitAdd;
-// export async function gitCommit(
-//   message: string,
-//   config: string[]
-// ): Promise<void> {
-//   core.notice(`inside gitCommit`)
-//   await exec.exec("git", [...config, "commit", "-m", message])
-// }
-// export async function gitPush(branch: string, config: string[]): Promise<void> {
-//   core.notice(`inside gitPush`)
-//   await exec.exec("git", ["push", "origin", `HEAD:${branch}`, ...config])
-// }
 async function gitCommit(message, filePath) {
-    core.notice(`inside gitCommit`);
-    await exec.exec("git", ["commit", "-m", message, filePath]);
+    try {
+        const statusOutput = await exec.getExecOutput("git", [
+            "status",
+            "--porcelain",
+            filePath
+        ]);
+        if (statusOutput.stdout.trim() === "") {
+            core.notice(`No changes to commit for file ${filePath}`);
+            return;
+        }
+        await exec.exec("git", ["commit", "-m", message, filePath]);
+    }
+    catch (error) {
+        core.setFailed(`Failed to complete git commit: ${error.message}`);
+    }
 }
 exports.gitCommit = gitCommit;
 async function gitPush(branch) {
-    core.notice(`inside gitPush`);
-    await exec.exec("git", ["push", "origin", `HEAD:${branch}`]);
+    try {
+        await exec.exec("git", ["push", "origin", `HEAD:${branch}`]);
+    }
+    catch (error) {
+        core.setFailed(`Failed to complete git push: ${error.message}`);
+    }
 }
 exports.gitPush = gitPush;
-exports.gitConfig = [
-    "config",
-    "--global",
-    `user.name=Anmol Baranwal`,
-    "config",
-    "--global",
-    `user.email=actions@github.com`
-];
+async function gitConfig() {
+    try {
+        await exec.exec("git", [
+            "config",
+            "--global",
+            "user.email",
+            "actions@github.com"
+        ]);
+        await exec.exec("git", [
+            "config",
+            "--global",
+            "user.name",
+            "GitHub Actions"
+        ]);
+    }
+    catch (error) {
+        core.setFailed(`Failed to set up Git configuration: ${error.message}`);
+    }
+}
+exports.gitConfig = gitConfig;
 
 
 /***/ }),
