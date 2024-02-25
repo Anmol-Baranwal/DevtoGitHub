@@ -67,7 +67,7 @@ async function gitPush(branch) {
         await exec.exec("git", ["push", "origin", `HEAD:${branch}`]);
     }
     catch (error) {
-        core.setFailed(`Failed to complete git push: ${error.message}`);
+        core.notice(`Failed to complete git push: ${error.message}`);
     }
 }
 exports.gitPush = gitPush;
@@ -96,7 +96,7 @@ async function gitPull(branch) {
         await exec.exec("git", ["pull", "origin", branch]);
     }
     catch (error) {
-        core.setFailed(`Failed to pull changes from ${branch}: ${error.message}`);
+        core.notice(`Failed to pull changes from ${branch}: ${error.message}`);
     }
 }
 exports.gitPull = gitPull;

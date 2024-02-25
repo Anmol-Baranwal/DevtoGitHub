@@ -42,7 +42,7 @@ export async function gitPush(branch: string): Promise<void> {
   try {
     await exec.exec("git", ["push", "origin", `HEAD:${branch}`])
   } catch (error) {
-    core.setFailed(`Failed to complete git push: ${(error as Error).message}`)
+    core.notice(`Failed to complete git push: ${(error as Error).message}`)
   }
 }
 
@@ -71,7 +71,7 @@ export async function gitPull(branch: string): Promise<void> {
   try {
     await exec.exec("git", ["pull", "origin", branch])
   } catch (error) {
-    core.setFailed(
+    core.notice(
       `Failed to pull changes from ${branch}: ${(error as Error).message}`
     )
   }
