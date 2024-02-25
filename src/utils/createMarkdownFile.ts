@@ -33,7 +33,7 @@ export async function createMarkdownFile(
 
   for (const article of articles) {
     const fileName = getFileNameFromTitle(article.title).trim()
-    const filePath = `${outputDir}/${fileName}.md`
+    const filePath = `./${outputDir}/${fileName}.md`
 
     // Check if the markdown file already exists
     if (!fs.existsSync(filePath)) {

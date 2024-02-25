@@ -38,8 +38,8 @@ jobs:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: true # default
-          outputDir: "./articles" # default
-          saveArticlesReadme: true 
+          outputDir: "articles" # this will save the articles in "articles" directory
+          saveArticlesReadme: true # this will create a table of content for easy navigation
 ```
 
 - For detailed instructions on custom configuration and visual samples, please refer to the [examples](./Examples.md).
@@ -55,11 +55,11 @@ Various inputs are defined to let you configure the action:
 | `gh-token` | The GitHub token for authentication | `'${{ github.token }}'` | `No` |
 | `devApiKey` | The API key from your DEV | `''` | `Yes` |
 | `saveArticles` | This will save your articles in respective markdown file | `'true'` | `No` |
-| `outputDir` | The directory to save your articles | `'./articles'` | `No` |
+| `outputDir` | The directory to save your articles. Default will save it under articles directory. | `'articles'` | `No` |
 | `saveArticlesReadme` | To create a table of contents for your articles in readme (same directory) | `'false'` | `No` |
 | `readingList` | To create a reading list from DEV | `'false'` | `No` |
 | `readTime` | The API key from your DEV | `'false'` | `No` |
-| `outputDirReading` | The output directory for saving the reading list (Readme.md) | `'./'` | `No` |
+| `outputDirReading` | The output directory for saving the reading list (Readme.md). Default will save it under root directory. | `''` | `No` |
 | `excludeTags` | To filter the reading list to avoid this tag. Use commas to separate if there are multiple tags. | `''` | `No` |
 | `mustIncludeTags` | To create a reading list to include this tag prioritizing over excludeTags. Use commas to separate if there are multiple tags. | `''` | `No` |
 | `branch` | The git branch to use for these process | `'main'` | `No` |

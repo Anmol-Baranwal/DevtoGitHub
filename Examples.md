@@ -28,7 +28,7 @@ jobs:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: true # default
-          outputDir: "./articles" # default
+          outputDir: "articles" # default
 ```
 
 > Output
@@ -60,7 +60,7 @@ jobs:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: true # default
-          outputDir: "./articles" # default
+          outputDir: "articles" # default
           saveArticlesReadme: true 
 ```
 
@@ -94,7 +94,7 @@ jobs:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: false # default is true
           readingList: true # default is false
-          outputDirReading: ./read/ # default is ./
+          outputDirReading: "" # this is default and it will save reading list in Readme.md in root directory
 
 ```
 
@@ -128,7 +128,7 @@ jobs:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: false # default is true
           readingList: true
-          outputDirReading: ./read/ # default is ./
+          outputDirReading: "read" # this will save reading list in read/Readme.md
           readTime: true
 ```
 
@@ -182,3 +182,16 @@ There are conventions for commit messages that make commits self-explanatory reg
 > Git Branch
 
 You can read more about the branch [here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches). Branches will allow you to do those above process in a contained area of your repository. You can change it using `branch` whose default value is `main`.
+Your text is mostly grammatically correct. Here's a slightly revised version for better clarity and correctness:
+
+---
+
+> Some examples of cron schedules (to use in workflow)
+
+In case you are looking for cron schedules, here are some common ones that you can directly use:
+
+- `0 0 * * *` - runs at midnight (0:00) every day.
+- `0 */12 * * *` - runs at minute 0 of every 12th hour.
+- `0 0 * * 0` - runs at midnight (0:00) every Sunday.
+- `0 0 1 * *` - runs at midnight (0:00) on the first day of every month.
+- `0 0 */15 * *` - runs at midnight (0:00) every 15 days.

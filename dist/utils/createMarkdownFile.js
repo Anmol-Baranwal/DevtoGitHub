@@ -43,7 +43,7 @@ async function createMarkdownFile(articles, outputDir, branch) {
     }
     for (const article of articles) {
         const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
-        const filePath = `${outputDir}/${fileName}.md`;
+        const filePath = `./${outputDir}/${fileName}.md`;
         // Check if the markdown file already exists
         if (!fs.existsSync(filePath)) {
             let commitMessage = `add ${fileName} markdown file`;
