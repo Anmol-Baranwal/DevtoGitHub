@@ -26,12 +26,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@main
+        uses: Anmol-Baranwal/DevSync@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: true # default
-          outputDir: "articles" # default
+          outputDir: "articles" # this is default and it will save articles in "articles" directory
 ```
 
 > Output
@@ -73,13 +72,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@main
+        uses: Anmol-Baranwal/DevSync@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: true # default
-          outputDir: "articles" # default
-          saveArticlesReadme: true 
+          outputDir: "articles" # # this is default and it will save articles in "articles" directory
+          saveArticlesReadme: true # this will create table of contents in "articles/README.md"
 ```
 
 > Output
@@ -109,10 +107,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@main
+        uses: Anmol-Baranwal/DevSync@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: false # default is true
           readingList: true # default is false
           outputDirReading: "" # this is default and it will save reading list in Readme.md in root directory
@@ -146,10 +143,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@main
+        uses: Anmol-Baranwal/DevSync@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: false # default is true
           readingList: true
           outputDirReading: "read" # this will save reading list in read/Readme.md
@@ -183,10 +179,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@main
+        uses: Anmol-Baranwal/DevSync@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: false # default is true
           readingList: true
           readTime: true
@@ -222,3 +217,7 @@ In case you are looking for cron schedules, here are some common ones that you c
 - `0 0 * * 0` - runs at midnight (0:00) every Sunday.
 - `0 0 1 * *` - runs at midnight (0:00) on the first day of every month.
 - `0 0 */15 * *` - runs at midnight (0:00) every 15 days.
+
+<br />
+
+You can see the list of [input options](https://github.com/Anmol-Baranwal/DevSync?tab=readme-ov-file#inputs) that you can use with the workflow.

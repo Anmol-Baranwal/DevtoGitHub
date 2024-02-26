@@ -38,10 +38,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@main
+        uses: Anmol-Baranwal/DevSync@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
           saveArticles: true # default
           outputDir: "articles" # this will save the articles in "articles" directory
           saveArticlesReadme: true # this will create a table of content for easy navigation
