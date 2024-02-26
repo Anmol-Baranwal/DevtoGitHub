@@ -1,9 +1,9 @@
-## Examples
+# Examples
 
 > Welcome. Let's see the workflow samples along with the output it gives.
 > You need to create a file in the repository at the following path: `.github/workflows/dev-sync.yml` and paste the code of your choice inside.
 
-### Saving Articles
+## Saving Articles
 
 > Explanation
 
@@ -50,7 +50,7 @@ The structure of each article markdown file would be as follows:
 ![structure of saved article](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/6c1cc3c6-3b35-467b-8892-48dea28ea0d0)
 
 
-### Table of Contents for Saved Articles
+## Table of Contents for Saved Articles
 
 > Explanation
 
@@ -86,7 +86,7 @@ jobs:
 ![saving articles with table of contents](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/3ef5c665-b42a-4e1d-b769-4146d8e82259)
 
 
-### Reading List
+## Reading List
 
 > Explanation
 
@@ -123,7 +123,7 @@ jobs:
 ![create reading list](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/b45d1e49-0a8b-4dc7-a41e-82649baa7aff)
 
 
-### Reading List with read time
+## Reading List with read time
 
 > Explanation
 
@@ -160,7 +160,7 @@ jobs:
 ![create a reading list with a reading time of the article](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/820cb75f-58c2-46ef-8845-5565f3f1fc37)
 
 
-### Reading List with excludeTags & mustIncludeTags
+## Reading List with excludeTags & mustIncludeTags
 
 > Explanation
 

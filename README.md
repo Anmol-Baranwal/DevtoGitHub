@@ -19,6 +19,8 @@ Save your DEV.to articles and reading list with a bunch of useful options.
 
 ## 🚀 Getting Started
 
+- Before you continue, you should take a few steps to create a repository and generate an API token from DEV. Don't worry, you can use this [complete guide](./GetStarted.md), which has clear instructions and image examples for each step.
+
 - Create a file in the repository at the following path: `.github/workflows/dev-sync.yml` and paste the following code into it.
 
 ```yml
@@ -131,3 +133,6 @@ The scripts and documentation in this project are released under the <a href="./
 <table>
 <td align="center" width="200"><pre><a href="https://github.com/Anmol-Baranwal"><img src="https://avatars.githubusercontent.com/u/74038190?v=4" width="200" alt="GitHub Profile of Anmol Baranwal" /><br><sub>Anmol Baranwal</sub></a><br>@Anmol-Baranwal</pre></td>
 </table>
+
+I would appreciate if you could give this repository a star 🌟. It would help others to discover this. 
+Thank you for your support 💜

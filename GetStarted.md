@@ -57,4 +57,4 @@ Now you have to put the name as `DEV_TOKEN` (used in workflow) and `Secret` as t
 
 ![repository secret](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/0501cd47-c7c5-45e9-a9a3-3711159a32f6)
 
-Hooray 🎉 You're all set! You can see [examples]() on what options you can choose from.
+Hooray 🎉 You're all set! You can now proceed to [creating a workflow file](https://github.com/Anmol-Baranwal/DevSync/tree/main?tab=readme-ov-file#-getting-started) mentioned in the README.
