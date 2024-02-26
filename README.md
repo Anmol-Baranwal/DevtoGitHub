@@ -29,6 +29,10 @@ name: DevSync
 on:
   schedule:
     - cron: "0 0 * * *" # Run daily, adjust as needed
+  # The lines below will allow you to manually run the workflow with each commit
+  workflow_dispatch:
+  push:
+    branches: ["main"]
 
 jobs:
   save-articles:
