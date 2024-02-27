@@ -7,7 +7,7 @@
 
 > Explanation
 
-This will save your articles when `saveArticles` is set to `true` (default). You can change which directory you want using `outputDir`. For instance, the below workflow will save your articles in the `articles` directory. The title of each markdown file would be using the title of the article.
+This will save your articles when `saveArticles` is set to `true` (default). You can change which directory you want using `outputDir`. For instance, the below workflow will save your articles in the `articles` directory. The file name of each markdown file would be using the title of the article.
 
 > Workflow code
 
@@ -136,7 +136,7 @@ jobs:
 
 > Explanation
 
-This will stop saving your articles since `saveArticles` is set to `false` (default is `true`). It will create your reading list with the articles in a structured way. You can change which directory you want using `outputDirReading`. For instance, the below workflow will save your articles in the `read` directory by adding your info in a `README`. It will also add a readTime with the articles when `readTime` is set to `true` (default is `false`).
+This will stop saving your articles since `saveArticles` is set to `false` (default is `true`). It will create your reading list with the articles in a structured way. You can change which directory you want using `outputDirReading`. For instance, the below workflow will save your articles in the `read` directory by adding your info in a `README`. It will add a reading time with the articles when `readTime` is set to `true` (default is `false`).
 
 > Workflow code
 

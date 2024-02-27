@@ -14,6 +14,8 @@ Please take a moment to read the following guidelines before contributing:
 
 - Basic familiarity with Git and GitHub: If you are also new to these tools, visit [GitHub for complete beginners](https://developer.mozilla.org/en-US/docs/MDN/Contribute/GitHub_beginners) for a comprehensive introduction to them.
 
+- You can read a [complete guide](https://dev.to/anmolbaranwal/a-complete-guide-to-open-source-100x-simpler-2d6c) on how the complete open source ecosystem works, including the basic flow of contribution in open source.
+
 ## Found a bug?
 
 - **Ensure the bug was not already reported** by searching the existing [Issues](https://github.com/Anmol-Baranwal/DevSync/issues?q=is%3Aissue+).
@@ -25,7 +27,7 @@ Please take a moment to read the following guidelines before contributing:
 
 This workflow is written in [TypeScript](https://www.typescriptlang.org/), a typed variant of JavaScript, and we use [Prettier](https://prettier.io/) to get a consistent code style.
 
-Because of how GitHub Actions are run, the source code of this project is transpiled from TypeScript into JavaScript. The transpiled code (found in `lib/`) is subsequently compiled using [NCC](https://github.com/vercel/ncc/blob/master/readme.md) (found in `dist/`) to avoid having to include the `node_modules/` directory in the repository.
+Because of how GitHub Actions are run, the source code of this project is transpiled from TypeScript into JavaScript. The transpiled code (found in `src/`) is subsequently compiled using [NCC](https://github.com/vercel/ncc/blob/master/readme.md) (found in `dist/`) to avoid having to include the `node_modules/` directory in the repository.
 
 ## Submitting a pull request
 

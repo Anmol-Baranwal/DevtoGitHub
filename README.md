@@ -9,7 +9,7 @@ Save your DEV.to articles and reading list with a bunch of useful options.
 - The details like tags, cover image, URL, and published time is shown in a proper format.
 - The best part is that you can create a table of contents in the readme to view and visit each of your articles in the saved repository.
 - You can also save your reading lists with specified structures and URLs for easy access.
-- Optionally display the total read time for each article in the reading list.
+- You can display the reading time for each article in the reading list.
 - You can customize the directory in which you want to save the articles and the reading list.
 - I've added a custom logic based on tags to give you more flexibility in saving your reading list.
 
@@ -60,18 +60,18 @@ Various inputs are defined to let you configure the action:
 
 | Name | Description | Default | Required |
 | ---- | ----------- | ------- | -------- |
-| `gh-token` | The GitHub token for authentication | `'${{ github.token }}'` | `No` |
-| `devApiKey` | The API key from your DEV | `''` | `Yes` |
-| `saveArticles` | This will save your articles in respective markdown file | `'true'` | `No` |
+| `gh-token` | The GitHub token for authentication. | `'${{ github.token }}'` | `No` |
+| `devApiKey` | The API key from your DEV. | `''` | `Yes` |
+| `saveArticles` | This will save your articles in respective markdown file. | `'true'` | `No` |
 | `outputDir` | The directory to save your articles. Default will save it under articles directory. | `'articles'` | `No` |
-| `saveArticlesReadme` | To create a table of contents for your articles in readme (same directory) | `'false'` | `No` |
-| `readingList` | To create a reading list from DEV | `'false'` | `No` |
-| `readTime` | The API key from your DEV | `'false'` | `No` |
+| `saveArticlesReadme` | To create a table of contents for your articles in readme (same directory). | `'false'` | `No` |
+| `readingList` | To create a reading list from DEV. | `'false'` | `No` |
+| `readTime` | To include the reading time for each article in the reading list. | `'false'` | `No` |
 | `outputDirReading` | The output directory for saving the reading list (Readme.md). Default will save it under root directory. | `''` | `No` |
 | `excludeTags` | To filter the reading list to avoid this tag. Use commas to separate if there are multiple tags. | `''` | `No` |
 | `mustIncludeTags` | To create a reading list to include this tag prioritizing over excludeTags. Use commas to separate if there are multiple tags. | `''` | `No` |
-| `branch` | The git branch to use for these process | `'main'` | `No` |
-| `conventionalCommits` | To use conventional commit message standards | `'true'` | `No` |
+| `branch` | The git branch to use for these process. | `'main'` | `No` |
+| `conventionalCommits` | To use conventional commit message standards. | `'true'` | `No` |
 
 <br>
 
