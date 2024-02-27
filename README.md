@@ -1,3 +1,5 @@
+![DevSync Banner](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/7c334d33-0eba-4914-aee2-ffe3bf02fc3b)
+
 # DevSync
 Save your DEV.to articles and reading list with a bunch of useful options.
 
