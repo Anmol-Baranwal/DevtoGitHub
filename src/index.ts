@@ -4,7 +4,7 @@ import * as core from "@actions/core"
 import { createReadingList } from "./utils/createReadingList"
 import { fetchDevToReadingList } from "./utils/fetchDevToReadingList"
 
-async function DevSync() {
+async function DevtoGitHub() {
   try {
     const apiKey = core.getInput("devApiKey")
     const outputDir = core.getInput("outputDir") || "./articles" // Default is the articles directory
@@ -33,4 +33,4 @@ async function DevSync() {
   }
 }
 
-DevSync()
+DevtoGitHub()

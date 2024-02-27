@@ -1,5 +1,5 @@
 {
-  "name": "devsync",
+  "name": "devtogithub",
   "version": "1.0.0",
   "description": "Save your dev.to articles with all the necessary information on GitHub",
   "main": "dist/index.js",
@@ -10,12 +10,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Anmol-Baranwal/DevSync.git"
+    "url": "git+https://github.com/Anmol-Baranwal/DevtoGitHub.git"
   },
   "bugs": {
-    "url": "https://github.com/Anmol-Baranwal/DevSync/issues"
+    "url": "https://github.com/Anmol-Baranwal/DevtoGitHub/issues"
   },
-  "homepage": "https://github.com/Anmol-Baranwal/DevSync#readme",
+  "homepage": "https://github.com/Anmol-Baranwal/DevtoGitHub#readme",
   "keywords": [],
   "exports": {
     ".": "./dist/index.js"

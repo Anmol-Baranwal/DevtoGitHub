@@ -18,8 +18,8 @@ Please take a moment to read the following guidelines before contributing:
 
 ## Found a bug?
 
-- **Ensure the bug was not already reported** by searching the existing [Issues](https://github.com/Anmol-Baranwal/DevSync/issues?q=is%3Aissue+).
-- If you're unable to find an open issue addressing the problem, open a new one using this [bug template](https://github.com/Anmol-Baranwal/DevSync/issues/new?assignees=&labels=bug&projects=&template=bug.yml&title=%5BBUG%5D+%3Cconcise+description%3E). Be sure to include a **title and clear description**, and as much relevant information as possible.
+- **Ensure the bug was not already reported** by searching the existing [Issues](https://github.com/Anmol-Baranwal/DevtoGitHub/issues?q=is%3Aissue+).
+- If you're unable to find an open issue addressing the problem, open a new one using this [bug template](https://github.com/Anmol-Baranwal/DevtoGitHub/issues/new?assignees=&labels=bug&projects=&template=bug.yml&title=%5BBUG%5D+%3Cconcise+description%3E). Be sure to include a **title and clear description**, and as much relevant information as possible.
 
 ## What should I know before submitting a pull request or issue
 
@@ -42,4 +42,4 @@ Because of how GitHub Actions are run, the source code of this project is transp
 
 ## Remarks ✅
 
-- If something is missing here, or you feel something is not well described, please [raise an issue](https://github.com/Anmol-Baranwal/DevSync/issues/new) with relevant template.
+- If something is missing here, or you feel something is not well described, please [raise an issue](https://github.com/Anmol-Baranwal/DevtoGitHub/issues/new) with relevant template.

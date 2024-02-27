@@ -1,6 +1,6 @@
-![DevSync Banner](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/7c334d33-0eba-4914-aee2-ffe3bf02fc3b)
+![DevtoGitHub Banner](https://github.com/Anmol-Baranwal/DevtoGitHub/assets/74038190/839a978c-cfa3-4977-a7a4-5656354642e0)
 
-# DevSync
+# DevtoGitHub
 Save your DEV.to articles and reading list with a bunch of useful options.
 
 ## Use cases
@@ -26,7 +26,7 @@ Save your DEV.to articles and reading list with a bunch of useful options.
 - Create a file in the repository at the following path: `.github/workflows/dev-sync.yml` and paste the following code into it.
 
 ```yml
-name: DevSync
+name: DevtoGitHub
 
 on:
   schedule:
@@ -43,8 +43,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@v1
+      - name: Run DevtoGitHub
+        uses: Anmol-Baranwal/DevtoGitHub@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           saveArticles: true # default
@@ -52,7 +52,7 @@ jobs:
           saveArticlesReadme: true # this will create a table of content for easy navigation
 ```
 
-- For detailed instructions on custom configuration and visual samples, please refer to the [examples](./Examples.md). To get started, I've also mentioned some of the [common cron schedule](https://github.com/Anmol-Baranwal/DevSync/blob/main/Examples.md#other-options) for you to use in the workflow.
+- For detailed instructions on custom configuration and visual samples, please refer to the [examples](./Examples.md). To get started, I've also mentioned some of the [common cron schedule](https://github.com/Anmol-Baranwal/DevtoGitHub/blob/main/Examples.md#other-options) for you to use in the workflow.
 
 ---
 
@@ -102,7 +102,7 @@ Suppose we have an article with tags: `['react', 'javascript', 'frontend', 'tuto
 
 All changes are welcome. Please read our [contributing guidelines](Contributing.md)
 
-Feel free to suggest any features or report bugs using these [issue templates](https://github.com/Anmol-Baranwal/DevSync/issues/new/choose).
+Feel free to suggest any features or report bugs using these [issue templates](https://github.com/Anmol-Baranwal/DevtoGitHub/issues/new/choose).
 
 ---
 

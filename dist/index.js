@@ -35,7 +35,7 @@ const createMarkdownFile_1 = __nccwpck_require__(6034);
 const core = __importStar(__nccwpck_require__(2186));
 const createReadingList_1 = __nccwpck_require__(8644);
 const fetchDevToReadingList_1 = __nccwpck_require__(3327);
-async function DevSync() {
+async function DevtoGitHub() {
     try {
         const apiKey = core.getInput("devApiKey");
         const outputDir = core.getInput("outputDir") || "./articles"; // Default is the articles directory
@@ -63,7 +63,7 @@ async function DevSync() {
         console.error("Error:", error.message);
     }
 }
-DevSync();
+DevtoGitHub();
 
 
 /***/ }),

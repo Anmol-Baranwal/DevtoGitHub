@@ -12,7 +12,7 @@ This will save your articles when `saveArticles` is set to `true` (default). You
 > Workflow code
 
 ```yml
-name: DevSync
+name: DevtoGitHub
 
 on:
   schedule:
@@ -29,8 +29,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@v1
+      - name: Run DevtoGitHub
+        uses: Anmol-Baranwal/DevtoGitHub@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           saveArticles: true # default
@@ -38,7 +38,7 @@ jobs:
 ```
 
 > Output
-![saving articles](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/a5c18795-c74b-4833-a38b-22c22c8e2c19)
+![saving articles](https://github.com/Anmol-Baranwal/DevtoGitHub/assets/74038190/ad357618-6fda-4f9e-b90d-39962dce9e9f)
 
 The structure of each article markdown file would be as follows:
 
@@ -50,7 +50,7 @@ The structure of each article markdown file would be as follows:
 - Content of the Article
 
 > Output
-![structure of saved article](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/6c1cc3c6-3b35-467b-8892-48dea28ea0d0)
+![structure of saved article](https://github.com/Anmol-Baranwal/DevtoGitHub/assets/74038190/24fb6087-bec8-457f-8c3f-2205a08fd873)
 
 
 ## Table of Contents for Saved Articles
@@ -62,7 +62,7 @@ This will save your articles when `saveArticles` is set to `true` (default). You
 > Workflow code
 
 ```yml
-name: DevSync
+name: DevtoGitHub
 
 on:
   schedule:
@@ -79,8 +79,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@v1
+      - name: Run DevtoGitHub
+        uses: Anmol-Baranwal/DevtoGitHub@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           saveArticles: true # default
@@ -89,7 +89,7 @@ jobs:
 ```
 
 > Output
-![saving articles with table of contents](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/3ef5c665-b42a-4e1d-b769-4146d8e82259)
+![saving articles with table of contents](https://github.com/Anmol-Baranwal/DevtoGitHub/assets/74038190/6093c3ff-9ae9-43f6-b70f-96cda5dd0ce1)
 
 
 ## Reading List
@@ -101,7 +101,7 @@ This will stop saving your articles since `saveArticles` is set to `false` (defa
 > Workflow code
 
 ```yml
-name: DevSync
+name: DevtoGitHub
 
 on:
   schedule:
@@ -118,8 +118,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@v1
+      - name: Run DevtoGitHub
+        uses: Anmol-Baranwal/DevtoGitHub@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           saveArticles: false # default is true
@@ -129,7 +129,7 @@ jobs:
 ```
 
 > Output
-![create reading list](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/b45d1e49-0a8b-4dc7-a41e-82649baa7aff)
+![create reading list](https://github.com/Anmol-Baranwal/DevtoGitHub/assets/74038190/d13f89a7-7999-4dab-9efb-12094918d078)
 
 
 ## Reading List with read time
@@ -141,7 +141,7 @@ This will stop saving your articles since `saveArticles` is set to `false` (defa
 > Workflow code
 
 ```yml
-name: DevSync
+name: DevtoGitHub
 
 on:
   schedule:
@@ -158,8 +158,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@v1
+      - name: Run DevtoGitHub
+        uses: Anmol-Baranwal/DevtoGitHub@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           saveArticles: false # default is true
@@ -169,19 +169,19 @@ jobs:
 ```
 
 > Output
-![create a reading list with a reading time of the article](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/820cb75f-58c2-46ef-8845-5565f3f1fc37)
+![create a reading list with a reading time of the article](https://github.com/Anmol-Baranwal/DevtoGitHub/assets/74038190/f5f6926d-ff73-4ad1-98d6-30833d9cf4e5)
 
 
 ## Reading List with excludeTags & mustIncludeTags
 
 > Explanation
 
-This will stop saving your articles since `saveArticles` is set to `false` (default is `true`). It will create your reading list with the articles in a structured way. You can change which directory you want using `outputDirReading`. For instance, the below workflow will save your articles in the root directory by adding your info in a `README`. You can read about excludeTags and mustIncludeTags in [detail with examples](https://github.com/Anmol-Baranwal/DevSync?tab=readme-ov-file#the-concept-of-excludetags-and-mustincludetags).
+This will stop saving your articles since `saveArticles` is set to `false` (default is `true`). It will create your reading list with the articles in a structured way. You can change which directory you want using `outputDirReading`. For instance, the below workflow will save your articles in the root directory by adding your info in a `README`. You can read about excludeTags and mustIncludeTags in [detail with examples](https://github.com/Anmol-Baranwal/DevtoGitHub?tab=readme-ov-file#the-concept-of-excludetags-and-mustincludetags).
 
 > Workflow code
 
 ```yml
-name: DevSync
+name: DevtoGitHub
 
 on:
   schedule:
@@ -198,8 +198,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run DevSync
-        uses: Anmol-Baranwal/DevSync@v1
+      - name: Run DevtoGitHub
+        uses: Anmol-Baranwal/DevtoGitHub@v1
         with:
           devApiKey: ${{ secrets.DEV_TOKEN }}
           saveArticles: false # default is true
@@ -218,7 +218,7 @@ These options are not mandatory for everyone if you're not very familiar with Gi
 There are conventions for commit messages that make commits self-explanatory regarding their type. If `conventionalCommits` is set to `true` (default) then those conventions will be used. You can read more about [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
 > Output
-![conventional commits](https://github.com/Anmol-Baranwal/DevSync/assets/74038190/4cd62814-6eb0-45c5-869b-20c624981c8c)
+![conventional commits](https://github.com/Anmol-Baranwal/DevtoGitHub/assets/74038190/bfe6221b-cc5a-4eb7-92f8-32f33f3945e1)
 
 
 > Git Branch
@@ -240,4 +240,4 @@ In case you are looking for cron schedules, here are some common ones that you c
 
 <br />
 
-You can see the list of [input options](https://github.com/Anmol-Baranwal/DevSync?tab=readme-ov-file#inputs) that you can use with the workflow.
+You can see the list of [input options](https://github.com/Anmol-Baranwal/DevtoGitHub?tab=readme-ov-file#inputs) that you can use with the workflow.

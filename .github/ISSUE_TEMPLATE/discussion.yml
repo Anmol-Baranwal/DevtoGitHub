@@ -14,5 +14,5 @@ body:
     attributes:
       label: "Checklist"
       options:
-        - label: "I have checked the existing [issues](https://github.com/Anmol-Baranwal/DevSync/issues?q=is%3Aissue+)"
+        - label: "I have checked the existing [issues](https://github.com/Anmol-Baranwal/DevtoGitHub/issues?q=is%3Aissue+)"
           required: true
