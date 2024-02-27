@@ -1,4 +1,4 @@
-name: 'DevSync'
+name: 'DevtoGitHub'
 description: 'Save your Dev.to articles with all the necessary information on GitHub'
 author: 'Anmol Baranwal <anmolbaranwal119@gmail.com>'
 inputs:
