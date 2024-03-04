@@ -9,6 +9,7 @@ import {
   gitPush
 } from "./git"
 import { parseMarkdownContent } from "./parseMarkdownContent"
+import { fetchDevArticleUsingId } from "./fetchDevArticleUsingId"
 
 const conventionalCommits =
   core.getInput("conventionalCommits") === "true" || true
@@ -16,7 +17,8 @@ const conventionalCommits =
 export async function createMarkdownFile(
   articles: any[],
   outputDir: string,
-  branch: string
+  branch: string,
+  apiKey: string
 ): Promise<void> {
   // output directory must exist
   if (!fs.existsSync(outputDir)) {
@@ -35,9 +37,11 @@ export async function createMarkdownFile(
     const fileName = getFileNameFromTitle(article.title).trim()
     const filePath = `./${outputDir}/${fileName}.md`
 
+    let commitMessage
+
     // Check if the markdown file already exists
     if (!fs.existsSync(filePath)) {
-      let commitMessage = `add ${fileName} markdown file`
+      commitMessage = `add ${fileName} markdown file`
 
       if (conventionalCommits) {
         commitMessage = `chore: ${commitMessage.toLowerCase()}`
@@ -63,9 +67,43 @@ export async function createMarkdownFile(
 
       core.notice(`Markdown file created: ${filePath}`)
     } else {
-      core.notice(
-        `Markdown file already exists for "${article.title}". Skipping.`
-      )
+      const existingContent = fs.readFileSync(filePath, "utf8")
+      const fetchedArticle = await fetchDevArticleUsingId(article.id, apiKey)
+
+      // Check if the article has been edited by comparing the existing content with the fetched article's content
+      const newMarkdownContent = parseMarkdownContent(fetchedArticle, {
+        option: "2"
+      })
+      if (existingContent !== newMarkdownContent) {
+        core.notice(
+          `Article has been edited, updating the Markdown file content.`
+        )
+        fs.writeFileSync(filePath, newMarkdownContent)
+
+        commitMessage = `update ${fileName} markdown file with edited content`
+
+        if (conventionalCommits) {
+          commitMessage = `chore: ${commitMessage.toLowerCase()}`
+        }
+
+        try {
+          await gitConfig()
+          await gitAdd(filePath)
+          await gitCommit(commitMessage, filePath)
+          await gitPull(branch)
+          await gitPush(branch)
+
+          core.notice(`Markdown file created and committed: ${filePath}`)
+        } catch (error) {
+          core.setFailed(
+            `Failed to commit and push changes: ${(error as Error).message}`
+          )
+        }
+      } else {
+        core.notice(
+          `Markdown file already exists for "${article.title}" and it is not edited. Skipping.`
+        )
+      }
     }
   }
   const tableOfContents =

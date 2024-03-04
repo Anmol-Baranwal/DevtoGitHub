@@ -6,6 +6,7 @@ export interface DevToArticle {
   cover_image?: string
   social_image?: string
   tag_list: string[]
+  tags: string[]
   url: string
   positive_reactions_count: number
   public_reactions_count: number
@@ -13,6 +14,7 @@ export interface DevToArticle {
   organization?: string
   series?: string
   body_markdown?: string
+  edited_at?: string
 }
 
 export interface ReadingListArticle {

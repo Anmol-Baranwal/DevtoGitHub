@@ -15,7 +15,7 @@ async function DevtoGitHub() {
 
     if (saveArticles === true) {
       const articles = await fetchDevToArticles(apiKey)
-      createMarkdownFile(articles, outputDir, branch)
+      createMarkdownFile(articles, outputDir, branch, apiKey)
       core.notice("Articles fetched and saved successfully.")
     } else {
       core.notice(`skipping saving of articles`)

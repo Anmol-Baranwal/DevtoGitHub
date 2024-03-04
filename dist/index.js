@@ -45,7 +45,7 @@ async function DevtoGitHub() {
         const saveArticles = core.getInput("saveArticles") === "true" || false;
         if (saveArticles === true) {
             const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
-            (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch);
+            (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch, apiKey);
             core.notice("Articles fetched and saved successfully.");
         }
         else {
@@ -102,8 +102,9 @@ const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
 const git_1 = __nccwpck_require__(9556);
 const parseMarkdownContent_1 = __nccwpck_require__(4305);
+const fetchDevArticleUsingId_1 = __nccwpck_require__(6023);
 const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
-async function createMarkdownFile(articles, outputDir, branch) {
+async function createMarkdownFile(articles, outputDir, branch, apiKey) {
     // output directory must exist
     if (!fs.existsSync(outputDir)) {
         try {
@@ -118,9 +119,10 @@ async function createMarkdownFile(articles, outputDir, branch) {
     for (const article of articles) {
         const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
         const filePath = `./${outputDir}/${fileName}.md`;
+        let commitMessage;
         // Check if the markdown file already exists
         if (!fs.existsSync(filePath)) {
-            let commitMessage = `add ${fileName} markdown file`;
+            commitMessage = `add ${fileName} markdown file`;
             if (conventionalCommits) {
                 commitMessage = `chore: ${commitMessage.toLowerCase()}`;
             }
@@ -141,7 +143,34 @@ async function createMarkdownFile(articles, outputDir, branch) {
             core.notice(`Markdown file created: ${filePath}`);
         }
         else {
-            core.notice(`Markdown file already exists for "${article.title}". Skipping.`);
+            const existingContent = fs.readFileSync(filePath, "utf8");
+            const fetchedArticle = await (0, fetchDevArticleUsingId_1.fetchDevArticleUsingId)(article.id, apiKey);
+            // Check if the article has been edited by comparing the existing content with the fetched article's content
+            const newMarkdownContent = (0, parseMarkdownContent_1.parseMarkdownContent)(fetchedArticle, {
+                option: "2"
+            });
+            if (existingContent !== newMarkdownContent) {
+                core.notice(`Article has been edited, updating the Markdown file content.`);
+                fs.writeFileSync(filePath, newMarkdownContent);
+                commitMessage = `update ${fileName} markdown file with edited content`;
+                if (conventionalCommits) {
+                    commitMessage = `chore: ${commitMessage.toLowerCase()}`;
+                }
+                try {
+                    await (0, git_1.gitConfig)();
+                    await (0, git_1.gitAdd)(filePath);
+                    await (0, git_1.gitCommit)(commitMessage, filePath);
+                    await (0, git_1.gitPull)(branch);
+                    await (0, git_1.gitPush)(branch);
+                    core.notice(`Markdown file created and committed: ${filePath}`);
+                }
+                catch (error) {
+                    core.setFailed(`Failed to commit and push changes: ${error.message}`);
+                }
+            }
+            else {
+                core.notice(`Markdown file already exists for "${article.title}" and it is not edited. Skipping.`);
+            }
         }
     }
     const tableOfContents = core.getInput("saveArticlesReadme") === "true" || false;
@@ -292,6 +321,31 @@ async function createReadingList(articles, outputDir, branch) {
     core.notice(`Reading list updated in README.md`);
 }
 exports.createReadingList = createReadingList;
+
+
+/***/ }),
+
+/***/ 6023:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.fetchDevArticleUsingId = void 0;
+async function fetchDevArticleUsingId(id, apiKey) {
+    const apiUrl = `https://dev.to/api/articles/${id}`;
+    const headers = {
+        "Content-Type": "application/json",
+        "api-key": apiKey
+    };
+    const response = await fetch(apiUrl, { headers });
+    if (!response.ok) {
+        throw new Error(`Failed to fetch article. Status: ${response.status}`);
+    }
+    const article = await response.json();
+    return article;
+}
+exports.fetchDevArticleUsingId = fetchDevArticleUsingId;
 
 
 /***/ }),
@@ -553,12 +607,15 @@ exports.gitPull = gitPull;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseMarkdownContent = void 0;
-function parseMarkdownContent(article) {
+function parseMarkdownContent(article, choice = { option: "1" }) {
     const coverImageBanner = article.cover_image
         ? `<img src="${article.cover_image}" alt="Cover Image" />`
         : "";
     const formattedTimestamp = formatTimestamp(article.published_timestamp);
-    const formattedTags = article.tag_list.map((tag) => `\`${tag}\``).join(", ");
+    // the api response of article fetched using id has different fields compared to api response of user's article.
+    const formattedTags = choice && choice.option === "2"
+        ? article.tags.join(", ")
+        : article.tag_list.map((tag) => `\`${tag}\``).join(", ");
     return `\
   ${coverImageBanner}
   <hr />

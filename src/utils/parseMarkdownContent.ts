@@ -1,12 +1,24 @@
 import { DevToArticle } from "../types"
 
-export function parseMarkdownContent(article: DevToArticle): string {
+type Choice = {
+  option?: "1" | "2"
+}
+
+export function parseMarkdownContent(
+  article: DevToArticle,
+  choice: Choice = { option: "1" }
+): string {
   const coverImageBanner = article.cover_image
     ? `<img src="${article.cover_image}" alt="Cover Image" />`
     : ""
 
   const formattedTimestamp = formatTimestamp(article.published_timestamp)
-  const formattedTags = article.tag_list.map((tag) => `\`${tag}\``).join(", ")
+
+  // the api response of article fetched using id has different fields compared to api response of user's article.
+  const formattedTags =
+    choice && choice.option === "2"
+      ? article.tags.join(", ")
+      : article.tag_list.map((tag) => `\`${tag}\``).join(", ")
 
   return `\
   ${coverImageBanner}
