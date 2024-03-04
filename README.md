@@ -13,9 +13,10 @@ Save your DEV.to articles and reading list with a bunch of useful options.
 - You can also save your reading lists with specified structures and URLs for easy access.
 - You can display the reading time for each article in the reading list.
 - You can customize the directory in which you want to save the articles and the reading list.
-- I've added a custom logic based on tags to give you more flexibility in saving your reading list.
-
-> The only drawback is that articles/readingList aren't going to update even if you update it on the DEV. I will handle this in the upcoming version.
+Your sentences are clear, but here are some minor grammar adjustments for clarity and correctness:
+- I've included [custom logic](https://github.com/Anmol-Baranwal/DevtoGitHub?tab=readme-ov-file#the-concept-of-excludetags-and-mustincludetags) based on tags to provide you with more flexibility in managing your reading list.
+- All articles and the reading list will be fetched regardless of the total number.
+- If you update an article on DEV, it will be automatically updated here the next time the workflow runs.
 
 ---
 
@@ -94,7 +95,7 @@ Suppose we have an article with tags: `['react', 'javascript', 'frontend', 'tuto
 - If `excludeTags` is 'backend' and `mustIncludeTags` is 'typescript'. The article is included because it does not have the `backend` tag.
 - These cases will work for multiple tags, and `mustIncludeTags` will only work if `excludeTags` is provided.
 
-> As I said earlier even if you remove a article from your reading list on DEV, it's isn't deleted from this repository. I'm going to solve this in the future release.
+> Please note that even if you remove a article from your reading list on DEV, it's isn't deleted from this repository. I'm going to solve this in the future release.
 
 ---
 
@@ -128,6 +129,8 @@ The scripts and documentation in this project are released under the <a href="./
 
 <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" /> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" />
 <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white" />
+
+- I've used Forem v1 APIs. You can refer to the [docs](https://developers.forem.com/api/v1).
 
 ---
 
