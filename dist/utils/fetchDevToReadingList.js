@@ -45,12 +45,27 @@ const filteredArticles = (articles, excludeTags, mustIncludeTags) => {
 };
 async function fetchDevToReadingList(apiKey, per_page) {
     if (per_page === undefined)
-        per_page = 999; // default is 30
-    const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`;
-    const headers = {
-        "Content-Type": "application/json",
-        "api-key": apiKey
-    };
+        per_page = 30; // Default per page value is 30
+    let page = 1;
+    let readingList = [];
+    while (true) {
+        const apiUrl = `https://dev.to/api/readinglist?page=${page}&per_page=${per_page}`;
+        const headers = {
+            "Content-Type": "application/json",
+            "api-key": apiKey
+        };
+        const response = await (0, node_fetch_1.default)(apiUrl, { headers });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch reading list. Status: ${response.status}`);
+        }
+        const articles = (await response.json());
+        if (articles.length === 0) {
+            break; // break when no more articles left
+        }
+        readingList = readingList.concat(articles);
+        page++;
+    }
+    core.notice("Reading list fetched successfully.");
     const excludeTags = core
         .getInput("excludeTags")
         .split(",")
@@ -59,18 +74,7 @@ async function fetchDevToReadingList(apiKey, per_page) {
         .getInput("mustIncludeTags")
         .split(",")
         .map((tag) => tag.trim());
-    // we can also do this.
-    // core.getInput("mustIncludeTags").flatMap(tagList => tagList.split(", "));
-    // sample values
-    // const excludeTags = ["webdev", "react", "discuss"]
-    // const mustIncludeTags = ["startup", "programming", "beginners"]
-    const response = await (0, node_fetch_1.default)(apiUrl, { headers });
-    if (!response.ok) {
-        throw new Error(`Failed to fetch reading list. Status: ${response.status}`);
-    }
-    core.notice("Reading list fetched successfully.");
-    const articles = (await response.json());
-    const filteredReadingList = filteredArticles(articles, excludeTags, mustIncludeTags);
+    const filteredReadingList = filteredArticles(readingList, excludeTags, mustIncludeTags);
     return filteredReadingList;
 }
 exports.fetchDevToReadingList = fetchDevToReadingList;

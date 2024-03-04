@@ -30,13 +30,37 @@ export async function fetchDevToReadingList(
   apiKey: string,
   per_page?: number
 ): Promise<ReadingList[]> {
-  if (per_page === undefined) per_page = 999 // default is 30
-  const apiUrl = `https://dev.to/api/readinglist?per_page=${per_page}`
+  if (per_page === undefined) per_page = 30 // Default per page value is 30
+  let page = 1
+  let readingList: ReadingList[] = []
 
-  const headers: { [key: string]: string } = {
-    "Content-Type": "application/json",
-    "api-key": apiKey
+  while (true) {
+    const apiUrl = `https://dev.to/api/readinglist?page=${page}&per_page=${per_page}`
+
+    const headers: { [key: string]: string } = {
+      "Content-Type": "application/json",
+      "api-key": apiKey
+    }
+
+    const response = await fetch(apiUrl, { headers })
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch reading list. Status: ${response.status}`
+      )
+    }
+
+    const articles = (await response.json()) as ReadingList[]
+
+    if (articles.length === 0) {
+      break // break when no more articles left
+    }
+
+    readingList = readingList.concat(articles)
+    page++
   }
+
+  core.notice("Reading list fetched successfully.")
 
   const excludeTags = core
     .getInput("excludeTags")
@@ -48,25 +72,8 @@ export async function fetchDevToReadingList(
     .split(",")
     .map((tag) => tag.trim())
 
-  // we can also do this.
-  // core.getInput("mustIncludeTags").flatMap(tagList => tagList.split(", "));
-
-  // sample values
-  // const excludeTags = ["webdev", "react", "discuss"]
-  // const mustIncludeTags = ["startup", "programming", "beginners"]
-
-  const response = await fetch(apiUrl, { headers })
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch reading list. Status: ${response.status}`)
-  }
-
-  core.notice("Reading list fetched successfully.")
-
-  const articles = (await response.json()) as ReadingList[]
-
   const filteredReadingList = filteredArticles(
-    articles,
+    readingList,
     excludeTags,
     mustIncludeTags
   )
