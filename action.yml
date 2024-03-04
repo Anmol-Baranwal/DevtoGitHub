@@ -33,6 +33,10 @@ inputs:
     description: 'To create a reading list from DEV to include this tag at all costs.'
     default: ''
     required: false
+  synchronizeReadingList:
+    description: 'To synchronize reading list with dev.to'
+    default: 'false'
+    required: false
   saveArticles:
     description: 'To save all the articles with all the necessary information.'
     default: 'true'

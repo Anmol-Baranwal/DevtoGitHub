@@ -3,6 +3,7 @@ import { createMarkdownFile } from "./utils/createMarkdownFile"
 import * as core from "@actions/core"
 import { createReadingList } from "./utils/createReadingList"
 import { fetchDevToReadingList } from "./utils/fetchDevToReadingList"
+import { synchronizeReadingList } from "./utils/synchronizeReadingList"
 
 async function DevtoGitHub() {
   try {
@@ -12,6 +13,8 @@ async function DevtoGitHub() {
     const branch = core.getInput("branch") || "main"
     const readingList = core.getInput("readingList") === "true" || false
     const saveArticles = core.getInput("saveArticles") === "true" || false
+    const synchronizeReadingListInput =
+      core.getInput("synchronizeReadingList") === "true" || false
 
     if (saveArticles === true) {
       const articles = await fetchDevToArticles(apiKey)
@@ -25,6 +28,13 @@ async function DevtoGitHub() {
       const readingListArticles = await fetchDevToReadingList(apiKey)
 
       createReadingList(readingListArticles, outputDirReading, branch)
+
+      if (synchronizeReadingListInput === true) {
+        // synchronize reading list from DEV with readme
+        synchronizeReadingList(readingListArticles, outputDirReading, branch)
+      } else {
+        core.notice(`skipping synchronization of reading list`)
+      }
     } else {
       core.notice(`skipping saving reading list`)
     }

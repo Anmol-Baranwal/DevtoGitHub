@@ -35,6 +35,7 @@ const createMarkdownFile_1 = __nccwpck_require__(6034);
 const core = __importStar(__nccwpck_require__(2186));
 const createReadingList_1 = __nccwpck_require__(8644);
 const fetchDevToReadingList_1 = __nccwpck_require__(3327);
+const synchronizeReadingList_1 = __nccwpck_require__(4724);
 async function DevtoGitHub() {
     try {
         const apiKey = core.getInput("devApiKey");
@@ -43,6 +44,7 @@ async function DevtoGitHub() {
         const branch = core.getInput("branch") || "main";
         const readingList = core.getInput("readingList") === "true" || false;
         const saveArticles = core.getInput("saveArticles") === "true" || false;
+        const synchronizeReadingListInput = core.getInput("synchronizeReadingList") === "true" || false;
         if (saveArticles === true) {
             const articles = await (0, fetchDevToArticles_1.fetchDevToArticles)(apiKey);
             (0, createMarkdownFile_1.createMarkdownFile)(articles, outputDir, branch, apiKey);
@@ -54,6 +56,13 @@ async function DevtoGitHub() {
         if (readingList === true) {
             const readingListArticles = await (0, fetchDevToReadingList_1.fetchDevToReadingList)(apiKey);
             (0, createReadingList_1.createReadingList)(readingListArticles, outputDirReading, branch);
+            if (synchronizeReadingListInput === true) {
+                // synchronize reading list from DEV with readme
+                (0, synchronizeReadingList_1.synchronizeReadingList)(readingListArticles, outputDirReading, branch);
+            }
+            else {
+                core.notice(`skipping synchronization of reading list`);
+            }
         }
         else {
             core.notice(`skipping saving reading list`);
@@ -650,6 +659,100 @@ const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
 };
+
+
+/***/ }),
+
+/***/ 4724:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.synchronizeReadingList = void 0;
+const fs = __importStar(__nccwpck_require__(7147));
+const core = __importStar(__nccwpck_require__(2186));
+const git_1 = __nccwpck_require__(9556);
+async function synchronizeReadingList(readingList, outputDir, branch) {
+    const readmePath = `./${outputDir}/README.md`;
+    let commitMessage = "synchronize reading list";
+    const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
+    if (conventionalCommits) {
+        commitMessage = `chore: ${commitMessage.toLowerCase()}`;
+    }
+    try {
+        const existingContent = fs.readFileSync(readmePath, "utf8");
+        // For logging names of removed articles
+        const removedArticles = [];
+        // Iterate each line in the readme
+        let updatedContent = existingContent
+            .split("\n")
+            .filter((line) => {
+            // Extract the URL from the line
+            const urlMatch = line.match(/\[.*\]\((.*)\)/);
+            if (urlMatch) {
+                const articleUrl = urlMatch[1];
+                // Check if the article URL exists in the fetched reading list
+                const existsInReadingList = readingList.some((article) => article.article.url === articleUrl);
+                // If the article doesn't exist in the reading list, add it to removedArticles
+                if (!existsInReadingList) {
+                    const titleMatch = line.match(/\[(.*)\]/);
+                    if (titleMatch) {
+                        const articleTitle = titleMatch[1];
+                        removedArticles.push(articleTitle);
+                    }
+                }
+                return existsInReadingList;
+            }
+            // Preserve lines that are not article URLs
+            return true;
+        })
+            .join("\n");
+        // Log removed articles
+        if (removedArticles.length > 0) {
+            console.log(`Removed these articles from the reading list: ${removedArticles.join(", ")}`);
+        }
+        fs.writeFileSync(readmePath, updatedContent);
+        try {
+            await (0, git_1.gitConfig)();
+            await (0, git_1.gitAdd)(readmePath);
+            await (0, git_1.gitCommit)(commitMessage, readmePath);
+            await (0, git_1.gitPull)(branch);
+            await (0, git_1.gitPush)(branch);
+        }
+        catch (error) {
+            core.setFailed(`Failed to commit and push changes: ${error.message}`);
+        }
+        core.notice(`Reading list synchronized successfully.`);
+    }
+    catch (error) {
+        core.setFailed(`Failed to synchronize reading list: ${error.message}`);
+    }
+}
+exports.synchronizeReadingList = synchronizeReadingList;
 
 
 /***/ }),
