@@ -7,22 +7,34 @@ export async function fetchDevToArticles(
   per_page?: number
 ): Promise<DevToArticle[]> {
   if (per_page === undefined) per_page = 999 // default is 30
-  const apiUrl = `https://dev.to/api/articles/me?per_page=${per_page}`
+  let page = 1
+  let articles: DevToArticle[] = []
 
-  const headers: { [key: string]: string } = {
-    "Content-Type": "application/json",
-    "api-key": apiKey
-  }
+  while (true) {
+    const apiUrl = `https://dev.to/api/articles/me?page=${page}&per_page=${per_page}`
 
-  const response = await fetch(apiUrl, { headers })
+    const headers: { [key: string]: string } = {
+      "Content-Type": "application/json",
+      "api-key": apiKey
+    }
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch articles. Status: ${response.status}`)
+    const response = await fetch(apiUrl, { headers })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch articles. Status: ${response.status}`)
+    }
+
+    const pageArticles = (await response.json()) as DevToArticle[]
+
+    if (pageArticles.length === 0) {
+      break // No more articles left
+    }
+
+    articles = articles.concat(pageArticles)
+    page++
   }
 
   core.notice("Articles fetched and saved successfully.")
 
-  const articles = await response.json()
-
-  return articles as DevToArticle[]
+  return articles
 }

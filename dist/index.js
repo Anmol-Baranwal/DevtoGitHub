@@ -388,17 +388,26 @@ const core = __importStar(__nccwpck_require__(2186));
 async function fetchDevToArticles(apiKey, per_page) {
     if (per_page === undefined)
         per_page = 999; // default is 30
-    const apiUrl = `https://dev.to/api/articles/me?per_page=${per_page}`;
-    const headers = {
-        "Content-Type": "application/json",
-        "api-key": apiKey
-    };
-    const response = await (0, node_fetch_1.default)(apiUrl, { headers });
-    if (!response.ok) {
-        throw new Error(`Failed to fetch articles. Status: ${response.status}`);
+    let page = 1;
+    let articles = [];
+    while (true) {
+        const apiUrl = `https://dev.to/api/articles/me?page=${page}&per_page=${per_page}`;
+        const headers = {
+            "Content-Type": "application/json",
+            "api-key": apiKey
+        };
+        const response = await (0, node_fetch_1.default)(apiUrl, { headers });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch articles. Status: ${response.status}`);
+        }
+        const pageArticles = (await response.json());
+        if (pageArticles.length === 0) {
+            break; // No more articles left
+        }
+        articles = articles.concat(pageArticles);
+        page++;
     }
     core.notice("Articles fetched and saved successfully.");
-    const articles = await response.json();
     return articles;
 }
 exports.fetchDevToArticles = fetchDevToArticles;
