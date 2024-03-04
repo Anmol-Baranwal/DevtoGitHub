@@ -17,6 +17,7 @@ Your sentences are clear, but here are some minor grammar adjustments for clarit
 - I've included [custom logic](https://github.com/Anmol-Baranwal/DevtoGitHub?tab=readme-ov-file#the-concept-of-excludetags-and-mustincludetags) based on tags to provide you with more flexibility in managing your reading list.
 - All articles and the reading list will be fetched regardless of the total number.
 - If you update an article on DEV, it will be automatically updated here the next time the workflow runs.
+- You can synchronize your reading list from DEV. For instance, if you remove any article from the reading list on DEV, then it will also be removed in the reading list in the readme.
 
 ---
 
@@ -75,6 +76,7 @@ Various inputs are defined to let you configure the action:
 | `mustIncludeTags` | To create a reading list to include this tag prioritizing over excludeTags. Use commas to separate if there are multiple tags. | `''` | `No` |
 | `branch` | The git branch to use for these process. | `'main'` | `No` |
 | `conventionalCommits` | To use conventional commit message standards. | `'true'` | `No` |
+| `synchronizeReadingList` | To synchronize the reading list from DEV. Removing an article from the reading list on DEV will also remove it from the repository. | `'false'` | `No` |
 
 <br>
 
@@ -94,8 +96,6 @@ Suppose we have an article with tags: `['react', 'javascript', 'frontend', 'tuto
 - If `excludeTags` is 'tutorial' and `mustIncludeTags` is empty (default), the article will be excluded because it has the `tutorial` tag.
 - If `excludeTags` is 'backend' and `mustIncludeTags` is 'typescript'. The article is included because it does not have the `backend` tag.
 - These cases will work for multiple tags, and `mustIncludeTags` will only work if `excludeTags` is provided.
-
-> Please note that even if you remove a article from your reading list on DEV, it's isn't deleted from this repository. I'm going to solve this in the future release.
 
 ---
 
@@ -130,7 +130,7 @@ The scripts and documentation in this project are released under the <a href="./
 <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" /> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" />
 <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white" />
 
-- I've used Forem v1 APIs. You can refer to the [docs](https://developers.forem.com/api/v1).
+- I've used Forem v1 APIs for building DevtoGithub. You can refer to the [docs](https://developers.forem.com/api/v1).
 
 ---
 

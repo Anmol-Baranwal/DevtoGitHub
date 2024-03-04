@@ -132,11 +132,11 @@ jobs:
 ![create reading list](https://github.com/Anmol-Baranwal/DevtoGitHub/assets/74038190/d13f89a7-7999-4dab-9efb-12094918d078)
 
 
-## Reading List with read time
+## Reading List with read time & synchronization with DEV.
 
 > Explanation
 
-This will stop saving your articles since `saveArticles` is set to `false` (default is `true`). It will create your reading list with the articles in a structured way. You can change which directory you want using `outputDirReading`. For instance, the below workflow will save your articles in the `read` directory by adding your info in a `README`. It will add a reading time with the articles when `readTime` is set to `true` (default is `false`).
+This will stop saving your articles since `saveArticles` is set to `false` (default is `true`). It will create your reading list with the articles in a structured way. You can change which directory you want using `outputDirReading`. For instance, the below workflow will save your articles in the `read` directory by adding your info in a `README`. It will add a reading time with the articles when `readTime` is set to `true` (default is `false`). Setting `synchronizeReadingList` to `true` will synchronize your reading list from DEV, removing any article from your reading list on DEV will also remove it from the readme here.
 
 > Workflow code
 
@@ -166,6 +166,7 @@ jobs:
           readingList: true
           outputDirReading: "read" # this will save reading list in read/Readme.md
           readTime: true
+          synchronizeReadingList: true
 ```
 
 > Output
