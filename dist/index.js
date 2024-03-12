@@ -77,6 +77,83 @@ DevtoGitHub();
 
 /***/ }),
 
+/***/ 3581:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createArticlesReadme = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const fs = __importStar(__nccwpck_require__(7147));
+const git_1 = __nccwpck_require__(9556);
+const performGitActions_1 = __nccwpck_require__(8881);
+const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
+async function createArticlesReadme(articles, outputDir, branch) {
+    // Create content for README.md
+    let readmeContent = "";
+    const readmePath = `${outputDir}/README.md`;
+    if (fs.existsSync(readmePath)) {
+        readmeContent = fs.readFileSync(readmePath, "utf8");
+    }
+    const hasTableOfContentsHeading = readmeContent.includes("# Table of Contents\n\n");
+    // Set the commit message based on whether the heading exists
+    let commitMessage = hasTableOfContentsHeading
+        ? "update readme with table of contents"
+        : "create readme with table of contents";
+    if (!hasTableOfContentsHeading) {
+        readmeContent = "# Table of Contents\n\n";
+    }
+    for (const article of articles) {
+        const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
+        const fileLink = `./${fileName}.md`;
+        if (readmeContent.includes(`[${article.title}]`)) {
+            console.log(`Skipping "${article.title}" because it already exists in the table of contents.`);
+            continue;
+        }
+        // Add entry to README content
+        readmeContent += `- [${article.title}](${fileLink.replace(/ /g, "%20")})\n`;
+    }
+    // Write README.md
+    fs.writeFileSync(readmePath, readmeContent);
+    if (conventionalCommits) {
+        commitMessage = `chore: ${commitMessage.toLowerCase()}`;
+    }
+    (0, performGitActions_1.performGitActions)({
+        commitMessage,
+        path: readmePath,
+        branch,
+        noticeMessage: "README.md file created and committed"
+    });
+}
+exports.createArticlesReadme = createArticlesReadme;
+
+
+/***/ }),
+
 /***/ 6034:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -112,6 +189,8 @@ const fs = __importStar(__nccwpck_require__(7147));
 const git_1 = __nccwpck_require__(9556);
 const parseMarkdownContent_1 = __nccwpck_require__(4305);
 const fetchDevArticleUsingId_1 = __nccwpck_require__(6023);
+const performGitActions_1 = __nccwpck_require__(8881);
+const createArticlesReadme_1 = __nccwpck_require__(3581);
 const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
 async function createMarkdownFile(articles, outputDir, branch, apiKey) {
     // output directory must exist
@@ -138,18 +217,13 @@ async function createMarkdownFile(articles, outputDir, branch, apiKey) {
             const markdownContent = (0, parseMarkdownContent_1.parseMarkdownContent)(article);
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
-            try {
-                await (0, git_1.gitConfig)();
-                await (0, git_1.gitAdd)(filePath);
-                await (0, git_1.gitCommit)(commitMessage, filePath);
-                await (0, git_1.gitPull)(branch);
-                await (0, git_1.gitPush)(branch);
-                core.notice(`Markdown file created and committed: ${filePath}`);
-            }
-            catch (error) {
-                core.setFailed(`Failed to commit and push changes: ${error.message}`);
-            }
-            core.notice(`Markdown file created: ${filePath}`);
+            (0, performGitActions_1.performGitActions)({
+                commitMessage,
+                path: filePath,
+                branch
+                // noticeMessage: "Markdown file created and committed"
+            });
+            // core.notice(`Markdown file created: ${filePath}`)
         }
         else {
             const existingContent = fs.readFileSync(filePath, "utf8");
@@ -165,17 +239,12 @@ async function createMarkdownFile(articles, outputDir, branch, apiKey) {
                 if (conventionalCommits) {
                     commitMessage = `chore: ${commitMessage.toLowerCase()}`;
                 }
-                try {
-                    await (0, git_1.gitConfig)();
-                    await (0, git_1.gitAdd)(filePath);
-                    await (0, git_1.gitCommit)(commitMessage, filePath);
-                    await (0, git_1.gitPull)(branch);
-                    await (0, git_1.gitPush)(branch);
-                    core.notice(`Markdown file created and committed: ${filePath}`);
-                }
-                catch (error) {
-                    core.setFailed(`Failed to commit and push changes: ${error.message}`);
-                }
+                (0, performGitActions_1.performGitActions)({
+                    commitMessage,
+                    path: filePath,
+                    branch,
+                    noticeMessage: "Markdown file created and committed"
+                });
             }
             else {
                 core.notice(`Markdown file already exists for "${article.title}" and it is not edited. Skipping.`);
@@ -184,52 +253,10 @@ async function createMarkdownFile(articles, outputDir, branch, apiKey) {
     }
     const tableOfContents = core.getInput("saveArticlesReadme") === "true" || false;
     if (tableOfContents) {
-        await createArticlesReadme(articles, outputDir, branch);
+        await (0, createArticlesReadme_1.createArticlesReadme)(articles, outputDir, branch);
     }
 }
 exports.createMarkdownFile = createMarkdownFile;
-async function createArticlesReadme(articles, outputDir, branch) {
-    // Create content for README.md
-    let readmeContent = "";
-    const readmePath = `${outputDir}/README.md`;
-    if (fs.existsSync(readmePath)) {
-        readmeContent = fs.readFileSync(readmePath, "utf8");
-    }
-    const hasTableOfContentsHeading = readmeContent.includes("# Table of Contents\n\n");
-    // Set the commit message based on whether the heading exists
-    let commitMessage = hasTableOfContentsHeading
-        ? "update readme with table of contents"
-        : "create readme with table of contents";
-    if (!hasTableOfContentsHeading) {
-        readmeContent = "# Table of Contents\n\n";
-    }
-    for (const article of articles) {
-        const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
-        const fileLink = `./${fileName}.md`;
-        if (readmeContent.includes(`[${article.title}]`)) {
-            console.log(`Skipping "${article.title}" because it already exists in the table of contents.`);
-            continue;
-        }
-        // Add entry to README content
-        readmeContent += `- [${article.title}](${fileLink.replace(/ /g, "%20")})\n`;
-    }
-    // Write README.md
-    fs.writeFileSync(readmePath, readmeContent);
-    if (conventionalCommits) {
-        commitMessage = `chore: ${commitMessage.toLowerCase()}`;
-    }
-    try {
-        await (0, git_1.gitConfig)();
-        await (0, git_1.gitAdd)(readmePath);
-        await (0, git_1.gitCommit)(commitMessage, readmePath);
-        await (0, git_1.gitPull)(branch);
-        await (0, git_1.gitPush)(branch);
-        core.notice("README.md file created and committed");
-    }
-    catch (error) {
-        core.setFailed(`Failed to commit and push changes (readme articles): ${error}`);
-    }
-}
 
 
 /***/ }),
@@ -266,7 +293,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createReadingList = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
-const git_1 = __nccwpck_require__(9556);
+const performGitActions_1 = __nccwpck_require__(8881);
 async function createReadingList(articles, outputDir, branch) {
     const readTime = core.getInput("readTime") === "true" || false;
     const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
@@ -316,17 +343,12 @@ async function createReadingList(articles, outputDir, branch) {
         }
     }
     fs.writeFileSync(readmePath, existingContent);
-    try {
-        await (0, git_1.gitConfig)();
-        await (0, git_1.gitAdd)(readmePath);
-        await (0, git_1.gitCommit)(commitMessage, readmePath);
-        await (0, git_1.gitPull)(branch);
-        await (0, git_1.gitPush)(branch);
-        core.notice(`reading list file created and committed`);
-    }
-    catch (error) {
-        core.setFailed(`Failed to commit and push changes: ${error.message}`);
-    }
+    (0, performGitActions_1.performGitActions)({
+        commitMessage,
+        path: readmePath,
+        branch,
+        noticeMessage: "Reading list file created and committed"
+    });
     core.notice(`Reading list updated in README.md`);
 }
 exports.createReadingList = createReadingList;
@@ -364,36 +386,12 @@ exports.fetchDevArticleUsingId = fetchDevArticleUsingId;
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.fetchDevToArticles = void 0;
 const node_fetch_1 = __importDefault(__nccwpck_require__(1793));
-const core = __importStar(__nccwpck_require__(2186));
 async function fetchDevToArticles(apiKey, per_page) {
     if (per_page === undefined)
         per_page = 999; // default is 30
@@ -416,7 +414,6 @@ async function fetchDevToArticles(apiKey, per_page) {
         articles = articles.concat(pageArticles);
         page++;
     }
-    core.notice("Articles fetched and saved successfully.");
     return articles;
 }
 exports.fetchDevToArticles = fetchDevToArticles;
@@ -558,7 +555,7 @@ async function gitAdd(filePath) {
         await exec.exec("git", ["add", filePath]);
     }
     catch (error) {
-        core.setFailed(`Failed to complete git add: ${error.message}`);
+        core.notice(`Failed to complete git add: ${error.message}`);
     }
 }
 exports.gitAdd = gitAdd;
@@ -576,7 +573,7 @@ async function gitCommit(message, filePath) {
         await exec.exec("git", ["commit", "-m", message, filePath]);
     }
     catch (error) {
-        core.setFailed(`Failed to complete git commit: ${error.message}`);
+        core.notice(`Failed to complete git commit: ${error.message}`);
     }
 }
 exports.gitCommit = gitCommit;
@@ -605,7 +602,7 @@ async function gitConfig() {
         ]);
     }
     catch (error) {
-        core.setFailed(`Failed to set up Git configuration: ${error.message}`);
+        core.notice(`Failed to set up Git configuration: ${error.message}`);
     }
 }
 exports.gitConfig = gitConfig;
@@ -663,6 +660,57 @@ const formatTimestamp = (timestamp) => {
 
 /***/ }),
 
+/***/ 8881:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.performGitActions = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const git_1 = __nccwpck_require__(9556);
+async function performGitActions({ commitMessage, path, branch, noticeMessage }) {
+    try {
+        await (0, git_1.gitConfig)();
+        await (0, git_1.gitAdd)(path);
+        await (0, git_1.gitCommit)(commitMessage, path);
+        await (0, git_1.gitPull)(branch);
+        await (0, git_1.gitPush)(branch);
+        if (noticeMessage)
+            core.notice(noticeMessage);
+    }
+    catch (error) {
+        core.notice(`Failed to commit and push changes: ${error.message}`);
+    }
+}
+exports.performGitActions = performGitActions;
+
+
+/***/ }),
+
 /***/ 4724:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -695,7 +743,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.synchronizeReadingList = void 0;
 const fs = __importStar(__nccwpck_require__(7147));
 const core = __importStar(__nccwpck_require__(2186));
-const git_1 = __nccwpck_require__(9556);
+const performGitActions_1 = __nccwpck_require__(8881);
 async function synchronizeReadingList(readingList, outputDir, branch) {
     const readmePath = `./${outputDir}/README.md`;
     let commitMessage = "synchronize reading list";
@@ -736,20 +784,15 @@ async function synchronizeReadingList(readingList, outputDir, branch) {
             console.log(`Removed these articles from the reading list: ${removedArticles.join(", ")}`);
         }
         fs.writeFileSync(readmePath, updatedContent);
-        try {
-            await (0, git_1.gitConfig)();
-            await (0, git_1.gitAdd)(readmePath);
-            await (0, git_1.gitCommit)(commitMessage, readmePath);
-            await (0, git_1.gitPull)(branch);
-            await (0, git_1.gitPush)(branch);
-        }
-        catch (error) {
-            core.setFailed(`Failed to commit and push changes: ${error.message}`);
-        }
+        (0, performGitActions_1.performGitActions)({
+            commitMessage,
+            path: readmePath,
+            branch
+        });
         core.notice(`Reading list synchronized successfully.`);
     }
     catch (error) {
-        core.setFailed(`Failed to synchronize reading list: ${error.message}`);
+        core.notice(`Failed to synchronize reading list: ${error.message}`);
     }
 }
 exports.synchronizeReadingList = synchronizeReadingList;

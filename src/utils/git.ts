@@ -14,7 +14,7 @@ export async function gitAdd(filePath: string): Promise<void> {
   try {
     await exec.exec("git", ["add", filePath])
   } catch (error) {
-    core.setFailed(`Failed to complete git add: ${(error as Error).message}`)
+    core.notice(`Failed to complete git add: ${(error as Error).message}`)
   }
 }
 
@@ -34,7 +34,7 @@ export async function gitCommit(
     }
     await exec.exec("git", ["commit", "-m", message, filePath])
   } catch (error) {
-    core.setFailed(`Failed to complete git commit: ${(error as Error).message}`)
+    core.notice(`Failed to complete git commit: ${(error as Error).message}`)
   }
 }
 
@@ -61,7 +61,7 @@ export async function gitConfig(): Promise<void> {
       "GitHub Actions"
     ])
   } catch (error) {
-    core.setFailed(
+    core.notice(
       `Failed to set up Git configuration: ${(error as Error).message}`
     )
   }

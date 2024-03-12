@@ -1,6 +1,5 @@
 import { DevToArticle } from "../types"
 import fetch from "node-fetch"
-import * as core from "@actions/core"
 
 export async function fetchDevToArticles(
   apiKey: string,
@@ -33,8 +32,6 @@ export async function fetchDevToArticles(
     articles = articles.concat(pageArticles)
     page++
   }
-
-  core.notice("Articles fetched and saved successfully.")
 
   return articles
 }

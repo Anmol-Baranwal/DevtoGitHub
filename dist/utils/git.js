@@ -40,7 +40,7 @@ async function gitAdd(filePath) {
         await exec.exec("git", ["add", filePath]);
     }
     catch (error) {
-        core.setFailed(`Failed to complete git add: ${error.message}`);
+        core.notice(`Failed to complete git add: ${error.message}`);
     }
 }
 exports.gitAdd = gitAdd;
@@ -58,7 +58,7 @@ async function gitCommit(message, filePath) {
         await exec.exec("git", ["commit", "-m", message, filePath]);
     }
     catch (error) {
-        core.setFailed(`Failed to complete git commit: ${error.message}`);
+        core.notice(`Failed to complete git commit: ${error.message}`);
     }
 }
 exports.gitCommit = gitCommit;
@@ -87,7 +87,7 @@ async function gitConfig() {
         ]);
     }
     catch (error) {
-        core.setFailed(`Failed to set up Git configuration: ${error.message}`);
+        core.notice(`Failed to set up Git configuration: ${error.message}`);
     }
 }
 exports.gitConfig = gitConfig;

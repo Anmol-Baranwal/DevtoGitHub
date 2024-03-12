@@ -1,7 +1,7 @@
 import * as core from "@actions/core"
 import * as fs from "fs"
 import { ReadingList } from "../types"
-import { gitAdd, gitCommit, gitConfig, gitPull, gitPush } from "./git"
+import { performGitActions } from "./performGitActions"
 
 export async function createReadingList(
   articles: ReadingList[],
@@ -69,19 +69,12 @@ export async function createReadingList(
 
   fs.writeFileSync(readmePath, existingContent)
 
-  try {
-    await gitConfig()
-    await gitAdd(readmePath)
-    await gitCommit(commitMessage, readmePath)
-    await gitPull(branch)
-    await gitPush(branch)
-
-    core.notice(`reading list file created and committed`)
-  } catch (error) {
-    core.setFailed(
-      `Failed to commit and push changes: ${(error as Error).message}`
-    )
-  }
+  performGitActions({
+    commitMessage,
+    path: readmePath,
+    branch,
+    noticeMessage: "Reading list file created and committed"
+  })
 
   core.notice(`Reading list updated in README.md`)
 }

@@ -1,15 +1,10 @@
 import * as core from "@actions/core"
 import * as fs from "fs"
-import {
-  getFileNameFromTitle,
-  gitAdd,
-  gitCommit,
-  gitConfig,
-  gitPull,
-  gitPush
-} from "./git"
+import { getFileNameFromTitle } from "./git"
 import { parseMarkdownContent } from "./parseMarkdownContent"
 import { fetchDevArticleUsingId } from "./fetchDevArticleUsingId"
+import { performGitActions } from "./performGitActions"
+import { createArticlesReadme } from "./createArticlesReadme"
 
 const conventionalCommits =
   core.getInput("conventionalCommits") === "true" || true
@@ -51,21 +46,14 @@ export async function createMarkdownFile(
       // Write markdown content to file
       fs.writeFileSync(filePath, markdownContent)
 
-      try {
-        await gitConfig()
-        await gitAdd(filePath)
-        await gitCommit(commitMessage, filePath)
-        await gitPull(branch)
-        await gitPush(branch)
+      performGitActions({
+        commitMessage,
+        path: filePath,
+        branch
+        // noticeMessage: "Markdown file created and committed"
+      })
 
-        core.notice(`Markdown file created and committed: ${filePath}`)
-      } catch (error) {
-        core.setFailed(
-          `Failed to commit and push changes: ${(error as Error).message}`
-        )
-      }
-
-      core.notice(`Markdown file created: ${filePath}`)
+      // core.notice(`Markdown file created: ${filePath}`)
     } else {
       const existingContent = fs.readFileSync(filePath, "utf8")
       const fetchedArticle = await fetchDevArticleUsingId(article.id, apiKey)
@@ -86,19 +74,12 @@ export async function createMarkdownFile(
           commitMessage = `chore: ${commitMessage.toLowerCase()}`
         }
 
-        try {
-          await gitConfig()
-          await gitAdd(filePath)
-          await gitCommit(commitMessage, filePath)
-          await gitPull(branch)
-          await gitPush(branch)
-
-          core.notice(`Markdown file created and committed: ${filePath}`)
-        } catch (error) {
-          core.setFailed(
-            `Failed to commit and push changes: ${(error as Error).message}`
-          )
-        }
+        performGitActions({
+          commitMessage,
+          path: filePath,
+          branch,
+          noticeMessage: "Markdown file created and committed"
+        })
       } else {
         core.notice(
           `Markdown file already exists for "${article.title}" and it is not edited. Skipping.`
@@ -111,68 +92,5 @@ export async function createMarkdownFile(
 
   if (tableOfContents) {
     await createArticlesReadme(articles, outputDir, branch)
-  }
-}
-
-async function createArticlesReadme(
-  articles: any[],
-  outputDir: string,
-  branch: string
-): Promise<void> {
-  // Create content for README.md
-  let readmeContent = ""
-  const readmePath = `${outputDir}/README.md`
-  if (fs.existsSync(readmePath)) {
-    readmeContent = fs.readFileSync(readmePath, "utf8")
-  }
-
-  const hasTableOfContentsHeading = readmeContent.includes(
-    "# Table of Contents\n\n"
-  )
-
-  // Set the commit message based on whether the heading exists
-  let commitMessage = hasTableOfContentsHeading
-    ? "update readme with table of contents"
-    : "create readme with table of contents"
-
-  if (!hasTableOfContentsHeading) {
-    readmeContent = "# Table of Contents\n\n"
-  }
-
-  for (const article of articles) {
-    const fileName = getFileNameFromTitle(article.title).trim()
-
-    const fileLink = `./${fileName}.md`
-
-    if (readmeContent.includes(`[${article.title}]`)) {
-      console.log(
-        `Skipping "${article.title}" because it already exists in the table of contents.`
-      )
-      continue
-    }
-
-    // Add entry to README content
-    readmeContent += `- [${article.title}](${fileLink.replace(/ /g, "%20")})\n`
-  }
-
-  // Write README.md
-  fs.writeFileSync(readmePath, readmeContent)
-
-  if (conventionalCommits) {
-    commitMessage = `chore: ${commitMessage.toLowerCase()}`
-  }
-
-  try {
-    await gitConfig()
-    await gitAdd(readmePath)
-    await gitCommit(commitMessage, readmePath)
-    await gitPull(branch)
-    await gitPush(branch)
-
-    core.notice("README.md file created and committed")
-  } catch (error) {
-    core.setFailed(
-      `Failed to commit and push changes (readme articles): ${error}`
-    )
   }
 }

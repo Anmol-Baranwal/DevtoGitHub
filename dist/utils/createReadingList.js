@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createReadingList = void 0;
 const core = __importStar(require("@actions/core"));
 const fs = __importStar(require("fs"));
-const git_1 = require("./git");
+const performGitActions_1 = require("./performGitActions");
 async function createReadingList(articles, outputDir, branch) {
     const readTime = core.getInput("readTime") === "true" || false;
     const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
@@ -76,17 +76,12 @@ async function createReadingList(articles, outputDir, branch) {
         }
     }
     fs.writeFileSync(readmePath, existingContent);
-    try {
-        await (0, git_1.gitConfig)();
-        await (0, git_1.gitAdd)(readmePath);
-        await (0, git_1.gitCommit)(commitMessage, readmePath);
-        await (0, git_1.gitPull)(branch);
-        await (0, git_1.gitPush)(branch);
-        core.notice(`reading list file created and committed`);
-    }
-    catch (error) {
-        core.setFailed(`Failed to commit and push changes: ${error.message}`);
-    }
+    (0, performGitActions_1.performGitActions)({
+        commitMessage,
+        path: readmePath,
+        branch,
+        noticeMessage: "Reading list file created and committed"
+    });
     core.notice(`Reading list updated in README.md`);
 }
 exports.createReadingList = createReadingList;

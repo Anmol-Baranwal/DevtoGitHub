@@ -1,7 +1,7 @@
 import * as fs from "fs"
 import { ReadingList } from "../types"
 import * as core from "@actions/core"
-import { gitAdd, gitCommit, gitConfig, gitPull, gitPush } from "./git"
+import { performGitActions } from "./performGitActions"
 
 export async function synchronizeReadingList(
   readingList: ReadingList[],
@@ -66,21 +66,15 @@ export async function synchronizeReadingList(
 
     fs.writeFileSync(readmePath, updatedContent)
 
-    try {
-      await gitConfig()
-      await gitAdd(readmePath)
-      await gitCommit(commitMessage, readmePath)
-      await gitPull(branch)
-      await gitPush(branch)
-    } catch (error) {
-      core.setFailed(
-        `Failed to commit and push changes: ${(error as Error).message}`
-      )
-    }
+    performGitActions({
+      commitMessage,
+      path: readmePath,
+      branch
+    })
 
     core.notice(`Reading list synchronized successfully.`)
   } catch (error) {
-    core.setFailed(
+    core.notice(
       `Failed to synchronize reading list: ${(error as Error).message}`
     )
   }

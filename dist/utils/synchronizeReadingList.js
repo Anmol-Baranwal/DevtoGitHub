@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.synchronizeReadingList = void 0;
 const fs = __importStar(require("fs"));
 const core = __importStar(require("@actions/core"));
-const git_1 = require("./git");
+const performGitActions_1 = require("./performGitActions");
 async function synchronizeReadingList(readingList, outputDir, branch) {
     const readmePath = `./${outputDir}/README.md`;
     let commitMessage = "synchronize reading list";
@@ -67,20 +67,15 @@ async function synchronizeReadingList(readingList, outputDir, branch) {
             console.log(`Removed these articles from the reading list: ${removedArticles.join(", ")}`);
         }
         fs.writeFileSync(readmePath, updatedContent);
-        try {
-            await (0, git_1.gitConfig)();
-            await (0, git_1.gitAdd)(readmePath);
-            await (0, git_1.gitCommit)(commitMessage, readmePath);
-            await (0, git_1.gitPull)(branch);
-            await (0, git_1.gitPush)(branch);
-        }
-        catch (error) {
-            core.setFailed(`Failed to commit and push changes: ${error.message}`);
-        }
+        (0, performGitActions_1.performGitActions)({
+            commitMessage,
+            path: readmePath,
+            branch
+        });
         core.notice(`Reading list synchronized successfully.`);
     }
     catch (error) {
-        core.setFailed(`Failed to synchronize reading list: ${error.message}`);
+        core.notice(`Failed to synchronize reading list: ${error.message}`);
     }
 }
 exports.synchronizeReadingList = synchronizeReadingList;

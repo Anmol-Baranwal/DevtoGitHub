@@ -29,6 +29,8 @@ const fs = __importStar(require("fs"));
 const git_1 = require("./git");
 const parseMarkdownContent_1 = require("./parseMarkdownContent");
 const fetchDevArticleUsingId_1 = require("./fetchDevArticleUsingId");
+const performGitActions_1 = require("./performGitActions");
+const createArticlesReadme_1 = require("./createArticlesReadme");
 const conventionalCommits = core.getInput("conventionalCommits") === "true" || true;
 async function createMarkdownFile(articles, outputDir, branch, apiKey) {
     // output directory must exist
@@ -55,18 +57,13 @@ async function createMarkdownFile(articles, outputDir, branch, apiKey) {
             const markdownContent = (0, parseMarkdownContent_1.parseMarkdownContent)(article);
             // Write markdown content to file
             fs.writeFileSync(filePath, markdownContent);
-            try {
-                await (0, git_1.gitConfig)();
-                await (0, git_1.gitAdd)(filePath);
-                await (0, git_1.gitCommit)(commitMessage, filePath);
-                await (0, git_1.gitPull)(branch);
-                await (0, git_1.gitPush)(branch);
-                core.notice(`Markdown file created and committed: ${filePath}`);
-            }
-            catch (error) {
-                core.setFailed(`Failed to commit and push changes: ${error.message}`);
-            }
-            core.notice(`Markdown file created: ${filePath}`);
+            (0, performGitActions_1.performGitActions)({
+                commitMessage,
+                path: filePath,
+                branch
+                // noticeMessage: "Markdown file created and committed"
+            });
+            // core.notice(`Markdown file created: ${filePath}`)
         }
         else {
             const existingContent = fs.readFileSync(filePath, "utf8");
@@ -82,17 +79,12 @@ async function createMarkdownFile(articles, outputDir, branch, apiKey) {
                 if (conventionalCommits) {
                     commitMessage = `chore: ${commitMessage.toLowerCase()}`;
                 }
-                try {
-                    await (0, git_1.gitConfig)();
-                    await (0, git_1.gitAdd)(filePath);
-                    await (0, git_1.gitCommit)(commitMessage, filePath);
-                    await (0, git_1.gitPull)(branch);
-                    await (0, git_1.gitPush)(branch);
-                    core.notice(`Markdown file created and committed: ${filePath}`);
-                }
-                catch (error) {
-                    core.setFailed(`Failed to commit and push changes: ${error.message}`);
-                }
+                (0, performGitActions_1.performGitActions)({
+                    commitMessage,
+                    path: filePath,
+                    branch,
+                    noticeMessage: "Markdown file created and committed"
+                });
             }
             else {
                 core.notice(`Markdown file already exists for "${article.title}" and it is not edited. Skipping.`);
@@ -101,49 +93,7 @@ async function createMarkdownFile(articles, outputDir, branch, apiKey) {
     }
     const tableOfContents = core.getInput("saveArticlesReadme") === "true" || false;
     if (tableOfContents) {
-        await createArticlesReadme(articles, outputDir, branch);
+        await (0, createArticlesReadme_1.createArticlesReadme)(articles, outputDir, branch);
     }
 }
 exports.createMarkdownFile = createMarkdownFile;
-async function createArticlesReadme(articles, outputDir, branch) {
-    // Create content for README.md
-    let readmeContent = "";
-    const readmePath = `${outputDir}/README.md`;
-    if (fs.existsSync(readmePath)) {
-        readmeContent = fs.readFileSync(readmePath, "utf8");
-    }
-    const hasTableOfContentsHeading = readmeContent.includes("# Table of Contents\n\n");
-    // Set the commit message based on whether the heading exists
-    let commitMessage = hasTableOfContentsHeading
-        ? "update readme with table of contents"
-        : "create readme with table of contents";
-    if (!hasTableOfContentsHeading) {
-        readmeContent = "# Table of Contents\n\n";
-    }
-    for (const article of articles) {
-        const fileName = (0, git_1.getFileNameFromTitle)(article.title).trim();
-        const fileLink = `./${fileName}.md`;
-        if (readmeContent.includes(`[${article.title}]`)) {
-            console.log(`Skipping "${article.title}" because it already exists in the table of contents.`);
-            continue;
-        }
-        // Add entry to README content
-        readmeContent += `- [${article.title}](${fileLink.replace(/ /g, "%20")})\n`;
-    }
-    // Write README.md
-    fs.writeFileSync(readmePath, readmeContent);
-    if (conventionalCommits) {
-        commitMessage = `chore: ${commitMessage.toLowerCase()}`;
-    }
-    try {
-        await (0, git_1.gitConfig)();
-        await (0, git_1.gitAdd)(readmePath);
-        await (0, git_1.gitCommit)(commitMessage, readmePath);
-        await (0, git_1.gitPull)(branch);
-        await (0, git_1.gitPush)(branch);
-        core.notice("README.md file created and committed");
-    }
-    catch (error) {
-        core.setFailed(`Failed to commit and push changes (readme articles): ${error}`);
-    }
-}
